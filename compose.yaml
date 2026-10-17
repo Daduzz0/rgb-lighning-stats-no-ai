@@ -1,0 +1,100 @@
+name: rgb-stats
+
+x-node: &node
+  image: rgb-stats-node:local
+  build:
+    context: .
+    dockerfile: docker/Dockerfile
+  command: ["/RLNdata", "--network", "regtest", "--daemon-listening-port", "3001", "--ldk-peer-listening-port", "9735", "--disable-authentication"]
+  restart: unless-stopped
+  stop_grace_period: 90s
+  depends_on:
+    bitcoind:
+      condition: service_healthy
+    electrs:
+      condition: service_started
+    proxy:
+      condition: service_started
+
+services:
+  bitcoind:
+    image: registry.gitlab.com/hashbeam/docker/bitcoind:30.2
+    command: "-fallbackfee=0.0002"
+    environment:
+      MYUID: 1000
+      MYGID: 1000
+      RPCAUTH: "user:84c66d54d736d8b02aaa5b02e07e759b$$cc56c229b2a49ae2bfd5932cc8a6135d435bb9a7ac037ddd351d65936082c03d"
+    volumes: ["bitcoin:/srv/app/.bitcoin"]
+    healthcheck:
+      test: ["CMD", "bitcoin-cli", "-regtest", "-rpcuser=user", "-rpcpassword=password", "getblockchaininfo"]
+      interval: 3s
+      timeout: 5s
+      retries: 60
+  electrs:
+    image: registry.gitlab.com/hashbeam/docker/electrs:0.11.0
+    environment:
+      MYUID: 1000
+      MYGID: 1000
+      BTCPASS: password
+    volumes: ["electrum:/srv/app/db"]
+    depends_on:
+      bitcoind:
+        condition: service_healthy
+  proxy:
+    image: ghcr.io/rgb-tools/rgb-proxy-server:0.3.0
+    volumes: ["proxy:/proxy"]
+  alice:
+    <<: *node
+    ports: ["127.0.0.1:8801:3001"]
+    volumes: ["alice:/RLNdata"]
+  bob:
+    <<: *node
+    ports: ["127.0.0.1:8802:3001"]
+    volumes: ["bob:/RLNdata"]
+  carol:
+    <<: *node
+    ports: ["127.0.0.1:8803:3001"]
+    volumes: ["carol:/RLNdata"]
+  dave:
+    <<: *node
+    ports: ["127.0.0.1:8804:3001"]
+    volumes: ["dave:/RLNdata"]
+  erin:
+    <<: *node
+    ports: ["127.0.0.1:8805:3001"]
+    volumes: ["erin:/RLNdata"]
+  frank:
+    <<: *node
+    ports: ["127.0.0.1:8806:3001"]
+    volumes: ["frank:/RLNdata"]
+  grace:
+    <<: *node
+    ports: ["127.0.0.1:8807:3001"]
+    volumes: ["grace:/RLNdata"]
+  heidi:
+    <<: *node
+    ports: ["127.0.0.1:8808:3001"]
+    volumes: ["heidi:/RLNdata"]
+  ivan:
+    <<: *node
+    ports: ["127.0.0.1:8809:3001"]
+    volumes: ["ivan:/RLNdata"]
+  judy:
+    <<: *node
+    ports: ["127.0.0.1:8810:3001"]
+    volumes: ["judy:/RLNdata"]
+
+volumes:
+  bitcoin:
+  electrum:
+  proxy:
+  alice:
+  bob:
+  carol:
+  dave:
+  erin:
+  frank:
+  grace:
+  heidi:
+  ivan:
+  judy:

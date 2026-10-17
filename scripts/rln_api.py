@@ -7,7 +7,11 @@ import urllib.request
 
 
 class ApiError(RuntimeError):
-    pass
+    def __init__(self, message, http_status=None, name=None):
+        super().__init__(message)
+        self.http_status = http_status
+        self.name = name
+
 
 
 class NoRedirect(urllib.request.HTTPRedirectHandler):
@@ -47,7 +51,9 @@ class Rln:
                 name = json.loads(error.read()).get("name", "HTTP_ERROR")
             except (ValueError, AttributeError):
                 name = "HTTP_ERROR"
-            raise ApiError(f"{endpoint}: HTTP {error.code} ({name})") from None
+            finally:
+                error.close()
+            raise ApiError(f"{endpoint}: HTTP {error.code} ({name})", error.code, name) from None
         except (OSError, ValueError) as error:
             raise ApiError(f"{endpoint}: {type(error).__name__}; nessun retry automatico") from None
         if not isinstance(result, dict):

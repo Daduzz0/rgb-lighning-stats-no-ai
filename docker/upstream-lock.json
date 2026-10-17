@@ -1,0 +1,13 @@
+{
+  "repository": "https://github.com/RGB-Tools/rgb-lightning-node",
+  "commit": "d4762ac3d1b3ca83f2f7b4f894e8569109dc572a",
+  "ldkCommit": "e2a0b8e24dc919ccef289f103fd1f8e1974fcc1d",
+  "instrumentation": "payment-events-v1",
+  "routing": "unmodified node default; only three event handlers gain structured logging",
+  "buildProfile": {
+    "release": true,
+    "optLevel": 1,
+    "codegenUnits": 256,
+    "jobs": 1
+  }
+}
