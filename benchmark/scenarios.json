@@ -1,0 +1,209 @@
+{
+  "schemaVersion": 1,
+  "name": "topology-routing-20",
+  "network": "regtest",
+  "execution": "sequential-live",
+  "description": "20 pagamenti reali. Le categorie descrivono gli stimoli, non impongono algoritmo, MPP o esito. I saldi evolvono; ogni decisione usa lo stato live.",
+  "cases": [
+    {
+      "id": "01-btc-direct",
+      "sender": "alice",
+      "recipient": "bob",
+      "amountMsat": "1000000",
+      "asset": null,
+      "assetAmount": null,
+      "userPreference": "",
+      "coverage": "BTC piccolo, un hop"
+    },
+    {
+      "id": "02-rgb-mpp-100",
+      "sender": "alice",
+      "recipient": "judy",
+      "amountMsat": "30000000",
+      "asset": "TEST",
+      "assetAmount": "100",
+      "userPreference": "",
+      "coverage": "Split RGB 60+40 sullo stato iniziale; QVAC sceglie liberamente"
+    },
+    {
+      "id": "03-rgb-return-100",
+      "sender": "judy",
+      "recipient": "alice",
+      "amountMsat": "10000000",
+      "asset": "TEST",
+      "assetAmount": "100",
+      "userPreference": "",
+      "coverage": "Ritorno degli asset su liquidità inversa dopo MPP, con margine BTC per le fee"
+    },
+    {
+      "id": "04-rgb-mpp-80",
+      "sender": "alice",
+      "recipient": "judy",
+      "amountMsat": "30000000",
+      "asset": "TEST",
+      "assetAmount": "80",
+      "userPreference": "",
+      "coverage": "Liquidità frammentata, importo intermedio tra single path e capacità aggregata"
+    },
+    {
+      "id": "05-rgb-return-80",
+      "sender": "judy",
+      "recipient": "alice",
+      "amountMsat": "10000000",
+      "asset": "TEST",
+      "assetAmount": "80",
+      "userPreference": "",
+      "coverage": "Ritorno dopo split parziale"
+    },
+    {
+      "id": "06-rgb-over-capacity",
+      "sender": "alice",
+      "recipient": "judy",
+      "amountMsat": "30000000",
+      "asset": "TEST",
+      "assetAmount": "101",
+      "userPreference": "",
+      "coverage": "Capacità iniziale degli ingressi a Judy superata di una unità"
+    },
+    {
+      "id": "07-rgb-single-boundary",
+      "sender": "alice",
+      "recipient": "judy",
+      "amountMsat": "10000000",
+      "asset": "TEST",
+      "assetAmount": "60",
+      "userPreference": "",
+      "coverage": "Massimo del percorso iniziale con liquidità maggiore"
+    },
+    {
+      "id": "08-rgb-return-60",
+      "sender": "judy",
+      "recipient": "alice",
+      "amountMsat": "8000000",
+      "asset": "TEST",
+      "assetAmount": "60",
+      "userPreference": "",
+      "coverage": "Direzione inversa dopo pagamento al limite"
+    },
+    {
+      "id": "09-rgb-low-fee",
+      "sender": "alice",
+      "recipient": "judy",
+      "amountMsat": "10000000",
+      "asset": "TEST",
+      "assetAmount": "30",
+      "userPreference": "Preferisco commissioni basse",
+      "coverage": "Ottimizzazione fee tra percorsi alternativi"
+    },
+    {
+      "id": "10-rgb-return-30",
+      "sender": "judy",
+      "recipient": "alice",
+      "amountMsat": "8000000",
+      "asset": "TEST",
+      "assetAmount": "30",
+      "userPreference": "",
+      "coverage": "Riequilibrio RGB dopo ricerca di fee basse"
+    },
+    {
+      "id": "11-rgb-direct",
+      "sender": "alice",
+      "recipient": "bob",
+      "amountMsat": "3000000",
+      "asset": "TEST",
+      "assetAmount": "1",
+      "userPreference": "",
+      "coverage": "Minimo HTLC RGB e un hop"
+    },
+    {
+      "id": "12-rgb-bob-erin",
+      "sender": "bob",
+      "recipient": "erin",
+      "amountMsat": "5000000",
+      "asset": "TEST",
+      "assetAmount": "10",
+      "userPreference": "",
+      "coverage": "Mittente intermedio sul ramo economico"
+    },
+    {
+      "id": "13-rgb-carol-frank",
+      "sender": "carol",
+      "recipient": "frank",
+      "amountMsat": "5000000",
+      "asset": "TEST",
+      "assetAmount": "15",
+      "userPreference": "",
+      "coverage": "Ramo centrale con fee diverse"
+    },
+    {
+      "id": "14-rgb-dave-grace",
+      "sender": "dave",
+      "recipient": "grace",
+      "amountMsat": "5000000",
+      "asset": "TEST",
+      "assetAmount": "15",
+      "userPreference": "",
+      "coverage": "Ramo alternativo più costoso"
+    },
+    {
+      "id": "15-rgb-frank-ivan",
+      "sender": "frank",
+      "recipient": "ivan",
+      "amountMsat": "5000000",
+      "asset": "TEST",
+      "assetAmount": "20",
+      "userPreference": "Preferisco affidabilità",
+      "coverage": "Affidabilità e consumo del secondo ingresso a Judy"
+    },
+    {
+      "id": "16-btc-multihop",
+      "sender": "alice",
+      "recipient": "judy",
+      "amountMsat": "10000000",
+      "asset": null,
+      "assetAmount": null,
+      "userPreference": "",
+      "coverage": "BTC su più hop e sugli stessi canali RGB"
+    },
+    {
+      "id": "17-btc-large",
+      "sender": "alice",
+      "recipient": "judy",
+      "amountMsat": "1200000000",
+      "asset": null,
+      "assetAmount": null,
+      "userPreference": "",
+      "coverage": "BTC maggiore della capacità nominale di un singolo canale"
+    },
+    {
+      "id": "18-rgb-privacy",
+      "sender": "heidi",
+      "recipient": "ivan",
+      "amountMsat": "10000000",
+      "asset": "TEST",
+      "assetAmount": "10",
+      "userPreference": "Preferisco un percorso singolo per privacy, evita probing aggiuntivo",
+      "coverage": "Tra rami: preferenza single path e stato già modificato"
+    },
+    {
+      "id": "19-btc-peripheral",
+      "sender": "karl",
+      "recipient": "tara",
+      "amountMsat": "3000000",
+      "asset": null,
+      "assetAmount": null,
+      "userPreference": "",
+      "coverage": "Nodi periferici: raggiungibili nella demo mesh, isolati nel grafo channels dichiarato"
+    },
+    {
+      "id": "20-rgb-peripheral",
+      "sender": "leo",
+      "recipient": "saul",
+      "amountMsat": "3000000",
+      "asset": "TEST",
+      "assetAmount": "1",
+      "userPreference": "",
+      "coverage": "Asset e connettività su nodi periferici della demo mesh"
+    }
+  ]
+}

@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Manage the isolated Docker regtest lab and bootstrap its ten RLN nodes."""
 import argparse
+import hashlib
 from collections import Counter
 import json
 import os
@@ -14,11 +15,13 @@ import time
 from baseline import ROOT, channel_snapshot, read, validate, write
 from rln_api import ApiError, Rln
 
+COMPOSE_FILE = ROOT / "compose.yaml"
+
 
 def compose(project, *args, capture=True):
     if not re.fullmatch(r"[a-z0-9][a-z0-9_-]{0,39}", project):
         raise ValueError("Nome progetto Docker non valido")
-    return subprocess.run(["docker", "compose", "-p", project, "-f", str(ROOT / "compose.yaml"), *args],
+    return subprocess.run(["docker", "compose", "-p", project, "-f", str(COMPOSE_FILE), *args],
                           check=True, text=True, capture_output=capture, timeout=1800).stdout
 
 
@@ -49,7 +52,7 @@ def mine(project, blocks=6):
     return bitcoin(project, "-rpcwallet=miner", "-generate", blocks)
 
 
-def unlock(client, password, alias):
+def unlock(client, password, alias, peer_port=9735):
     try:
         client.request("nodeinfo")
         return
@@ -59,7 +62,7 @@ def unlock(client, password, alias):
                    "ldk_chain_sync": {"mode": "BlockSync", "config": {
                        "bitcoind_rpc_username": "user", "bitcoind_rpc_password": "password",
                        "bitcoind_rpc_host": "bitcoind", "bitcoind_rpc_port": 18443}},
-                   "indexer_url": "electrs:50001", "announce_addresses": [f"{alias}:9735"],
+                   "indexer_url": "electrs:50001", "announce_addresses": [f"{alias}:{peer_port}"],
                    "announce_alias": alias}, timeout=120)
 
 
@@ -77,9 +80,15 @@ def funding_broadcast(client, peer_pubkey, project):
         return False
 
 
-def setup(project="rgb-stats", layout="history"):
-    validate()
-    topology = read(ROOT / "topology.json")
+def setup(project="rgb-stats", layout="history", *, topology_path=None):
+    if topology_path is None:
+        validate()
+    elif layout != "topology":
+        raise ValueError("An explicit topology must use topology layout, not historical balances")
+    topology_file = Path(topology_path) if topology_path else ROOT / "topology.json"
+    topology = read(topology_file)
+    topology_digest = hashlib.sha256(topology_file.read_bytes()).hexdigest()
+    peer_ports = {n["id"]: n["p2pPort"] if topology_path else 9735 for n in topology["nodes"]}
     state = ROOT / "state" / project
     state.mkdir(parents=True, exist_ok=True, mode=0o700)
     os.chmod(state, 0o700)
@@ -123,7 +132,7 @@ def setup(project="rgb-stats", layout="history"):
         wait_for(f"inizializzazione {alias}", initialize)
         def unlocked():
             try:
-                unlock(client, credentials[alias]["password"], alias)
+                unlock(client, credentials[alias]["password"], alias, peer_ports[alias])
                 return client.request("nodeinfo")
             except ApiError as error:
                 if error.name == "WrongPassword":
@@ -138,14 +147,15 @@ def setup(project="rgb-stats", layout="history"):
         previous = read(setup_path)
         if previous.get("status") != "ready":
             raise RuntimeError(f"Setup precedente incompleto: verificare {setup_path}. Non vengono ripetuti funding, emissione o aperture.")
-        if previous["layout"] != layout or previous["identities"] != identities:
+        if (previous["layout"] != layout or previous["identities"] != identities
+                or (topology_path and previous.get("topologySha256") != topology_digest)):
             raise ValueError("Stato Docker diverso dal setup salvato: usare un progetto nuovo")
         print(f"Lab già preparato; saldi correnti conservati. Config: {config_path}")
         return config_path
     if any(c.request("listchannels")["channels"] for c in clients.values()):
         raise ValueError("Trovati canali senza setup corrispondente; usare un progetto nuovo")
     checkpoint = {"status": "funding", "layout": layout, "identities": identities,
-                  "upstream": read(ROOT / "docker/upstream-lock.json")}
+                  "upstream": read(ROOT / "docker/upstream-lock.json"), "topologySha256": topology_digest}
     write(setup_path, checkpoint)
     print("Funding BTC e creazione UTXO RGB...", flush=True)
     addresses = {c.request("address", {})["address"]: 0.2 for c in clients.values()}
@@ -156,7 +166,7 @@ def setup(project="rgb-stats", layout="history"):
     for alias, client in clients.items():
         wait_for(f"sincronizzazione {alias}", lambda: client.request("networkinfo")["height"] >= height)
         wait_for(f"saldo BTC {alias}", lambda: client.request("btcbalance", {"skip_sync": False})["vanilla"]["spendable"] >= 20_000_000)
-        client.request("createutxos", {"up_to": True, "num": 10, "size": 1_000_000,
+        client.request("createutxos", {"up_to": True, "num": topology["setup"]["rgbUtxos"]["count"] if topology_path else 10, "size": 1_000_000,
                        "fee_rate": 2, "skip_sync": False}, timeout=120)
     mine(project)
     asset_spec = topology["assets"][0]
@@ -208,7 +218,7 @@ def setup(project="rgb-stats", layout="history"):
         for key in ("id", "from", "to", "asset"):
             payload.pop(key, None)
         payload["asset_id"] = asset
-        payload["peer_pubkey_and_opt_addr"] = f"{identities[peer]}@{peer}:9735"
+        payload["peer_pubkey_and_opt_addr"] = f"{identities[peer]}@{peer}:{peer_ports[peer]}"
         if layout == "history":
             initial = balances[history_channels[channel["id"]]["channelId"]]
             payload.update(push_msat=int(initial["toMsat"]), push_asset_amount=int(initial["toAssetAmount"]))
@@ -226,7 +236,7 @@ def setup(project="rgb-stats", layout="history"):
     degree = Counter(c[key] for c in topology["channels"] for key in ("from", "to"))
     for alias, client in clients.items():
         wait_for(f"canali e gossip {alias}", lambda: client.request("nodeinfo")["num_usable_channels"] == degree[alias]
-                 and client.request("nodeinfo")["network_channels"] >= len(topology["channels"]), timeout=300)
+                 and (degree[alias] == 0 or client.request("nodeinfo")["network_channels"] >= len(topology["channels"])), timeout=300)
     checkpoint.update(status="ready", observedChannels=channel_snapshot(clients),
                       balanceNote="BTC balances include real commitment fees and reserves; reverse fee policy uses upstream defaults.")
     config = {**read(ROOT / "config.example.json"), "nodes": {a: {"url": c.url, "expectedPubkey": identities[a],
@@ -236,7 +246,7 @@ def setup(project="rgb-stats", layout="history"):
               "daemonProvenance": checkpoint["upstream"], "labLayout": layout}
     write(config_path, config)
     write(setup_path, checkpoint)
-    print(f"Lab pronto: 10 nodi, 15 canali. Config: {config_path}", flush=True)
+    print(f"Lab pronto: {len(topology['nodes'])} nodi, {len(topology['channels'])} canali. Config: {config_path}", flush=True)
     return config_path
 
 

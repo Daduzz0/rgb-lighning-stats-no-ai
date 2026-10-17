@@ -1,0 +1,80 @@
+{
+  "schemaVersion": 1,
+  "network": "regtest",
+  "project": "rgb-stats-benchmark",
+  "label": "machine-a",
+  "composeFile": "benchmark/compose.yaml",
+  "assets": {
+    "TEST": "rgb:REPLACE_WITH_REAL_CONTRACT_ID"
+  },
+  "paymentTimeoutMs": 180000,
+  "observationTimeoutMs": 15000,
+  "requestTimeoutMs": 120000,
+  "nodes": {
+    "alice": {
+      "url": "http://127.0.0.1:8801"
+    },
+    "bob": {
+      "url": "http://127.0.0.1:8802"
+    },
+    "carol": {
+      "url": "http://127.0.0.1:8803"
+    },
+    "dave": {
+      "url": "http://127.0.0.1:8804"
+    },
+    "erin": {
+      "url": "http://127.0.0.1:8805"
+    },
+    "frank": {
+      "url": "http://127.0.0.1:8806"
+    },
+    "grace": {
+      "url": "http://127.0.0.1:8807"
+    },
+    "heidi": {
+      "url": "http://127.0.0.1:8808"
+    },
+    "ivan": {
+      "url": "http://127.0.0.1:8809"
+    },
+    "judy": {
+      "url": "http://127.0.0.1:8810"
+    },
+    "karl": {
+      "url": "http://127.0.0.1:8811"
+    },
+    "leo": {
+      "url": "http://127.0.0.1:8812"
+    },
+    "mia": {
+      "url": "http://127.0.0.1:8813"
+    },
+    "nico": {
+      "url": "http://127.0.0.1:8814"
+    },
+    "olive": {
+      "url": "http://127.0.0.1:8815"
+    },
+    "paul": {
+      "url": "http://127.0.0.1:8816"
+    },
+    "quinn": {
+      "url": "http://127.0.0.1:8817"
+    },
+    "ruth": {
+      "url": "http://127.0.0.1:8818"
+    },
+    "saul": {
+      "url": "http://127.0.0.1:8819"
+    },
+    "tara": {
+      "url": "http://127.0.0.1:8820"
+    }
+  },
+  "baseline": {
+    "repositoryCommit": "d4762ac3d1b3ca83f2f7b4f894e8569109dc572a",
+    "mpp": false,
+    "routing": "stock"
+  }
+}

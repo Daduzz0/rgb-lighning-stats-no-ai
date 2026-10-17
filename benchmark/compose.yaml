@@ -1,0 +1,169 @@
+name: rgb-stats-benchmark
+
+x-node: &node
+  image: rgb-stats-benchmark-single-path:local
+  build:
+    context: ../docker
+    dockerfile: Dockerfile.benchmark
+  restart: unless-stopped
+  stop_grace_period: 90s
+  depends_on:
+    bitcoind:
+      condition: service_healthy
+    electrs:
+      condition: service_started
+    proxy:
+      condition: service_started
+
+services:
+  bitcoind:
+    image: registry.gitlab.com/hashbeam/docker/bitcoind:30.2
+    command: "-fallbackfee=0.0002"
+    environment:
+      MYUID: 1000
+      MYGID: 1000
+      RPCAUTH: "user:84c66d54d736d8b02aaa5b02e07e759b$$cc56c229b2a49ae2bfd5932cc8a6135d435bb9a7ac037ddd351d65936082c03d"
+    volumes: ["bitcoin:/srv/app/.bitcoin"]
+    healthcheck:
+      test: ["CMD", "bitcoin-cli", "-regtest", "-rpcuser=user", "-rpcpassword=password", "getblockchaininfo"]
+      interval: 3s
+      timeout: 5s
+      retries: 60
+  electrs:
+    image: registry.gitlab.com/hashbeam/docker/electrs:0.11.0
+    environment:
+      MYUID: 1000
+      MYGID: 1000
+      BTCPASS: password
+    volumes: ["electrum:/srv/app/db"]
+    depends_on:
+      bitcoind:
+        condition: service_healthy
+  proxy:
+    image: ghcr.io/rgb-tools/rgb-proxy-server:0.3.0
+    volumes: ["proxy:/proxy"]
+  alice:
+    <<: *node
+    command: ["/RLNdata", "--network", "regtest", "--daemon-listening-port", "3001", "--ldk-peer-listening-port", "9801", "--disable-authentication"]
+    ports: ["127.0.0.1:8801:3001"]
+    volumes: ["alice:/RLNdata"]
+  bob:
+    <<: *node
+    command: ["/RLNdata", "--network", "regtest", "--daemon-listening-port", "3001", "--ldk-peer-listening-port", "9802", "--disable-authentication"]
+    ports: ["127.0.0.1:8802:3001"]
+    volumes: ["bob:/RLNdata"]
+  carol:
+    <<: *node
+    command: ["/RLNdata", "--network", "regtest", "--daemon-listening-port", "3001", "--ldk-peer-listening-port", "9803", "--disable-authentication"]
+    ports: ["127.0.0.1:8803:3001"]
+    volumes: ["carol:/RLNdata"]
+  dave:
+    <<: *node
+    command: ["/RLNdata", "--network", "regtest", "--daemon-listening-port", "3001", "--ldk-peer-listening-port", "9804", "--disable-authentication"]
+    ports: ["127.0.0.1:8804:3001"]
+    volumes: ["dave:/RLNdata"]
+  erin:
+    <<: *node
+    command: ["/RLNdata", "--network", "regtest", "--daemon-listening-port", "3001", "--ldk-peer-listening-port", "9805", "--disable-authentication"]
+    ports: ["127.0.0.1:8805:3001"]
+    volumes: ["erin:/RLNdata"]
+  frank:
+    <<: *node
+    command: ["/RLNdata", "--network", "regtest", "--daemon-listening-port", "3001", "--ldk-peer-listening-port", "9806", "--disable-authentication"]
+    ports: ["127.0.0.1:8806:3001"]
+    volumes: ["frank:/RLNdata"]
+  grace:
+    <<: *node
+    command: ["/RLNdata", "--network", "regtest", "--daemon-listening-port", "3001", "--ldk-peer-listening-port", "9807", "--disable-authentication"]
+    ports: ["127.0.0.1:8807:3001"]
+    volumes: ["grace:/RLNdata"]
+  heidi:
+    <<: *node
+    command: ["/RLNdata", "--network", "regtest", "--daemon-listening-port", "3001", "--ldk-peer-listening-port", "9808", "--disable-authentication"]
+    ports: ["127.0.0.1:8808:3001"]
+    volumes: ["heidi:/RLNdata"]
+  ivan:
+    <<: *node
+    command: ["/RLNdata", "--network", "regtest", "--daemon-listening-port", "3001", "--ldk-peer-listening-port", "9809", "--disable-authentication"]
+    ports: ["127.0.0.1:8809:3001"]
+    volumes: ["ivan:/RLNdata"]
+  judy:
+    <<: *node
+    command: ["/RLNdata", "--network", "regtest", "--daemon-listening-port", "3001", "--ldk-peer-listening-port", "9810", "--disable-authentication"]
+    ports: ["127.0.0.1:8810:3001"]
+    volumes: ["judy:/RLNdata"]
+  karl:
+    <<: *node
+    command: ["/RLNdata", "--network", "regtest", "--daemon-listening-port", "3001", "--ldk-peer-listening-port", "9811", "--disable-authentication"]
+    ports: ["127.0.0.1:8811:3001"]
+    volumes: ["karl:/RLNdata"]
+  leo:
+    <<: *node
+    command: ["/RLNdata", "--network", "regtest", "--daemon-listening-port", "3001", "--ldk-peer-listening-port", "9812", "--disable-authentication"]
+    ports: ["127.0.0.1:8812:3001"]
+    volumes: ["leo:/RLNdata"]
+  mia:
+    <<: *node
+    command: ["/RLNdata", "--network", "regtest", "--daemon-listening-port", "3001", "--ldk-peer-listening-port", "9813", "--disable-authentication"]
+    ports: ["127.0.0.1:8813:3001"]
+    volumes: ["mia:/RLNdata"]
+  nico:
+    <<: *node
+    command: ["/RLNdata", "--network", "regtest", "--daemon-listening-port", "3001", "--ldk-peer-listening-port", "9814", "--disable-authentication"]
+    ports: ["127.0.0.1:8814:3001"]
+    volumes: ["nico:/RLNdata"]
+  olive:
+    <<: *node
+    command: ["/RLNdata", "--network", "regtest", "--daemon-listening-port", "3001", "--ldk-peer-listening-port", "9815", "--disable-authentication"]
+    ports: ["127.0.0.1:8815:3001"]
+    volumes: ["olive:/RLNdata"]
+  paul:
+    <<: *node
+    command: ["/RLNdata", "--network", "regtest", "--daemon-listening-port", "3001", "--ldk-peer-listening-port", "9816", "--disable-authentication"]
+    ports: ["127.0.0.1:8816:3001"]
+    volumes: ["paul:/RLNdata"]
+  quinn:
+    <<: *node
+    command: ["/RLNdata", "--network", "regtest", "--daemon-listening-port", "3001", "--ldk-peer-listening-port", "9817", "--disable-authentication"]
+    ports: ["127.0.0.1:8817:3001"]
+    volumes: ["quinn:/RLNdata"]
+  ruth:
+    <<: *node
+    command: ["/RLNdata", "--network", "regtest", "--daemon-listening-port", "3001", "--ldk-peer-listening-port", "9818", "--disable-authentication"]
+    ports: ["127.0.0.1:8818:3001"]
+    volumes: ["ruth:/RLNdata"]
+  saul:
+    <<: *node
+    command: ["/RLNdata", "--network", "regtest", "--daemon-listening-port", "3001", "--ldk-peer-listening-port", "9819", "--disable-authentication"]
+    ports: ["127.0.0.1:8819:3001"]
+    volumes: ["saul:/RLNdata"]
+  tara:
+    <<: *node
+    command: ["/RLNdata", "--network", "regtest", "--daemon-listening-port", "3001", "--ldk-peer-listening-port", "9820", "--disable-authentication"]
+    ports: ["127.0.0.1:8820:3001"]
+    volumes: ["tara:/RLNdata"]
+
+volumes:
+  bitcoin:
+  electrum:
+  proxy:
+  alice:
+  bob:
+  carol:
+  dave:
+  erin:
+  frank:
+  grace:
+  heidi:
+  ivan:
+  judy:
+  karl:
+  leo:
+  mia:
+  nico:
+  olive:
+  paul:
+  quinn:
+  ruth:
+  saul:
+  tara:

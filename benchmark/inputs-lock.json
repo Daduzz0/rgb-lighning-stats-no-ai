@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "sourceRepository": "air-gb-lightning",
+  "sourceSuite": "wallet/infra/benchmark/scenarios.json",
+  "files": {
+    "scenarios.json": "24178a2230ba05d35f5ef27b6f795748196fdb0b32821d2af5ce986d4e25d7be",
+    "topology.json": "3abc67024d755375c3e770b8a0e28a2e2a3449d35aa947cf37bb6ca254513432",
+    "common.mjs": "bd40029bfbb48cb9bc4736379b04f97d6875b9135675a4cfd3306768c5e9a4d7",
+    "compare.mjs": "457a31cb2a49a8cd987833f65ec4c07b4ca91d2c8a056bbe6954cfdd2a9eb7cd"
+  }
+}

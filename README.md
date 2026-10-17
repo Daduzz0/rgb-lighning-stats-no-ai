@@ -11,6 +11,18 @@ usa soltanto la libreria standard; il laboratorio è pensato per Linux. La prima
 compilazione Rust scarica le dipendenze e può richiedere diversi minuti e alcuni GB
 di disco/RAM. La build usa un solo job per contenere il consumo di memoria.
 
+## Confronto con AIR-GB / QVAC: 20 pagamenti, 20 nodi
+
+Il profilo dedicato in [benchmark/README.md](benchmark/README.md) replica gli input
+AIR-GB, prepara Alice–Tara e usa il routing upstream con un solo percorso per
+pagamento. Raccoglie fee e hop dagli eventi LDK e confronta lo stato iniziale con
+una run AI prima di inviare transazioni. Produce risultati JSON/CSV compatibili con
+il comparatore AIR-GB. Richiede anche Node 24 sul computer di esecuzione.
+
+Usare i comandi `make benchmark-*` descritti nella guida per questo confronto.
+I comandi e i dataset storici descritti sotto continuano a usare il laboratorio
+originario a dieci nodi e non sono gli input del benchmark AI a venti casi.
+
 ## Avvio e test
 
 ```bash
