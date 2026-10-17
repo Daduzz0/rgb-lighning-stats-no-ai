@@ -274,7 +274,7 @@ class TelemetryTests(unittest.TestCase):
         self.assertEqual(measured['hopCount'], 1)
         self.assertEqual(measured['paths'][0]['nodes'], ['alice', 'judy'])
 
-    def test_mpp_sums_hops_and_preserves_failed_attempts_without_charging_their_fee(self):
+    def test_multiple_path_events_sum_hops_and_ignore_failed_attempt_fees(self):
         events = [{'event': 'payment_sent', 'feeMsat': 3000},
                   {'event': 'path_succeeded', 'hops': [self.hop] * 3, 'feeMsat': 1000, 'amountMsat': 6000},
                   {'event': 'path_succeeded', 'hops': [self.hop] * 4, 'feeMsat': 2000, 'amountMsat': 4000},
@@ -361,7 +361,12 @@ class PersistenceTests(unittest.TestCase):
             self.assertEqual([r['id'] for r in records], [request['id'], 'second'])
             self.assertTrue(all(r['runId'] == 'run' and 'channelsAfter' in r for r in records))
             self.assertEqual((root / 'results/run/transactions.jsonl').read_bytes(), before)
-            self.assertEqual(json.loads((root / 'results/run/summary.json').read_text())['attempted'], 2)
+            summary = json.loads((root / 'results/run/summary.json').read_text())
+            self.assertEqual(summary['attempted'], 2)
+            self.assertEqual(summary['performance']['all']['succeeded'], 2)
+            self.assertEqual(summary['performance']['rgb']['succeeded'], 2)
+            self.assertEqual(summary['performance']['btc']['attempted'], 0)
+            self.assertIsNotNone(summary['performance']['all']['durationMsSucceeded']['avg'])
 
 
 if __name__ == '__main__':

@@ -160,7 +160,7 @@ def preflight(plan, config, factory=Rln):
     if not regtest(config.get("network")):
         raise ValueError("Sono consentiti solo nodi regtest")
     for key, default, maximum in (("requestTimeoutSec", 15, 300), ("settlementTimeoutSec", 120, 3600),
-                                  ("pollIntervalSec", 1, 30), ("invoiceExpirySec", 3600, 86400)):
+                                  ("pollIntervalSec", 0.1, 30), ("invoiceExpirySec", 3600, 86400)):
         value = config.get(key, default)
         if isinstance(value, bool) or not isinstance(value, (int, float)) or not 0 < value <= maximum:
             raise ValueError(f"Configurazione temporale non valida: {key}")
@@ -267,7 +267,7 @@ def run_payment(request, config, clients, identities, journal, observer=None):
             if remaining <= 0:
                 result["status"] = "inconclusive"
                 break
-            time.sleep(min(config.get("pollIntervalSec", 1), remaining))
+            time.sleep(min(config.get("pollIntervalSec", 0.1), remaining))
     except (ApiError, ValueError, KeyError, TypeError, AttributeError) as error:
         if result["status"] == "pending":
             result["status"] = "inconclusive"
@@ -296,6 +296,46 @@ def channel_snapshot(clients):
     return {alias: [{key: channel[key] for key in fields if key in channel}
                     for channel in client.request("listchannels")["channels"]]
             for alias, client in clients.items()}
+
+
+def _stats(values):
+    nums = sorted(v for v in values if isinstance(v, (int, float)) and not isinstance(v, bool))
+    if not nums:
+        return {"count": 0, "total": 0, "avg": None, "min": None, "p50": None, "p95": None, "max": None}
+    n = len(nums)
+    return {
+        "count": n,
+        "total": sum(nums),
+        "avg": round(sum(nums) / n, 2),
+        "min": nums[0],
+        "p50": nums[(n - 1) // 2],
+        "p95": nums[min(n - 1, int((n - 1) * 0.95))],
+        "max": nums[-1],
+    }
+
+
+def _slice_metrics(items):
+    succeeded = [r for r in items if r.get("status") == "succeeded"]
+    attempted = len(items)
+    return {
+        "attempted": attempted,
+        "succeeded": len(succeeded),
+        "failed": sum(r.get("status") == "failed" for r in items),
+        "rejected": sum(r.get("status") == "rejected" for r in items),
+        "successRate": round(len(succeeded) / attempted, 4) if attempted else None,
+        "durationMsAll": _stats([r.get("durationMs") for r in items]),
+        "durationMsSucceeded": _stats([r.get("durationMs") for r in succeeded]),
+        "feeMsat": _stats([r.get("feeMsat") for r in succeeded]),
+        "hopCount": _stats([r.get("hopCount") for r in succeeded]),
+    }
+
+
+def performance_summary(records):
+    return {
+        "all": _slice_metrics(records),
+        "btc": _slice_metrics([r for r in records if not r.get("assetId")]),
+        "rgb": _slice_metrics([r for r in records if r.get("assetId")]),
+    }
 
 
 def replay(plan, config, run_id, root=ROOT, log_path=None):
@@ -329,13 +369,17 @@ def replay(plan, config, run_id, root=ROOT, log_path=None):
             result["snapshotError"] = str(error)
         append_log(directory / "transactions.jsonl", result)
         append_log(log_path, result)
-        records.append({key: result[key] for key in ("id", "status", "feeMsat", "telemetryComplete")})
-        print(f"{request['id']}: {result['status']} fee={result['feeMsat']} msat hops={result['hopCount']}", flush=True)
+        records.append({key: result.get(key) for key in (
+            "id", "status", "durationMs", "feeMsat", "hopCount",
+            "pathCount", "assetId", "failureReason", "telemetryComplete",
+        )})
+        print(f"{request['id']}: {result['status']} duration={result['durationMs']}ms fee={result['feeMsat']} msat hops={result['hopCount']}", flush=True)
         write(directory / "summary.json", {"attempted": len(records), "planned": len(plan["requests"]),
               "outcomes": dict(Counter(r["status"] for r in records)),
               "measuredFeesMsat": sum(r["feeMsat"] for r in records if r["feeMsat"] is not None),
-              "transactionsWithTelemetry": sum(r["telemetryComplete"] for r in records),
+              "transactionsWithTelemetry": sum(bool(r["telemetryComplete"]) for r in records),
               "transactionsWithoutFeeMeasurement": sum(r["feeMsat"] is None for r in records),
+              "performance": performance_summary(records),
               "results": records})
         if result.get("channelsAfter") is not None:
             write(directory / "channels-after.json", result["channelsAfter"])

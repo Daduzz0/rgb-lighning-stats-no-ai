@@ -55,7 +55,7 @@ configurazioni di identità appartenenti a volumi eliminati.
 `make test` non avvia servizi e non invia pagamenti. Controlla integrità dei fixture,
 normalizzazione e invio di **tutte le 2.000 richieste uniche**, BTC/RGB, transizioni
 pending/success/failed, timeout, risposte malformate, identità/importi/asset errati,
-assenza di retry degli invii ambigui, telemetria diretta e MPP, log concorrenti,
+assenza di retry degli invii ambigui, telemetria dei percorsi, log concorrenti,
 scritture atomiche e isolamento Compose. Usa client simulati per verificare il runner;
 i loro esiti non sono misure di rete.
 
@@ -67,18 +67,15 @@ i loro esiti non sono misure di rete.
 - invoice duplicata, scaduta e malformata;
 - importo BTC minimo del carrier RGB e rifiuto sotto il minimo;
 - liquidità BTC e RGB esaurita;
-- BTC MPP con un importo superiore al limite del canale diretto e pagamento di ritorno;
-- limite upstream RGB MPP: la versione fissata richiede l'intero importo RGB su ogni
-  canale candidato, quindi non può combinare 30+20 unità per consegnarne 40;
 - arresto reale di Bob e pagamento su un percorso alternativo;
 - arresto reale di Heidi e Ivan, che taglia tutti gli ingressi verso Judy, e fallimento
   dei pagamenti BTC/RGB. I nodi fermati vengono riavviati e sbloccati in `finally`.
 
-Per escludere intenzionalmente fault injection o MPP:
+Per escludere intenzionalmente fault injection:
 
 ```bash
 python3 scripts/transaction_suite.py --config state/rgb-stats/config.json \
-  --run-id suite-ridotta-01 --no-faults --no-mpp
+  --run-id suite-ridotta-01 --no-faults
 ```
 
 La suite modifica i saldi. Eseguirla su un laboratorio appena creato per confronti

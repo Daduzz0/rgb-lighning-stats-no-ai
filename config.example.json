@@ -3,7 +3,7 @@
   "network": "regtest",
   "requestTimeoutSec": 15,
   "settlementTimeoutSec": 120,
-  "pollIntervalSec": 1,
+  "pollIntervalSec": 0.1,
   "invoiceExpirySec": 3600,
   "nodes": {
     "alice": {

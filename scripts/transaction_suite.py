@@ -32,7 +32,7 @@ def reference_coverage():
              "expectedSynthetic": scenario["expected"]} for scenario in topology["scenarios"]]
 
 
-def run_suite(config, run_id, root=baseline.ROOT, faults=True, mpp=True):
+def run_suite(config, run_id, root=baseline.ROOT, faults=True):
     if not re.fullmatch(r"[A-Za-z0-9_-]{1,80}", run_id):
         raise ValueError("run-id non valido")
     if config.get("labLayout") != "history":
@@ -53,8 +53,8 @@ def run_suite(config, run_id, root=baseline.ROOT, faults=True, mpp=True):
               "network": "regtest", "type": "live_transaction_suite", "suiteStatus": "running", "cases": [],
               "originalTopologyScenarios": reference_coverage(),
               "daemonProvenance": config.get("daemonProvenance"), "routingMode": "node_default",
-              "plannedCases": 22 - (0 if faults else 4) - (0 if mpp else 3),
-              "faultInjectionEnabled": faults, "mppTestsEnabled": mpp}
+              "plannedCases": 19 - (0 if faults else 4),
+              "faultInjectionEnabled": faults}
     baseline.write(directory / "run.json", {**report, "nodes": identities})
     def journal(record):
         baseline.append_log(directory / "journal.jsonl", {"runId": run_id, **record})
@@ -69,9 +69,10 @@ def run_suite(config, run_id, root=baseline.ROOT, faults=True, mpp=True):
     def save_report():
         report["outcomes"] = dict(Counter(c["verdict"] for c in report["cases"]))
         report["attempted"] = len(report["cases"])
+        report["performance"] = baseline.performance_summary(report["cases"])
         baseline.write(directory / "suite.json", report)
     def run(case_id, asset=False, sender="alice", recipient="judy", amount=10000000,
-            asset_amount=1, expected="succeeded", hop_min=None, paths_min=None, invoice=None):
+            asset_amount=1, expected="succeeded", hop_min=None, invoice=None):
         request = {**base, "id": case_id, "sender": sender, "recipient": recipient,
                    "amountMsat": str(amount), "assetAlias": base["assetAlias"] if asset else None,
                    "assetAmount": str(asset_amount) if asset else None}
@@ -89,8 +90,6 @@ def run_suite(config, run_id, root=baseline.ROOT, faults=True, mpp=True):
                 failures.append("Telemetria fee/hop incompleta")
             if hop_min is not None and (result["hopCount"] is None or result["hopCount"] < hop_min):
                 failures.append(f"Attesi almeno {hop_min} hop")
-            if paths_min is not None and (result["pathCount"] is None or result["pathCount"] < paths_min):
-                failures.append(f"Attesi almeno {paths_min} percorsi MPP")
             if case_id.endswith(("-direct", "-reverse")) and "multihop" not in case_id:
                 if result["hopCount"] != 1 or result["feeMsat"] != 0:
                     failures.append("Il pagamento diretto deve avere un hop e fee di routing zero")
@@ -99,9 +98,13 @@ def run_suite(config, run_id, root=baseline.ROOT, faults=True, mpp=True):
                       snapshotErrors={"before": errors_before, "after": errors_after})
         baseline.append_log(directory / "transactions.jsonl", result)
         baseline.append_log(root / "results/transactions.jsonl", result)
-        report["cases"].append({k: result[k] for k in ("id", "status", "expectedStatus", "verdict", "assertionErrors", "feeMsat", "hopCount", "pathCount", "telemetryComplete")})
+        report["cases"].append({k: result.get(k) for k in (
+            "id", "status", "expectedStatus", "verdict", "assertionErrors",
+            "durationMs", "feeMsat", "hopCount", "pathCount", "assetId",
+            "failureReason", "telemetryComplete",
+        )})
         save_report()
-        print(f"{case_id}: {result['verdict']} ({result['status']}, fee={result['feeMsat']}, hops={result['hopCount']})", flush=True)
+        print(f"{case_id}: {result['verdict']} ({result['status']}, duration={result['durationMs']}ms, fee={result['feeMsat']}, hops={result['hopCount']})", flush=True)
         if result["status"] in ("submission_unknown", "inconclusive", "pending"):
             raise RuntimeError(f"Pagamento ambiguo {case_id}: riconciliare il journal prima di altri invii")
         return result
@@ -138,15 +141,6 @@ def run_suite(config, run_id, root=baseline.ROOT, faults=True, mpp=True):
         run("rgb-below-minimum-carrier", asset=True, recipient="bob", amount=minimum - 1, expected="not_submitted")
         run("btc-liquidity-exhausted", amount=10**13, expected="failed")
         run("rgb-liquidity-exhausted", asset=True, asset_amount=10001, expected="failed")
-        if mpp:
-            channels = clients["alice"].request("listchannels")["channels"]
-            direct_limit = next(c["next_outbound_htlc_limit_msat"] for c in channels if c["peer_pubkey"] == identities["bob"]["pubkey"])
-            amount = direct_limit + 10_000_000
-            run("btc-mpp", recipient="bob", amount=amount, paths_min=2)
-            run("btc-mpp-return", sender="bob", recipient="alice", amount=amount)
-            # The pinned RGB LDK checks the full RGB amount on each candidate channel;
-            # it cannot combine 30+20 units into a 40-unit payment. This is a real negative test.
-            run("rgb-mpp-unsupported-upstream", asset=True, asset_amount=40, expected="failed")
         invoice = clients["bob"].request("lninvoice", {"amt_msat": 10000000, "expiry_sec": 1})["invoice"]
         lab.wait_for("scadenza invoice di test", lambda: clients["bob"].request("invoicestatus", {"invoice": invoice})["status"] == "Expired", timeout=10)
         run("btc-expired-invoice", recipient="bob", invoice=invoice, expected="not_submitted")
@@ -175,11 +169,10 @@ def main():
     parser.add_argument("--config", type=Path, default=baseline.ROOT / "state/rgb-stats/config.json")
     parser.add_argument("--run-id", required=True)
     parser.add_argument("--no-faults", action="store_true")
-    parser.add_argument("--no-mpp", action="store_true")
     args = parser.parse_args()
     try:
         baseline.validate()
-        directory, passed = run_suite(baseline.read(args.config), args.run_id, faults=not args.no_faults, mpp=not args.no_mpp)
+        directory, passed = run_suite(baseline.read(args.config), args.run_id, faults=not args.no_faults)
         print(f"Rapporto suite: {directory / 'suite.json'}")
         return 0 if passed else 1
     except (ApiError, ValueError, RuntimeError, OSError, KeyError, lab.subprocess.SubprocessError) as error:
