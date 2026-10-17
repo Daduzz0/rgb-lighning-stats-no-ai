@@ -1,0 +1,63 @@
+{
+  "schemaVersion": 1,
+  "network": "regtest",
+  "requestTimeoutSec": 15,
+  "settlementTimeoutSec": 120,
+  "pollIntervalSec": 1,
+  "invoiceExpirySec": 3600,
+  "nodes": {
+    "alice": {
+      "url": null,
+      "expectedPubkey": null,
+      "bearerTokenEnv": null
+    },
+    "bob": {
+      "url": null,
+      "expectedPubkey": null,
+      "bearerTokenEnv": null
+    },
+    "carol": {
+      "url": null,
+      "expectedPubkey": null,
+      "bearerTokenEnv": null
+    },
+    "dave": {
+      "url": null,
+      "expectedPubkey": null,
+      "bearerTokenEnv": null
+    },
+    "erin": {
+      "url": null,
+      "expectedPubkey": null,
+      "bearerTokenEnv": null
+    },
+    "frank": {
+      "url": null,
+      "expectedPubkey": null,
+      "bearerTokenEnv": null
+    },
+    "grace": {
+      "url": null,
+      "expectedPubkey": null,
+      "bearerTokenEnv": null
+    },
+    "heidi": {
+      "url": null,
+      "expectedPubkey": null,
+      "bearerTokenEnv": null
+    },
+    "ivan": {
+      "url": null,
+      "expectedPubkey": null,
+      "bearerTokenEnv": null
+    },
+    "judy": {
+      "url": null,
+      "expectedPubkey": null,
+      "bearerTokenEnv": null
+    }
+  },
+  "assets": {
+    "rgb:synthetic-route-test": null
+  }
+}

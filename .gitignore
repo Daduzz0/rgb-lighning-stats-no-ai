@@ -1,0 +1,9 @@
+runtime/
+state/
+results/
+__pycache__/
+*.pyc
+config.local.json
+generated/
+.venv/
+kaleidoswap/

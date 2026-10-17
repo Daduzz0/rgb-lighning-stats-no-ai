@@ -1,0 +1,6 @@
+[project]
+name = "rgb-lightning-stats-no-ai"
+version = "0.1.0"
+description = "Regtest benchmark skeleton using the original RGB Lightning Node REST API, without AI routing"
+requires-python = ">=3.11"
+dependencies = []

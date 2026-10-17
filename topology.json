@@ -1,0 +1,742 @@
+{
+  "schemaVersion": 1,
+  "name": "airgb-routing-10-nodes",
+  "network": "regtest",
+  "description": "Fixture dichiarativa per test di routing BTC/RGB, interpretazione AI, esclusioni, budget fee e MPP.",
+  "runnerContract": {
+    "status": "Fixture per un futuro runner: questo file da solo non avvia i nodi.",
+    "references": "Gli id dei nodi e TEST sono simbolici. Creare wallet nuovi e salvare a runtime id->pubkey, channel id->short_channel_id e TEST->contract id. Non usare id o alias al posto delle pubkey nelle API.",
+    "identity": "Generare password e mnemoniche per ogni esecuzione e conservarle solo nella data directory privata; nessuna credenziale e inclusa nella fixture.",
+    "isolation": "Usare una topologia nuova per ogni scenario e algoritmo. Non riutilizzare saldi o scorer modificati da pagamenti precedenti.",
+    "merging": "Unire ricorsivamente i defaults con ogni scenario; gli array sostituiscono quelli di default. Null rimuove l asset nel caso BTC.",
+    "directions": "Ogni canale e fisicamente bidirezionale. from e il finanziatore; push_msat e push_asset_amount sono zero. La liquidita RGB iniziale e tutta from->to; la direzione opposta parte da zero.",
+    "fees": "fee_base_msat e fee_proportional_millionths configurano la direzione from->to. La fee del mittente sul primo canale non viene addebitata. Sommare tutte le fee di tutti i percorsi; non sommare le penalita dello scorer.",
+    "setupApi": "Applicare tutti i campi dei canali tramite /openchannel del daemon o un adapter equivalente. Il wrapper wallet.openChannel attuale non espone tutti i parametri delle fee.",
+    "readiness": "Dopo funding e trasferimenti attendere conferme, saldi spendibili e gossip dei 15 canali. Verificare liquidita e fee pubblicate prima di eseguire gli scenari.",
+    "ai": "Confrontare l estrazione con expectedExtractionDefaults piu expectedExtraction. Compilare contro la invoice effettiva e confrontare i vincoli risultanti con routing. La configurazione attesa non deve sostituire l output AI sotto test.",
+    "routing": "excludedNodeIds contiene id simbolici da tradurre in routing.excluded_nodes. max_paths e un limite di test indipendente dall estrazione AI. weights serve solo per multi_objective.",
+    "overrides": "Rendere realmente indisponibili i canali in unavailableChannelIds prima della ricerca e attendere la convergenza; non rimuoverli soltanto dal grafo usato per le asserzioni.",
+    "oracle": "graphFeasible indica la fattibilita con i vincoli dichiarati. Un planner sperimentale puo non trovare una soluzione fattibile: riportare separatamente il fallimento del planner, senza contarlo come verifica dei vincoli riuscita.",
+    "pathComparison": "Confrontare i percorsi come insieme non ordinato; nodes include mittente e destinatario. Gli importi BTC sono quelli consegnati al destinatario, le fee sono separate.",
+    "coverage": "Scoring AI, privacy e fault injection durante i retry richiedono scenari aggiuntivi. unavailable-channel-detour verifica una indisponibilita gia nota prima della prima ricerca."
+  },
+  "setup": {
+    "host": "127.0.0.1",
+    "credentialsEnvFile": "wallet/native-data/regtest/wallet.env",
+    "dataDirectoryTemplate": "wallet/native-data/topology-{runId}",
+    "bitcoinRpcHost": "127.0.0.1",
+    "bitcoinRpcPort": 18443,
+    "indexerUrl": "tcp://127.0.0.1:50001",
+    "rgbProxyEndpoint": "rpc://127.0.0.1:3000/json-rpc",
+    "initialBtcFundingSatPerNode": "20000000",
+    "confirmations": 6,
+    "rgbUtxos": {
+      "count": 4,
+      "sizeSat": "1000000",
+      "feeRateSatPerVbyte": "2"
+    },
+    "invoiceExpirySec": 3600,
+    "readinessTimeoutMs": 180000
+  },
+  "nodes": [
+    {
+      "id": "alice",
+      "alias": "Alice",
+      "p2pPort": 9801,
+      "apiPort": 8801
+    },
+    {
+      "id": "bob",
+      "alias": "Bob",
+      "p2pPort": 9802,
+      "apiPort": 8802
+    },
+    {
+      "id": "carol",
+      "alias": "Carol",
+      "p2pPort": 9803,
+      "apiPort": 8803
+    },
+    {
+      "id": "dave",
+      "alias": "Dave",
+      "p2pPort": 9804,
+      "apiPort": 8804
+    },
+    {
+      "id": "erin",
+      "alias": "Erin",
+      "p2pPort": 9805,
+      "apiPort": 8805
+    },
+    {
+      "id": "frank",
+      "alias": "Frank",
+      "p2pPort": 9806,
+      "apiPort": 8806
+    },
+    {
+      "id": "grace",
+      "alias": "Grace",
+      "p2pPort": 9807,
+      "apiPort": 8807
+    },
+    {
+      "id": "heidi",
+      "alias": "Heidi",
+      "p2pPort": 9808,
+      "apiPort": 8808
+    },
+    {
+      "id": "ivan",
+      "alias": "Ivan",
+      "p2pPort": 9809,
+      "apiPort": 8809
+    },
+    {
+      "id": "judy",
+      "alias": "Judy",
+      "p2pPort": 9810,
+      "apiPort": 8810
+    }
+  ],
+  "assets": [
+    {
+      "id": "TEST",
+      "issuer": "alice",
+      "ticker": "ROUTE",
+      "name": "Routing test asset",
+      "precision": 0,
+      "supply": "10000",
+      "initialAllocations": {
+        "alice": "2000",
+        "bob": "1000",
+        "carol": "1000",
+        "dave": "1000",
+        "erin": "1000",
+        "frank": "1000",
+        "grace": "1000",
+        "heidi": "1000",
+        "ivan": "1000",
+        "judy": "0"
+      }
+    }
+  ],
+  "channelDefaults": {
+    "asset": "TEST",
+    "capacity_sat": 1000000,
+    "public": true,
+    "with_anchors": true,
+    "push_msat": 0,
+    "push_asset_amount": 0,
+    "fee_proportional_millionths": 0
+  },
+  "channels": [
+    {
+      "id": "alice-bob",
+      "from": "alice",
+      "to": "bob",
+      "asset_amount": 60,
+      "fee_base_msat": 0
+    },
+    {
+      "id": "alice-carol",
+      "from": "alice",
+      "to": "carol",
+      "asset_amount": 40,
+      "fee_base_msat": 0
+    },
+    {
+      "id": "alice-dave",
+      "from": "alice",
+      "to": "dave",
+      "asset_amount": 40,
+      "fee_base_msat": 0
+    },
+    {
+      "id": "bob-erin",
+      "from": "bob",
+      "to": "erin",
+      "asset_amount": 60,
+      "fee_base_msat": 1000
+    },
+    {
+      "id": "bob-frank",
+      "from": "bob",
+      "to": "frank",
+      "asset_amount": 20,
+      "fee_base_msat": 4000
+    },
+    {
+      "id": "carol-erin",
+      "from": "carol",
+      "to": "erin",
+      "asset_amount": 20,
+      "fee_base_msat": 3000
+    },
+    {
+      "id": "carol-frank",
+      "from": "carol",
+      "to": "frank",
+      "asset_amount": 40,
+      "fee_base_msat": 2000
+    },
+    {
+      "id": "dave-frank",
+      "from": "dave",
+      "to": "frank",
+      "asset_amount": 20,
+      "fee_base_msat": 4000
+    },
+    {
+      "id": "dave-grace",
+      "from": "dave",
+      "to": "grace",
+      "asset_amount": 40,
+      "fee_base_msat": 3000
+    },
+    {
+      "id": "erin-heidi",
+      "from": "erin",
+      "to": "heidi",
+      "asset_amount": 60,
+      "fee_base_msat": 1000
+    },
+    {
+      "id": "frank-heidi",
+      "from": "frank",
+      "to": "heidi",
+      "asset_amount": 20,
+      "fee_base_msat": 5000
+    },
+    {
+      "id": "frank-ivan",
+      "from": "frank",
+      "to": "ivan",
+      "asset_amount": 40,
+      "fee_base_msat": 2000
+    },
+    {
+      "id": "grace-ivan",
+      "from": "grace",
+      "to": "ivan",
+      "asset_amount": 40,
+      "fee_base_msat": 3000
+    },
+    {
+      "id": "heidi-judy",
+      "from": "heidi",
+      "to": "judy",
+      "asset_amount": 60,
+      "fee_base_msat": 1000
+    },
+    {
+      "id": "ivan-judy",
+      "from": "ivan",
+      "to": "judy",
+      "asset_amount": 40,
+      "fee_base_msat": 2000
+    }
+  ],
+  "algorithmMatrix": [
+    {
+      "algorithm": "ldk_dijkstra"
+    },
+    {
+      "algorithm": "yen"
+    },
+    {
+      "algorithm": "min_cost_flow"
+    },
+    {
+      "algorithm": "multi_objective",
+      "weights": {
+        "fee": 1,
+        "reliability": 0,
+        "cltv": 0,
+        "hops": 0
+      }
+    }
+  ],
+  "paymentDefaults": {
+    "sender": "alice",
+    "recipient": "judy",
+    "amountMsat": "10000000",
+    "asset": "TEST",
+    "assetAmount": "30"
+  },
+  "routingDefaults": {
+    "max_paths": 1,
+    "max_fee_msat": 10000,
+    "excludedNodeIds": []
+  },
+  "expectedExtractionDefaults": {
+    "schemaVersion": "1.0",
+    "status": "parsed",
+    "feeLimit": null,
+    "excludedNodeReferences": [],
+    "priority": null,
+    "privacyRequest": null,
+    "unhandledRequests": []
+  },
+  "invariants": [
+    "Ogni percorso inizia nel sender e termina nel recipient della invoice canonica.",
+    "Ogni hop usa un canale realmente utilizzabile nella direzione corretta; nessun ciclo.",
+    "Nessun percorso o retry attraversa un nodo escluso.",
+    "La somma delle fee effettivamente pagate non supera max_fee_msat.",
+    "La somma degli importi consegnati coincide esattamente con amountMsat e assetAmount.",
+    "Ogni parte RGB e positiva, conserva il contract id e rispetta il minimo HTLC di 3000000 msat.",
+    "La somma della liquidita utilizzata da parti che condividono un canale non supera il saldo direzionale BTC/RGB.",
+    "Il numero di percorsi non supera max_paths; l algoritmo e la policy restano quelli confermati.",
+    "Per succeeded verificare mittente, destinatario e saldi; per no_route non deve esserci alcun pagamento regolato.",
+    "Per rejected_before_submission e needs_clarification non creare intenti eseguibili e non inviare HTLC."
+  ],
+  "scenarios": [
+    {
+      "id": "rgb-baseline",
+      "description": "Pagamento RGB su una topologia con nove percorsi semplici alternativi.",
+      "expected": {
+        "outcome": "succeeded",
+        "graphFeasible": true
+      }
+    },
+    {
+      "id": "fee-inclusive-boundary",
+      "description": "Budget uguale al costo minimo: esiste un solo percorso ammissibile.",
+      "prompt": "Massimo 3 sat di commissioni",
+      "expectedExtraction": {
+        "feeLimit": {
+          "value": "3",
+          "unit": "sat",
+          "comparison": "lte"
+        }
+      },
+      "routing": {
+        "max_fee_msat": 3000
+      },
+      "expected": {
+        "outcome": "succeeded",
+        "graphFeasible": true,
+        "paths": [
+          {
+            "nodes": [
+              "alice",
+              "bob",
+              "erin",
+              "heidi",
+              "judy"
+            ],
+            "assetAmount": "30",
+            "amountMsat": "10000000"
+          }
+        ],
+        "pathCount": 1,
+        "totalFeeMsat": "3000"
+      }
+    },
+    {
+      "id": "fee-exclusive-boundary",
+      "description": "Meno di 3 sat significa al massimo 2999 msat: nessun percorso ammissibile.",
+      "prompt": "Meno di 3 sat di commissioni",
+      "expectedExtraction": {
+        "feeLimit": {
+          "value": "3",
+          "unit": "sat",
+          "comparison": "lt"
+        }
+      },
+      "routing": {
+        "max_fee_msat": 2999
+      },
+      "expected": {
+        "outcome": "no_route",
+        "graphFeasible": false,
+        "reason": "fee_budget"
+      }
+    },
+    {
+      "id": "exclude-bob",
+      "description": "Il budget e la liquidita obbligano a passare da Carol, Frank e Ivan.",
+      "prompt": "Evita Bob, massimo 6 sat di commissioni",
+      "expectedExtraction": {
+        "feeLimit": {
+          "value": "6",
+          "unit": "sat",
+          "comparison": "lte"
+        },
+        "excludedNodeReferences": [
+          "Bob"
+        ]
+      },
+      "routing": {
+        "max_fee_msat": 6000,
+        "excludedNodeIds": [
+          "bob"
+        ]
+      },
+      "expected": {
+        "outcome": "succeeded",
+        "graphFeasible": true,
+        "paths": [
+          {
+            "nodes": [
+              "alice",
+              "carol",
+              "frank",
+              "ivan",
+              "judy"
+            ],
+            "assetAmount": "30",
+            "amountMsat": "10000000"
+          }
+        ],
+        "pathCount": 1,
+        "totalFeeMsat": "6000"
+      }
+    },
+    {
+      "id": "exclude-bob-and-frank",
+      "description": "Escludendo due nodi rimane il percorso Dave, Grace e Ivan.",
+      "prompt": "Evita Bob e Frank, massimo 8 sat di commissioni",
+      "expectedExtraction": {
+        "feeLimit": {
+          "value": "8",
+          "unit": "sat",
+          "comparison": "lte"
+        },
+        "excludedNodeReferences": [
+          "Bob",
+          "Frank"
+        ]
+      },
+      "routing": {
+        "max_fee_msat": 8000,
+        "excludedNodeIds": [
+          "bob",
+          "frank"
+        ]
+      },
+      "expected": {
+        "outcome": "succeeded",
+        "graphFeasible": true,
+        "paths": [
+          {
+            "nodes": [
+              "alice",
+              "dave",
+              "grace",
+              "ivan",
+              "judy"
+            ],
+            "assetAmount": "30",
+            "amountMsat": "10000000"
+          }
+        ],
+        "pathCount": 1,
+        "totalFeeMsat": "8000"
+      }
+    },
+    {
+      "id": "excluded-cut-set",
+      "description": "Heidi e Ivan sono tutti gli ingressi verso Judy: escluderli disconnette il destinatario.",
+      "prompt": "Evita Heidi e Ivan",
+      "expectedExtraction": {
+        "excludedNodeReferences": [
+          "Heidi",
+          "Ivan"
+        ]
+      },
+      "routing": {
+        "excludedNodeIds": [
+          "heidi",
+          "ivan"
+        ]
+      },
+      "expected": {
+        "outcome": "no_route",
+        "graphFeasible": false,
+        "reason": "excluded_cut_set",
+        "maximumDeliverableAssetAmount": "0"
+      }
+    },
+    {
+      "id": "mpp-60-40",
+      "description": "Per consegnare 100 unita RGB servono entrambi gli ingressi a Judy, con split 60 e 40.",
+      "prompt": "Massimo 9 sat di commissioni",
+      "expectedExtraction": {
+        "feeLimit": {
+          "value": "9",
+          "unit": "sat",
+          "comparison": "lte"
+        }
+      },
+      "payment": {
+        "assetAmount": "100"
+      },
+      "routing": {
+        "max_fee_msat": 9000,
+        "max_paths": 2
+      },
+      "expected": {
+        "outcome": "succeeded",
+        "graphFeasible": true,
+        "paths": [
+          {
+            "nodes": [
+              "alice",
+              "bob",
+              "erin",
+              "heidi",
+              "judy"
+            ],
+            "assetAmount": "60",
+            "amountMsat": "6000000"
+          },
+          {
+            "nodes": [
+              "alice",
+              "carol",
+              "frank",
+              "ivan",
+              "judy"
+            ],
+            "assetAmount": "40",
+            "amountMsat": "4000000"
+          }
+        ],
+        "pathCount": 2,
+        "totalFeeMsat": "9000"
+      }
+    },
+    {
+      "id": "mpp-total-fee-budget",
+      "description": "Il budget di 8999 msat vale per la somma delle parti: lo split minimo costa 9000.",
+      "prompt": "Meno di 9 sat di commissioni",
+      "expectedExtraction": {
+        "feeLimit": {
+          "value": "9",
+          "unit": "sat",
+          "comparison": "lt"
+        }
+      },
+      "payment": {
+        "assetAmount": "100"
+      },
+      "routing": {
+        "max_fee_msat": 8999,
+        "max_paths": 2
+      },
+      "expected": {
+        "outcome": "no_route",
+        "graphFeasible": false,
+        "reason": "aggregate_fee_budget"
+      }
+    },
+    {
+      "id": "mpp-single-path-forbidden",
+      "description": "Nessun percorso singolo puo trasportare 100 unita RGB.",
+      "payment": {
+        "assetAmount": "100"
+      },
+      "routing": {
+        "max_paths": 1,
+        "max_fee_msat": 100000
+      },
+      "expected": {
+        "outcome": "no_route",
+        "graphFeasible": false,
+        "reason": "path_count_and_liquidity",
+        "maximumDeliverableAssetAmount": "60"
+      }
+    },
+    {
+      "id": "rgb-total-liquidity-exhausted",
+      "description": "Gli ultimi due canali consentono al massimo 100 unita, anche con piu percorsi.",
+      "payment": {
+        "assetAmount": "101"
+      },
+      "routing": {
+        "max_paths": 8,
+        "max_fee_msat": 100000
+      },
+      "expected": {
+        "outcome": "no_route",
+        "graphFeasible": false,
+        "reason": "rgb_capacity",
+        "maximumDeliverableAssetAmount": "100"
+      }
+    },
+    {
+      "id": "mpp-exclusion-reduces-capacity",
+      "description": "Senza Bob restano al massimo 80 unita consegnabili: 100 devono fallire senza ignorare il vincolo.",
+      "prompt": "Evita Bob",
+      "expectedExtraction": {
+        "excludedNodeReferences": [
+          "Bob"
+        ]
+      },
+      "payment": {
+        "assetAmount": "100"
+      },
+      "routing": {
+        "excludedNodeIds": [
+          "bob"
+        ],
+        "max_paths": 8,
+        "max_fee_msat": 100000
+      },
+      "expected": {
+        "outcome": "no_route",
+        "graphFeasible": false,
+        "reason": "rgb_capacity_after_exclusion",
+        "maximumDeliverableAssetAmount": "80"
+      }
+    },
+    {
+      "id": "negated-exclusion",
+      "description": "La negazione non deve diventare un divieto: il solo percorso entro 3 sat passa da Bob.",
+      "prompt": "Non voglio evitare Bob. Massimo 3 sat di commissioni",
+      "expectedExtraction": {
+        "feeLimit": {
+          "value": "3",
+          "unit": "sat",
+          "comparison": "lte"
+        },
+        "excludedNodeReferences": []
+      },
+      "routing": {
+        "max_fee_msat": 3000
+      },
+      "expected": {
+        "outcome": "succeeded",
+        "graphFeasible": true,
+        "paths": [
+          {
+            "nodes": [
+              "alice",
+              "bob",
+              "erin",
+              "heidi",
+              "judy"
+            ],
+            "assetAmount": "30",
+            "amountMsat": "10000000"
+          }
+        ],
+        "pathCount": 1,
+        "totalFeeMsat": "3000"
+      }
+    },
+    {
+      "id": "unavailable-channel-detour",
+      "description": "Il canale Bob-Erin non e utilizzabile prima del routing: il budget forza il percorso alternativo.",
+      "prompt": "Massimo 6 sat di commissioni",
+      "expectedExtraction": {
+        "feeLimit": {
+          "value": "6",
+          "unit": "sat",
+          "comparison": "lte"
+        }
+      },
+      "routing": {
+        "max_fee_msat": 6000
+      },
+      "overrides": {
+        "unavailableChannelIds": [
+          "bob-erin"
+        ]
+      },
+      "expected": {
+        "outcome": "succeeded",
+        "graphFeasible": true,
+        "paths": [
+          {
+            "nodes": [
+              "alice",
+              "carol",
+              "frank",
+              "ivan",
+              "judy"
+            ],
+            "assetAmount": "30",
+            "amountMsat": "10000000"
+          }
+        ],
+        "pathCount": 1,
+        "totalFeeMsat": "6000"
+      }
+    },
+    {
+      "id": "btc-fee-boundary",
+      "description": "Controllo BTC senza asset RGB: lo stesso limite di fee deve essere rispettato.",
+      "prompt": "Massimo 3 sat di commissioni",
+      "expectedExtraction": {
+        "feeLimit": {
+          "value": "3",
+          "unit": "sat",
+          "comparison": "lte"
+        }
+      },
+      "payment": {
+        "asset": null,
+        "assetAmount": null
+      },
+      "routing": {
+        "max_fee_msat": 3000
+      },
+      "expected": {
+        "outcome": "succeeded",
+        "graphFeasible": true,
+        "paths": [
+          {
+            "nodes": [
+              "alice",
+              "bob",
+              "erin",
+              "heidi",
+              "judy"
+            ],
+            "amountMsat": "10000000"
+          }
+        ],
+        "pathCount": 1,
+        "totalFeeMsat": "3000"
+      }
+    },
+    {
+      "id": "exclude-recipient-conflict",
+      "description": "Il destinatario non puo essere escluso: bloccare prima di creare o inviare il pagamento.",
+      "prompt": "Evita Judy",
+      "expectedExtraction": {
+        "excludedNodeReferences": [
+          "Judy"
+        ]
+      },
+      "routing": {
+        "excludedNodeIds": [
+          "judy"
+        ]
+      },
+      "expected": {
+        "outcome": "rejected_before_submission",
+        "graphFeasible": false,
+        "reason": "recipient_excluded"
+      }
+    },
+    {
+      "id": "unknown-node-clarification",
+      "description": "Mallory non esiste nella topologia: richiedere chiarimento senza inviare.",
+      "prompt": "Evita Mallory",
+      "expectedExtraction": {
+        "excludedNodeReferences": [
+          "Mallory"
+        ]
+      },
+      "expected": {
+        "outcome": "needs_clarification",
+        "graphFeasible": false,
+        "reason": "unresolved_node"
+      }
+    }
+  ]
+}

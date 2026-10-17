@@ -1,0 +1,50 @@
+{
+  "schemaVersion": 1,
+  "synthetic": true,
+  "generator": "wallet/scripts/generate-routing-history.mjs",
+  "sourceTopologySha256": "fca4997ba449b61045199f29a96122ec66e2184d71a8fdb787e66ab2262ec571",
+  "cumulative": true,
+  "privacyReview": "passed_synthetic_provenance_and_field_checks",
+  "datasets": [
+    {
+      "filename": "history-0020.json",
+      "sha256": "34745cb3f31bf0fc41d44619337adebb650e5282d212ad185f6474b1faba2803",
+      "bytes": 105120,
+      "transactionCount": 20,
+      "succeeded": 20,
+      "failed": 0,
+      "incomingEpisodes": 22,
+      "outgoingEpisodes": 22
+    },
+    {
+      "filename": "history-0100.json",
+      "sha256": "75ed531b50b42a96ca43cec8ebdf57ee15baed0dbe5372c30950277eaa76dbad",
+      "bytes": 364298,
+      "transactionCount": 100,
+      "succeeded": 84,
+      "failed": 16,
+      "incomingEpisodes": 90,
+      "outgoingEpisodes": 106
+    },
+    {
+      "filename": "history-0500.json",
+      "sha256": "8771cf2c38522add26005d35084bd7f2f33b136cd4284aa57eedf31506fb1063",
+      "bytes": 1660857,
+      "transactionCount": 500,
+      "succeeded": 404,
+      "failed": 96,
+      "incomingEpisodes": 430,
+      "outgoingEpisodes": 526
+    },
+    {
+      "filename": "history-2000.json",
+      "sha256": "f66262f43096617bf59041e7aba35bd34dba2772ff8b35b6790b6bd134193b58",
+      "bytes": 6519565,
+      "transactionCount": 2000,
+      "succeeded": 1604,
+      "failed": 396,
+      "incomingEpisodes": 1704,
+      "outgoingEpisodes": 2100
+    }
+  ]
+}

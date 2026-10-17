@@ -1,0 +1,3112 @@
+{
+  "schemaVersion": 1,
+  "synthetic": true,
+  "datasetId": "synthetic-routing-history-0020",
+  "provenance": {
+    "generator": "wallet/scripts/generate-routing-history.mjs",
+    "generationLabel": "airgb-synthetic-routing-history-v1",
+    "sourceTopology": "topology.json",
+    "sourceTopologySha256": "fca4997ba449b61045199f29a96122ec66e2184d71a8fdb787e66ab2262ec571",
+    "implementationReference": "docs/qvac/features-1-and-2-implementation.md",
+    "asOf": "2026-10-01T00:00:00.000Z"
+  },
+  "semantics": {
+    "scope": "Offline synthetic historical observations; no live wallet or transaction log was read.",
+    "balances": "Historical state is independent from topology.json startup balances. RGB starts equally split, BTC uses declared directional ratios; successful transfers are replayed with exact fee accounting.",
+    "reverseFees": "Synthetic historical assumption: reverse base fee equals the declared forward base fee; both proportional fees are zero.",
+    "directions": "nodeHistories holds endpoint incoming/outgoing observations. Forwarding nodes and actual per-hop amounts are in transaction paths.",
+    "episodes": "Each entry.episode exactly matches TelemetryEpisode. MPP produces one observation per part. Failed attempts produce outgoing observations only.",
+    "identifiers": "Aliases are fictional topology labels. Pubkeys are constructed valid curve points with no private key created; channel and asset identifiers are synthetic. Rebind identifiers for live-node tests."
+  },
+  "privacyReview": {
+    "source": "synthetic_only",
+    "usesRealWalletData": false,
+    "usesRealNodeIdentities": false,
+    "checks": [
+      "topology_structural_allowlist",
+      "no_secrets_or_identifying_contact_fields",
+      "no_network_addresses_or_live_invoices",
+      "all_history_values_generated_deterministically"
+    ]
+  },
+  "topology": {
+    "name": "airgb-routing-10-nodes",
+    "network": "regtest",
+    "nodes": [
+      {
+        "id": "alice",
+        "alias": "Alice",
+        "pubkey": "02b671095c10e8f4cebe0937ac69e5a0e0de8b3199a280245a4332dfe40fa71fe2"
+      },
+      {
+        "id": "bob",
+        "alias": "Bob",
+        "pubkey": "02ac8c684718bde43e9766c902f8492d2d3deb9c99692d5e88daf7d6854b556dd3"
+      },
+      {
+        "id": "carol",
+        "alias": "Carol",
+        "pubkey": "02211429538d73a2b2e381b5ca9a96263b54a3b89e06cf81d248f7cff7bb77313a"
+      },
+      {
+        "id": "dave",
+        "alias": "Dave",
+        "pubkey": "02b4f4b925713e595eafe3f69d51b2fd0d4be0cc11168ca612a8638d834f3a175f"
+      },
+      {
+        "id": "erin",
+        "alias": "Erin",
+        "pubkey": "028acb8b8520220f44ca1e5fdda92fe6b329248648d4924619656bd0c5b5c778be"
+      },
+      {
+        "id": "frank",
+        "alias": "Frank",
+        "pubkey": "0224ad5a14880ae3983ff8020ec16bc8434a5b523d2e394da874a9ddb074bba86f"
+      },
+      {
+        "id": "grace",
+        "alias": "Grace",
+        "pubkey": "02850e17a18b49d9b0d98325e5f2b08989a589627751a9d3056f97f943dde2ee38"
+      },
+      {
+        "id": "heidi",
+        "alias": "Heidi",
+        "pubkey": "02c187aea8e006b846d82c200f929e1a40a6ad24b6df46f15abebfc36e90447e08"
+      },
+      {
+        "id": "ivan",
+        "alias": "Ivan",
+        "pubkey": "028d0d55c5c2b491dda3964c4f3bce9974e3f4a2408ed6c146e557dded9b521544"
+      },
+      {
+        "id": "judy",
+        "alias": "Judy",
+        "pubkey": "02f593944cddc5f5f110f0cb47cfa7333bd951ab783730a58796be694628a41a84"
+      }
+    ],
+    "channels": [
+      {
+        "id": "alice-bob",
+        "channelId": "678ef8fa838a9955f8069c6c66f4ca31d0a25c07a0cecd804e2f190ac381ddeb",
+        "from": "alice",
+        "to": "bob",
+        "assetId": "rgb:synthetic-route-test",
+        "capacitySat": "1000000",
+        "assetCapacity": "60",
+        "forwardFeeBaseMsat": 0,
+        "reverseFeeBaseMsat": 0,
+        "feeProportionalMillionths": 0,
+        "initialFromRatioPct": 85
+      },
+      {
+        "id": "alice-carol",
+        "channelId": "c637a26168039fc64919fe40adaf810e0d3a889b5a19c629796cfa0c47f91367",
+        "from": "alice",
+        "to": "carol",
+        "assetId": "rgb:synthetic-route-test",
+        "capacitySat": "1000000",
+        "assetCapacity": "40",
+        "forwardFeeBaseMsat": 0,
+        "reverseFeeBaseMsat": 0,
+        "feeProportionalMillionths": 0,
+        "initialFromRatioPct": 65
+      },
+      {
+        "id": "alice-dave",
+        "channelId": "658cde8e28826d1c4971d6e3720e062b9823a8db1bc5e1cec4b95b44a8528848",
+        "from": "alice",
+        "to": "dave",
+        "assetId": "rgb:synthetic-route-test",
+        "capacitySat": "1000000",
+        "assetCapacity": "40",
+        "forwardFeeBaseMsat": 0,
+        "reverseFeeBaseMsat": 0,
+        "feeProportionalMillionths": 0,
+        "initialFromRatioPct": 45
+      },
+      {
+        "id": "bob-erin",
+        "channelId": "6156f72e86ffc85c5ce6baa1be43df97a696204d96b74fa85e939d394a75446f",
+        "from": "bob",
+        "to": "erin",
+        "assetId": "rgb:synthetic-route-test",
+        "capacitySat": "1000000",
+        "assetCapacity": "60",
+        "forwardFeeBaseMsat": 1000,
+        "reverseFeeBaseMsat": 1000,
+        "feeProportionalMillionths": 0,
+        "initialFromRatioPct": 75
+      },
+      {
+        "id": "bob-frank",
+        "channelId": "843bfeaa7533b799873b09db9a90737a1b7fd67110ac03b635e7715c3b160be0",
+        "from": "bob",
+        "to": "frank",
+        "assetId": "rgb:synthetic-route-test",
+        "capacitySat": "1000000",
+        "assetCapacity": "20",
+        "forwardFeeBaseMsat": 4000,
+        "reverseFeeBaseMsat": 4000,
+        "feeProportionalMillionths": 0,
+        "initialFromRatioPct": 25
+      },
+      {
+        "id": "carol-erin",
+        "channelId": "0e5da3c50e1ccd797fcf43c5442558c19dfe622d9b7f49b35f1b6f21635fcd22",
+        "from": "carol",
+        "to": "erin",
+        "assetId": "rgb:synthetic-route-test",
+        "capacitySat": "1000000",
+        "assetCapacity": "20",
+        "forwardFeeBaseMsat": 3000,
+        "reverseFeeBaseMsat": 3000,
+        "feeProportionalMillionths": 0,
+        "initialFromRatioPct": 55
+      },
+      {
+        "id": "carol-frank",
+        "channelId": "370e01ef45904b7e3138756254866829c131f61d3f966812d244dfdc08285734",
+        "from": "carol",
+        "to": "frank",
+        "assetId": "rgb:synthetic-route-test",
+        "capacitySat": "1000000",
+        "assetCapacity": "40",
+        "forwardFeeBaseMsat": 2000,
+        "reverseFeeBaseMsat": 2000,
+        "feeProportionalMillionths": 0,
+        "initialFromRatioPct": 20
+      },
+      {
+        "id": "dave-frank",
+        "channelId": "009675a5ab86676eac5b3cf04a2f8bc468b9506c4a66f0efe0a4cfd7e2382a90",
+        "from": "dave",
+        "to": "frank",
+        "assetId": "rgb:synthetic-route-test",
+        "capacitySat": "1000000",
+        "assetCapacity": "20",
+        "forwardFeeBaseMsat": 4000,
+        "reverseFeeBaseMsat": 4000,
+        "feeProportionalMillionths": 0,
+        "initialFromRatioPct": 35
+      },
+      {
+        "id": "dave-grace",
+        "channelId": "1eff7e1243c1f29776f1ed3d9e2ba4cb5ba86af57333920c9f5ce2601294fa22",
+        "from": "dave",
+        "to": "grace",
+        "assetId": "rgb:synthetic-route-test",
+        "capacitySat": "1000000",
+        "assetCapacity": "40",
+        "forwardFeeBaseMsat": 3000,
+        "reverseFeeBaseMsat": 3000,
+        "feeProportionalMillionths": 0,
+        "initialFromRatioPct": 80
+      },
+      {
+        "id": "erin-heidi",
+        "channelId": "efc581b72c9e428aa1f22a175b0bb74e47702768865a420eb539baac3b5ed0e5",
+        "from": "erin",
+        "to": "heidi",
+        "assetId": "rgb:synthetic-route-test",
+        "capacitySat": "1000000",
+        "assetCapacity": "60",
+        "forwardFeeBaseMsat": 1000,
+        "reverseFeeBaseMsat": 1000,
+        "feeProportionalMillionths": 0,
+        "initialFromRatioPct": 70
+      },
+      {
+        "id": "frank-heidi",
+        "channelId": "35e9341a50aad4d905a566090787b42ad66c1372f1617f1076c8562b5243553a",
+        "from": "frank",
+        "to": "heidi",
+        "assetId": "rgb:synthetic-route-test",
+        "capacitySat": "1000000",
+        "assetCapacity": "20",
+        "forwardFeeBaseMsat": 5000,
+        "reverseFeeBaseMsat": 5000,
+        "feeProportionalMillionths": 0,
+        "initialFromRatioPct": 10
+      },
+      {
+        "id": "frank-ivan",
+        "channelId": "b1118772eafa388f892bf951fef4777cf9abb00597b1335538da6f6e7b4888c1",
+        "from": "frank",
+        "to": "ivan",
+        "assetId": "rgb:synthetic-route-test",
+        "capacitySat": "1000000",
+        "assetCapacity": "40",
+        "forwardFeeBaseMsat": 2000,
+        "reverseFeeBaseMsat": 2000,
+        "feeProportionalMillionths": 0,
+        "initialFromRatioPct": 30
+      },
+      {
+        "id": "grace-ivan",
+        "channelId": "5670a7760896d32403ba1a713c688eae10202cd89398ec837e0c5e3a5613db63",
+        "from": "grace",
+        "to": "ivan",
+        "assetId": "rgb:synthetic-route-test",
+        "capacitySat": "1000000",
+        "assetCapacity": "40",
+        "forwardFeeBaseMsat": 3000,
+        "reverseFeeBaseMsat": 3000,
+        "feeProportionalMillionths": 0,
+        "initialFromRatioPct": 60
+      },
+      {
+        "id": "heidi-judy",
+        "channelId": "95837da7c5b6febd64946c6f440b6b2f2d9a955e9465bf560310755b85355e53",
+        "from": "heidi",
+        "to": "judy",
+        "assetId": "rgb:synthetic-route-test",
+        "capacitySat": "1000000",
+        "assetCapacity": "60",
+        "forwardFeeBaseMsat": 1000,
+        "reverseFeeBaseMsat": 1000,
+        "feeProportionalMillionths": 0,
+        "initialFromRatioPct": 80
+      },
+      {
+        "id": "ivan-judy",
+        "channelId": "0db9b707a77f94f35c2d09db991bed0af6ca92e713f8d7059551f52a0694c955",
+        "from": "ivan",
+        "to": "judy",
+        "assetId": "rgb:synthetic-route-test",
+        "capacitySat": "1000000",
+        "assetCapacity": "40",
+        "forwardFeeBaseMsat": 2000,
+        "reverseFeeBaseMsat": 2000,
+        "feeProportionalMillionths": 0,
+        "initialFromRatioPct": 40
+      }
+    ]
+  },
+  "knownNodes": [
+    {
+      "alias": "Alice",
+      "pubkey": "02b671095c10e8f4cebe0937ac69e5a0e0de8b3199a280245a4332dfe40fa71fe2"
+    },
+    {
+      "alias": "Bob",
+      "pubkey": "02ac8c684718bde43e9766c902f8492d2d3deb9c99692d5e88daf7d6854b556dd3"
+    },
+    {
+      "alias": "Carol",
+      "pubkey": "02211429538d73a2b2e381b5ca9a96263b54a3b89e06cf81d248f7cff7bb77313a"
+    },
+    {
+      "alias": "Dave",
+      "pubkey": "02b4f4b925713e595eafe3f69d51b2fd0d4be0cc11168ca612a8638d834f3a175f"
+    },
+    {
+      "alias": "Erin",
+      "pubkey": "028acb8b8520220f44ca1e5fdda92fe6b329248648d4924619656bd0c5b5c778be"
+    },
+    {
+      "alias": "Frank",
+      "pubkey": "0224ad5a14880ae3983ff8020ec16bc8434a5b523d2e394da874a9ddb074bba86f"
+    },
+    {
+      "alias": "Grace",
+      "pubkey": "02850e17a18b49d9b0d98325e5f2b08989a589627751a9d3056f97f943dde2ee38"
+    },
+    {
+      "alias": "Heidi",
+      "pubkey": "02c187aea8e006b846d82c200f929e1a40a6ad24b6df46f15abebfc36e90447e08"
+    },
+    {
+      "alias": "Ivan",
+      "pubkey": "028d0d55c5c2b491dda3964c4f3bce9974e3f4a2408ed6c146e557dded9b521544"
+    },
+    {
+      "alias": "Judy",
+      "pubkey": "02f593944cddc5f5f110f0cb47cfa7333bd951ab783730a58796be694628a41a84"
+    }
+  ],
+  "initialChannelStates": [
+    {
+      "channelId": "678ef8fa838a9955f8069c6c66f4ca31d0a25c07a0cecd804e2f190ac381ddeb",
+      "fromMsat": "850000000",
+      "toMsat": "150000000",
+      "fromAssetAmount": "30",
+      "toAssetAmount": "30"
+    },
+    {
+      "channelId": "c637a26168039fc64919fe40adaf810e0d3a889b5a19c629796cfa0c47f91367",
+      "fromMsat": "650000000",
+      "toMsat": "350000000",
+      "fromAssetAmount": "20",
+      "toAssetAmount": "20"
+    },
+    {
+      "channelId": "658cde8e28826d1c4971d6e3720e062b9823a8db1bc5e1cec4b95b44a8528848",
+      "fromMsat": "450000000",
+      "toMsat": "550000000",
+      "fromAssetAmount": "20",
+      "toAssetAmount": "20"
+    },
+    {
+      "channelId": "6156f72e86ffc85c5ce6baa1be43df97a696204d96b74fa85e939d394a75446f",
+      "fromMsat": "750000000",
+      "toMsat": "250000000",
+      "fromAssetAmount": "30",
+      "toAssetAmount": "30"
+    },
+    {
+      "channelId": "843bfeaa7533b799873b09db9a90737a1b7fd67110ac03b635e7715c3b160be0",
+      "fromMsat": "250000000",
+      "toMsat": "750000000",
+      "fromAssetAmount": "10",
+      "toAssetAmount": "10"
+    },
+    {
+      "channelId": "0e5da3c50e1ccd797fcf43c5442558c19dfe622d9b7f49b35f1b6f21635fcd22",
+      "fromMsat": "550000000",
+      "toMsat": "450000000",
+      "fromAssetAmount": "10",
+      "toAssetAmount": "10"
+    },
+    {
+      "channelId": "370e01ef45904b7e3138756254866829c131f61d3f966812d244dfdc08285734",
+      "fromMsat": "200000000",
+      "toMsat": "800000000",
+      "fromAssetAmount": "20",
+      "toAssetAmount": "20"
+    },
+    {
+      "channelId": "009675a5ab86676eac5b3cf04a2f8bc468b9506c4a66f0efe0a4cfd7e2382a90",
+      "fromMsat": "350000000",
+      "toMsat": "650000000",
+      "fromAssetAmount": "10",
+      "toAssetAmount": "10"
+    },
+    {
+      "channelId": "1eff7e1243c1f29776f1ed3d9e2ba4cb5ba86af57333920c9f5ce2601294fa22",
+      "fromMsat": "800000000",
+      "toMsat": "200000000",
+      "fromAssetAmount": "20",
+      "toAssetAmount": "20"
+    },
+    {
+      "channelId": "efc581b72c9e428aa1f22a175b0bb74e47702768865a420eb539baac3b5ed0e5",
+      "fromMsat": "700000000",
+      "toMsat": "300000000",
+      "fromAssetAmount": "30",
+      "toAssetAmount": "30"
+    },
+    {
+      "channelId": "35e9341a50aad4d905a566090787b42ad66c1372f1617f1076c8562b5243553a",
+      "fromMsat": "100000000",
+      "toMsat": "900000000",
+      "fromAssetAmount": "10",
+      "toAssetAmount": "10"
+    },
+    {
+      "channelId": "b1118772eafa388f892bf951fef4777cf9abb00597b1335538da6f6e7b4888c1",
+      "fromMsat": "300000000",
+      "toMsat": "700000000",
+      "fromAssetAmount": "20",
+      "toAssetAmount": "20"
+    },
+    {
+      "channelId": "5670a7760896d32403ba1a713c688eae10202cd89398ec837e0c5e3a5613db63",
+      "fromMsat": "600000000",
+      "toMsat": "400000000",
+      "fromAssetAmount": "20",
+      "toAssetAmount": "20"
+    },
+    {
+      "channelId": "95837da7c5b6febd64946c6f440b6b2f2d9a955e9465bf560310755b85355e53",
+      "fromMsat": "800000000",
+      "toMsat": "200000000",
+      "fromAssetAmount": "30",
+      "toAssetAmount": "30"
+    },
+    {
+      "channelId": "0db9b707a77f94f35c2d09db991bed0af6ca92e713f8d7059551f52a0694c955",
+      "fromMsat": "400000000",
+      "toMsat": "600000000",
+      "fromAssetAmount": "20",
+      "toAssetAmount": "20"
+    }
+  ],
+  "finalChannelStates": [
+    {
+      "channelId": "678ef8fa838a9955f8069c6c66f4ca31d0a25c07a0cecd804e2f190ac381ddeb",
+      "fromMsat": "849997000",
+      "toMsat": "150003000",
+      "fromAssetAmount": "30",
+      "toAssetAmount": "30"
+    },
+    {
+      "channelId": "c637a26168039fc64919fe40adaf810e0d3a889b5a19c629796cfa0c47f91367",
+      "fromMsat": "649994000",
+      "toMsat": "350006000",
+      "fromAssetAmount": "20",
+      "toAssetAmount": "20"
+    },
+    {
+      "channelId": "658cde8e28826d1c4971d6e3720e062b9823a8db1bc5e1cec4b95b44a8528848",
+      "fromMsat": "449997000",
+      "toMsat": "550003000",
+      "fromAssetAmount": "20",
+      "toAssetAmount": "20"
+    },
+    {
+      "channelId": "6156f72e86ffc85c5ce6baa1be43df97a696204d96b74fa85e939d394a75446f",
+      "fromMsat": "750001000",
+      "toMsat": "249999000",
+      "fromAssetAmount": "30",
+      "toAssetAmount": "30"
+    },
+    {
+      "channelId": "843bfeaa7533b799873b09db9a90737a1b7fd67110ac03b635e7715c3b160be0",
+      "fromMsat": "249999000",
+      "toMsat": "750001000",
+      "fromAssetAmount": "10",
+      "toAssetAmount": "10"
+    },
+    {
+      "channelId": "0e5da3c50e1ccd797fcf43c5442558c19dfe622d9b7f49b35f1b6f21635fcd22",
+      "fromMsat": "549999000",
+      "toMsat": "450001000",
+      "fromAssetAmount": "10",
+      "toAssetAmount": "10"
+    },
+    {
+      "channelId": "370e01ef45904b7e3138756254866829c131f61d3f966812d244dfdc08285734",
+      "fromMsat": "199994000",
+      "toMsat": "800006000",
+      "fromAssetAmount": "20",
+      "toAssetAmount": "20"
+    },
+    {
+      "channelId": "009675a5ab86676eac5b3cf04a2f8bc468b9506c4a66f0efe0a4cfd7e2382a90",
+      "fromMsat": "350003000",
+      "toMsat": "649997000",
+      "fromAssetAmount": "10",
+      "toAssetAmount": "10"
+    },
+    {
+      "channelId": "1eff7e1243c1f29776f1ed3d9e2ba4cb5ba86af57333920c9f5ce2601294fa22",
+      "fromMsat": "799994000",
+      "toMsat": "200006000",
+      "fromAssetAmount": "20",
+      "toAssetAmount": "20"
+    },
+    {
+      "channelId": "efc581b72c9e428aa1f22a175b0bb74e47702768865a420eb539baac3b5ed0e5",
+      "fromMsat": "700004000",
+      "toMsat": "299996000",
+      "fromAssetAmount": "30",
+      "toAssetAmount": "30"
+    },
+    {
+      "channelId": "35e9341a50aad4d905a566090787b42ad66c1372f1617f1076c8562b5243553a",
+      "fromMsat": "100000000",
+      "toMsat": "900000000",
+      "fromAssetAmount": "10",
+      "toAssetAmount": "10"
+    },
+    {
+      "channelId": "b1118772eafa388f892bf951fef4777cf9abb00597b1335538da6f6e7b4888c1",
+      "fromMsat": "300006000",
+      "toMsat": "699994000",
+      "fromAssetAmount": "20",
+      "toAssetAmount": "20"
+    },
+    {
+      "channelId": "5670a7760896d32403ba1a713c688eae10202cd89398ec837e0c5e3a5613db63",
+      "fromMsat": "600002000",
+      "toMsat": "399998000",
+      "fromAssetAmount": "20",
+      "toAssetAmount": "20"
+    },
+    {
+      "channelId": "95837da7c5b6febd64946c6f440b6b2f2d9a955e9465bf560310755b85355e53",
+      "fromMsat": "800002000",
+      "toMsat": "199998000",
+      "fromAssetAmount": "30",
+      "toAssetAmount": "30"
+    },
+    {
+      "channelId": "0db9b707a77f94f35c2d09db991bed0af6ca92e713f8d7059551f52a0694c955",
+      "fromMsat": "400016000",
+      "toMsat": "599984000",
+      "fromAssetAmount": "20",
+      "toAssetAmount": "20"
+    }
+  ],
+  "currentChannelsByNode": {
+    "alice": [
+      {
+        "channelId": "678ef8fa838a9955f8069c6c66f4ca31d0a25c07a0cecd804e2f190ac381ddeb",
+        "peerNodeId": "02ac8c684718bde43e9766c902f8492d2d3deb9c99692d5e88daf7d6854b556dd3",
+        "assetId": "rgb:synthetic-route-test",
+        "capacitySat": "1000000",
+        "outboundMsat": "849997000",
+        "inboundMsat": "150003000",
+        "assetLocalAmount": "30",
+        "assetRemoteAmount": "30",
+        "isUsable": true,
+        "public": true
+      },
+      {
+        "channelId": "c637a26168039fc64919fe40adaf810e0d3a889b5a19c629796cfa0c47f91367",
+        "peerNodeId": "02211429538d73a2b2e381b5ca9a96263b54a3b89e06cf81d248f7cff7bb77313a",
+        "assetId": "rgb:synthetic-route-test",
+        "capacitySat": "1000000",
+        "outboundMsat": "649994000",
+        "inboundMsat": "350006000",
+        "assetLocalAmount": "20",
+        "assetRemoteAmount": "20",
+        "isUsable": true,
+        "public": true
+      },
+      {
+        "channelId": "658cde8e28826d1c4971d6e3720e062b9823a8db1bc5e1cec4b95b44a8528848",
+        "peerNodeId": "02b4f4b925713e595eafe3f69d51b2fd0d4be0cc11168ca612a8638d834f3a175f",
+        "assetId": "rgb:synthetic-route-test",
+        "capacitySat": "1000000",
+        "outboundMsat": "449997000",
+        "inboundMsat": "550003000",
+        "assetLocalAmount": "20",
+        "assetRemoteAmount": "20",
+        "isUsable": true,
+        "public": true
+      }
+    ],
+    "bob": [
+      {
+        "channelId": "678ef8fa838a9955f8069c6c66f4ca31d0a25c07a0cecd804e2f190ac381ddeb",
+        "peerNodeId": "02b671095c10e8f4cebe0937ac69e5a0e0de8b3199a280245a4332dfe40fa71fe2",
+        "assetId": "rgb:synthetic-route-test",
+        "capacitySat": "1000000",
+        "outboundMsat": "150003000",
+        "inboundMsat": "849997000",
+        "assetLocalAmount": "30",
+        "assetRemoteAmount": "30",
+        "isUsable": true,
+        "public": true
+      },
+      {
+        "channelId": "6156f72e86ffc85c5ce6baa1be43df97a696204d96b74fa85e939d394a75446f",
+        "peerNodeId": "028acb8b8520220f44ca1e5fdda92fe6b329248648d4924619656bd0c5b5c778be",
+        "assetId": "rgb:synthetic-route-test",
+        "capacitySat": "1000000",
+        "outboundMsat": "750001000",
+        "inboundMsat": "249999000",
+        "assetLocalAmount": "30",
+        "assetRemoteAmount": "30",
+        "isUsable": true,
+        "public": true
+      },
+      {
+        "channelId": "843bfeaa7533b799873b09db9a90737a1b7fd67110ac03b635e7715c3b160be0",
+        "peerNodeId": "0224ad5a14880ae3983ff8020ec16bc8434a5b523d2e394da874a9ddb074bba86f",
+        "assetId": "rgb:synthetic-route-test",
+        "capacitySat": "1000000",
+        "outboundMsat": "249999000",
+        "inboundMsat": "750001000",
+        "assetLocalAmount": "10",
+        "assetRemoteAmount": "10",
+        "isUsable": true,
+        "public": true
+      }
+    ],
+    "carol": [
+      {
+        "channelId": "c637a26168039fc64919fe40adaf810e0d3a889b5a19c629796cfa0c47f91367",
+        "peerNodeId": "02b671095c10e8f4cebe0937ac69e5a0e0de8b3199a280245a4332dfe40fa71fe2",
+        "assetId": "rgb:synthetic-route-test",
+        "capacitySat": "1000000",
+        "outboundMsat": "350006000",
+        "inboundMsat": "649994000",
+        "assetLocalAmount": "20",
+        "assetRemoteAmount": "20",
+        "isUsable": true,
+        "public": true
+      },
+      {
+        "channelId": "0e5da3c50e1ccd797fcf43c5442558c19dfe622d9b7f49b35f1b6f21635fcd22",
+        "peerNodeId": "028acb8b8520220f44ca1e5fdda92fe6b329248648d4924619656bd0c5b5c778be",
+        "assetId": "rgb:synthetic-route-test",
+        "capacitySat": "1000000",
+        "outboundMsat": "549999000",
+        "inboundMsat": "450001000",
+        "assetLocalAmount": "10",
+        "assetRemoteAmount": "10",
+        "isUsable": true,
+        "public": true
+      },
+      {
+        "channelId": "370e01ef45904b7e3138756254866829c131f61d3f966812d244dfdc08285734",
+        "peerNodeId": "0224ad5a14880ae3983ff8020ec16bc8434a5b523d2e394da874a9ddb074bba86f",
+        "assetId": "rgb:synthetic-route-test",
+        "capacitySat": "1000000",
+        "outboundMsat": "199994000",
+        "inboundMsat": "800006000",
+        "assetLocalAmount": "20",
+        "assetRemoteAmount": "20",
+        "isUsable": true,
+        "public": true
+      }
+    ],
+    "dave": [
+      {
+        "channelId": "658cde8e28826d1c4971d6e3720e062b9823a8db1bc5e1cec4b95b44a8528848",
+        "peerNodeId": "02b671095c10e8f4cebe0937ac69e5a0e0de8b3199a280245a4332dfe40fa71fe2",
+        "assetId": "rgb:synthetic-route-test",
+        "capacitySat": "1000000",
+        "outboundMsat": "550003000",
+        "inboundMsat": "449997000",
+        "assetLocalAmount": "20",
+        "assetRemoteAmount": "20",
+        "isUsable": true,
+        "public": true
+      },
+      {
+        "channelId": "009675a5ab86676eac5b3cf04a2f8bc468b9506c4a66f0efe0a4cfd7e2382a90",
+        "peerNodeId": "0224ad5a14880ae3983ff8020ec16bc8434a5b523d2e394da874a9ddb074bba86f",
+        "assetId": "rgb:synthetic-route-test",
+        "capacitySat": "1000000",
+        "outboundMsat": "350003000",
+        "inboundMsat": "649997000",
+        "assetLocalAmount": "10",
+        "assetRemoteAmount": "10",
+        "isUsable": true,
+        "public": true
+      },
+      {
+        "channelId": "1eff7e1243c1f29776f1ed3d9e2ba4cb5ba86af57333920c9f5ce2601294fa22",
+        "peerNodeId": "02850e17a18b49d9b0d98325e5f2b08989a589627751a9d3056f97f943dde2ee38",
+        "assetId": "rgb:synthetic-route-test",
+        "capacitySat": "1000000",
+        "outboundMsat": "799994000",
+        "inboundMsat": "200006000",
+        "assetLocalAmount": "20",
+        "assetRemoteAmount": "20",
+        "isUsable": true,
+        "public": true
+      }
+    ],
+    "erin": [
+      {
+        "channelId": "6156f72e86ffc85c5ce6baa1be43df97a696204d96b74fa85e939d394a75446f",
+        "peerNodeId": "02ac8c684718bde43e9766c902f8492d2d3deb9c99692d5e88daf7d6854b556dd3",
+        "assetId": "rgb:synthetic-route-test",
+        "capacitySat": "1000000",
+        "outboundMsat": "249999000",
+        "inboundMsat": "750001000",
+        "assetLocalAmount": "30",
+        "assetRemoteAmount": "30",
+        "isUsable": true,
+        "public": true
+      },
+      {
+        "channelId": "0e5da3c50e1ccd797fcf43c5442558c19dfe622d9b7f49b35f1b6f21635fcd22",
+        "peerNodeId": "02211429538d73a2b2e381b5ca9a96263b54a3b89e06cf81d248f7cff7bb77313a",
+        "assetId": "rgb:synthetic-route-test",
+        "capacitySat": "1000000",
+        "outboundMsat": "450001000",
+        "inboundMsat": "549999000",
+        "assetLocalAmount": "10",
+        "assetRemoteAmount": "10",
+        "isUsable": true,
+        "public": true
+      },
+      {
+        "channelId": "efc581b72c9e428aa1f22a175b0bb74e47702768865a420eb539baac3b5ed0e5",
+        "peerNodeId": "02c187aea8e006b846d82c200f929e1a40a6ad24b6df46f15abebfc36e90447e08",
+        "assetId": "rgb:synthetic-route-test",
+        "capacitySat": "1000000",
+        "outboundMsat": "700004000",
+        "inboundMsat": "299996000",
+        "assetLocalAmount": "30",
+        "assetRemoteAmount": "30",
+        "isUsable": true,
+        "public": true
+      }
+    ],
+    "frank": [
+      {
+        "channelId": "843bfeaa7533b799873b09db9a90737a1b7fd67110ac03b635e7715c3b160be0",
+        "peerNodeId": "02ac8c684718bde43e9766c902f8492d2d3deb9c99692d5e88daf7d6854b556dd3",
+        "assetId": "rgb:synthetic-route-test",
+        "capacitySat": "1000000",
+        "outboundMsat": "750001000",
+        "inboundMsat": "249999000",
+        "assetLocalAmount": "10",
+        "assetRemoteAmount": "10",
+        "isUsable": true,
+        "public": true
+      },
+      {
+        "channelId": "370e01ef45904b7e3138756254866829c131f61d3f966812d244dfdc08285734",
+        "peerNodeId": "02211429538d73a2b2e381b5ca9a96263b54a3b89e06cf81d248f7cff7bb77313a",
+        "assetId": "rgb:synthetic-route-test",
+        "capacitySat": "1000000",
+        "outboundMsat": "800006000",
+        "inboundMsat": "199994000",
+        "assetLocalAmount": "20",
+        "assetRemoteAmount": "20",
+        "isUsable": true,
+        "public": true
+      },
+      {
+        "channelId": "009675a5ab86676eac5b3cf04a2f8bc468b9506c4a66f0efe0a4cfd7e2382a90",
+        "peerNodeId": "02b4f4b925713e595eafe3f69d51b2fd0d4be0cc11168ca612a8638d834f3a175f",
+        "assetId": "rgb:synthetic-route-test",
+        "capacitySat": "1000000",
+        "outboundMsat": "649997000",
+        "inboundMsat": "350003000",
+        "assetLocalAmount": "10",
+        "assetRemoteAmount": "10",
+        "isUsable": true,
+        "public": true
+      },
+      {
+        "channelId": "35e9341a50aad4d905a566090787b42ad66c1372f1617f1076c8562b5243553a",
+        "peerNodeId": "02c187aea8e006b846d82c200f929e1a40a6ad24b6df46f15abebfc36e90447e08",
+        "assetId": "rgb:synthetic-route-test",
+        "capacitySat": "1000000",
+        "outboundMsat": "100000000",
+        "inboundMsat": "900000000",
+        "assetLocalAmount": "10",
+        "assetRemoteAmount": "10",
+        "isUsable": true,
+        "public": true
+      },
+      {
+        "channelId": "b1118772eafa388f892bf951fef4777cf9abb00597b1335538da6f6e7b4888c1",
+        "peerNodeId": "028d0d55c5c2b491dda3964c4f3bce9974e3f4a2408ed6c146e557dded9b521544",
+        "assetId": "rgb:synthetic-route-test",
+        "capacitySat": "1000000",
+        "outboundMsat": "300006000",
+        "inboundMsat": "699994000",
+        "assetLocalAmount": "20",
+        "assetRemoteAmount": "20",
+        "isUsable": true,
+        "public": true
+      }
+    ],
+    "grace": [
+      {
+        "channelId": "1eff7e1243c1f29776f1ed3d9e2ba4cb5ba86af57333920c9f5ce2601294fa22",
+        "peerNodeId": "02b4f4b925713e595eafe3f69d51b2fd0d4be0cc11168ca612a8638d834f3a175f",
+        "assetId": "rgb:synthetic-route-test",
+        "capacitySat": "1000000",
+        "outboundMsat": "200006000",
+        "inboundMsat": "799994000",
+        "assetLocalAmount": "20",
+        "assetRemoteAmount": "20",
+        "isUsable": true,
+        "public": true
+      },
+      {
+        "channelId": "5670a7760896d32403ba1a713c688eae10202cd89398ec837e0c5e3a5613db63",
+        "peerNodeId": "028d0d55c5c2b491dda3964c4f3bce9974e3f4a2408ed6c146e557dded9b521544",
+        "assetId": "rgb:synthetic-route-test",
+        "capacitySat": "1000000",
+        "outboundMsat": "600002000",
+        "inboundMsat": "399998000",
+        "assetLocalAmount": "20",
+        "assetRemoteAmount": "20",
+        "isUsable": true,
+        "public": true
+      }
+    ],
+    "heidi": [
+      {
+        "channelId": "efc581b72c9e428aa1f22a175b0bb74e47702768865a420eb539baac3b5ed0e5",
+        "peerNodeId": "028acb8b8520220f44ca1e5fdda92fe6b329248648d4924619656bd0c5b5c778be",
+        "assetId": "rgb:synthetic-route-test",
+        "capacitySat": "1000000",
+        "outboundMsat": "299996000",
+        "inboundMsat": "700004000",
+        "assetLocalAmount": "30",
+        "assetRemoteAmount": "30",
+        "isUsable": true,
+        "public": true
+      },
+      {
+        "channelId": "35e9341a50aad4d905a566090787b42ad66c1372f1617f1076c8562b5243553a",
+        "peerNodeId": "0224ad5a14880ae3983ff8020ec16bc8434a5b523d2e394da874a9ddb074bba86f",
+        "assetId": "rgb:synthetic-route-test",
+        "capacitySat": "1000000",
+        "outboundMsat": "900000000",
+        "inboundMsat": "100000000",
+        "assetLocalAmount": "10",
+        "assetRemoteAmount": "10",
+        "isUsable": true,
+        "public": true
+      },
+      {
+        "channelId": "95837da7c5b6febd64946c6f440b6b2f2d9a955e9465bf560310755b85355e53",
+        "peerNodeId": "02f593944cddc5f5f110f0cb47cfa7333bd951ab783730a58796be694628a41a84",
+        "assetId": "rgb:synthetic-route-test",
+        "capacitySat": "1000000",
+        "outboundMsat": "800002000",
+        "inboundMsat": "199998000",
+        "assetLocalAmount": "30",
+        "assetRemoteAmount": "30",
+        "isUsable": true,
+        "public": true
+      }
+    ],
+    "ivan": [
+      {
+        "channelId": "b1118772eafa388f892bf951fef4777cf9abb00597b1335538da6f6e7b4888c1",
+        "peerNodeId": "0224ad5a14880ae3983ff8020ec16bc8434a5b523d2e394da874a9ddb074bba86f",
+        "assetId": "rgb:synthetic-route-test",
+        "capacitySat": "1000000",
+        "outboundMsat": "699994000",
+        "inboundMsat": "300006000",
+        "assetLocalAmount": "20",
+        "assetRemoteAmount": "20",
+        "isUsable": true,
+        "public": true
+      },
+      {
+        "channelId": "5670a7760896d32403ba1a713c688eae10202cd89398ec837e0c5e3a5613db63",
+        "peerNodeId": "02850e17a18b49d9b0d98325e5f2b08989a589627751a9d3056f97f943dde2ee38",
+        "assetId": "rgb:synthetic-route-test",
+        "capacitySat": "1000000",
+        "outboundMsat": "399998000",
+        "inboundMsat": "600002000",
+        "assetLocalAmount": "20",
+        "assetRemoteAmount": "20",
+        "isUsable": true,
+        "public": true
+      },
+      {
+        "channelId": "0db9b707a77f94f35c2d09db991bed0af6ca92e713f8d7059551f52a0694c955",
+        "peerNodeId": "02f593944cddc5f5f110f0cb47cfa7333bd951ab783730a58796be694628a41a84",
+        "assetId": "rgb:synthetic-route-test",
+        "capacitySat": "1000000",
+        "outboundMsat": "400016000",
+        "inboundMsat": "599984000",
+        "assetLocalAmount": "20",
+        "assetRemoteAmount": "20",
+        "isUsable": true,
+        "public": true
+      }
+    ],
+    "judy": [
+      {
+        "channelId": "95837da7c5b6febd64946c6f440b6b2f2d9a955e9465bf560310755b85355e53",
+        "peerNodeId": "02c187aea8e006b846d82c200f929e1a40a6ad24b6df46f15abebfc36e90447e08",
+        "assetId": "rgb:synthetic-route-test",
+        "capacitySat": "1000000",
+        "outboundMsat": "199998000",
+        "inboundMsat": "800002000",
+        "assetLocalAmount": "30",
+        "assetRemoteAmount": "30",
+        "isUsable": true,
+        "public": true
+      },
+      {
+        "channelId": "0db9b707a77f94f35c2d09db991bed0af6ca92e713f8d7059551f52a0694c955",
+        "peerNodeId": "028d0d55c5c2b491dda3964c4f3bce9974e3f4a2408ed6c146e557dded9b521544",
+        "assetId": "rgb:synthetic-route-test",
+        "capacitySat": "1000000",
+        "outboundMsat": "599984000",
+        "inboundMsat": "400016000",
+        "assetLocalAmount": "20",
+        "assetRemoteAmount": "20",
+        "isUsable": true,
+        "public": true
+      }
+    ]
+  },
+  "summary": {
+    "transactionCount": 20,
+    "succeeded": 20,
+    "failed": 0,
+    "btc": 6,
+    "rgb": 14,
+    "mpp": 2,
+    "outgoingEpisodes": 22,
+    "incomingEpisodes": 22,
+    "totalPaidFeeMsat": 68000,
+    "byNode": {
+      "alice": {
+        "outgoingTransactions": 2,
+        "incomingTransactions": 2,
+        "forwardedTransactions": 0
+      },
+      "bob": {
+        "outgoingTransactions": 2,
+        "incomingTransactions": 2,
+        "forwardedTransactions": 4
+      },
+      "carol": {
+        "outgoingTransactions": 2,
+        "incomingTransactions": 2,
+        "forwardedTransactions": 2
+      },
+      "dave": {
+        "outgoingTransactions": 2,
+        "incomingTransactions": 2,
+        "forwardedTransactions": 4
+      },
+      "erin": {
+        "outgoingTransactions": 1,
+        "incomingTransactions": 1,
+        "forwardedTransactions": 6
+      },
+      "frank": {
+        "outgoingTransactions": 2,
+        "incomingTransactions": 2,
+        "forwardedTransactions": 6
+      },
+      "grace": {
+        "outgoingTransactions": 2,
+        "incomingTransactions": 2,
+        "forwardedTransactions": 4
+      },
+      "heidi": {
+        "outgoingTransactions": 2,
+        "incomingTransactions": 2,
+        "forwardedTransactions": 2
+      },
+      "ivan": {
+        "outgoingTransactions": 2,
+        "incomingTransactions": 2,
+        "forwardedTransactions": 6
+      },
+      "judy": {
+        "outgoingTransactions": 3,
+        "incomingTransactions": 3,
+        "forwardedTransactions": 0
+      }
+    }
+  },
+  "transactions": [
+    {
+      "id": "synthetic-tx-000001",
+      "timestamp": 1767225600000,
+      "senderNodeId": "alice",
+      "recipientNodeId": "judy",
+      "amountMsat": "10000000",
+      "assetId": "rgb:synthetic-route-test",
+      "assetAmount": "20",
+      "routing": {
+        "algorithm": "ldk_dijkstra",
+        "max_fee_msat": 10000,
+        "max_paths": 2
+      },
+      "outcome": "succeeded",
+      "failureReason": null,
+      "failureChannelId": null,
+      "totalFeeMsat": 9000,
+      "durationMs": 93,
+      "paths": [
+        {
+          "nodes": [
+            "alice",
+            "bob",
+            "erin",
+            "heidi",
+            "judy"
+          ],
+          "amountMsat": "6000000",
+          "assetAmount": "12",
+          "plannedFeeMsat": 3000,
+          "settled": true,
+          "hops": [
+            {
+              "channelId": "678ef8fa838a9955f8069c6c66f4ca31d0a25c07a0cecd804e2f190ac381ddeb",
+              "fromNodeId": "alice",
+              "toNodeId": "bob",
+              "amountMsat": "6003000",
+              "forwardingFeeMsat": 0
+            },
+            {
+              "channelId": "6156f72e86ffc85c5ce6baa1be43df97a696204d96b74fa85e939d394a75446f",
+              "fromNodeId": "bob",
+              "toNodeId": "erin",
+              "amountMsat": "6002000",
+              "forwardingFeeMsat": 1000
+            },
+            {
+              "channelId": "efc581b72c9e428aa1f22a175b0bb74e47702768865a420eb539baac3b5ed0e5",
+              "fromNodeId": "erin",
+              "toNodeId": "heidi",
+              "amountMsat": "6001000",
+              "forwardingFeeMsat": 1000
+            },
+            {
+              "channelId": "95837da7c5b6febd64946c6f440b6b2f2d9a955e9465bf560310755b85355e53",
+              "fromNodeId": "heidi",
+              "toNodeId": "judy",
+              "amountMsat": "6000000",
+              "forwardingFeeMsat": 1000
+            }
+          ]
+        },
+        {
+          "nodes": [
+            "alice",
+            "carol",
+            "frank",
+            "ivan",
+            "judy"
+          ],
+          "amountMsat": "4000000",
+          "assetAmount": "8",
+          "plannedFeeMsat": 6000,
+          "settled": true,
+          "hops": [
+            {
+              "channelId": "c637a26168039fc64919fe40adaf810e0d3a889b5a19c629796cfa0c47f91367",
+              "fromNodeId": "alice",
+              "toNodeId": "carol",
+              "amountMsat": "4006000",
+              "forwardingFeeMsat": 0
+            },
+            {
+              "channelId": "370e01ef45904b7e3138756254866829c131f61d3f966812d244dfdc08285734",
+              "fromNodeId": "carol",
+              "toNodeId": "frank",
+              "amountMsat": "4004000",
+              "forwardingFeeMsat": 2000
+            },
+            {
+              "channelId": "b1118772eafa388f892bf951fef4777cf9abb00597b1335538da6f6e7b4888c1",
+              "fromNodeId": "frank",
+              "toNodeId": "ivan",
+              "amountMsat": "4002000",
+              "forwardingFeeMsat": 2000
+            },
+            {
+              "channelId": "0db9b707a77f94f35c2d09db991bed0af6ca92e713f8d7059551f52a0694c955",
+              "fromNodeId": "ivan",
+              "toNodeId": "judy",
+              "amountMsat": "4000000",
+              "forwardingFeeMsat": 2000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "synthetic-tx-000002",
+      "timestamp": 1767227400000,
+      "senderNodeId": "judy",
+      "recipientNodeId": "alice",
+      "amountMsat": "10000000",
+      "assetId": "rgb:synthetic-route-test",
+      "assetAmount": "20",
+      "routing": {
+        "algorithm": "ldk_dijkstra",
+        "max_fee_msat": 7000,
+        "max_paths": 2
+      },
+      "outcome": "succeeded",
+      "failureReason": null,
+      "failureChannelId": null,
+      "totalFeeMsat": 6000,
+      "durationMs": 20,
+      "paths": [
+        {
+          "nodes": [
+            "judy",
+            "heidi",
+            "erin",
+            "bob",
+            "alice"
+          ],
+          "amountMsat": "6000000",
+          "assetAmount": "12",
+          "plannedFeeMsat": 2000,
+          "settled": true,
+          "hops": [
+            {
+              "channelId": "95837da7c5b6febd64946c6f440b6b2f2d9a955e9465bf560310755b85355e53",
+              "fromNodeId": "judy",
+              "toNodeId": "heidi",
+              "amountMsat": "6002000",
+              "forwardingFeeMsat": 0
+            },
+            {
+              "channelId": "efc581b72c9e428aa1f22a175b0bb74e47702768865a420eb539baac3b5ed0e5",
+              "fromNodeId": "heidi",
+              "toNodeId": "erin",
+              "amountMsat": "6001000",
+              "forwardingFeeMsat": 1000
+            },
+            {
+              "channelId": "6156f72e86ffc85c5ce6baa1be43df97a696204d96b74fa85e939d394a75446f",
+              "fromNodeId": "erin",
+              "toNodeId": "bob",
+              "amountMsat": "6000000",
+              "forwardingFeeMsat": 1000
+            },
+            {
+              "channelId": "678ef8fa838a9955f8069c6c66f4ca31d0a25c07a0cecd804e2f190ac381ddeb",
+              "fromNodeId": "bob",
+              "toNodeId": "alice",
+              "amountMsat": "6000000",
+              "forwardingFeeMsat": 0
+            }
+          ]
+        },
+        {
+          "nodes": [
+            "judy",
+            "ivan",
+            "frank",
+            "carol",
+            "alice"
+          ],
+          "amountMsat": "4000000",
+          "assetAmount": "8",
+          "plannedFeeMsat": 4000,
+          "settled": true,
+          "hops": [
+            {
+              "channelId": "0db9b707a77f94f35c2d09db991bed0af6ca92e713f8d7059551f52a0694c955",
+              "fromNodeId": "judy",
+              "toNodeId": "ivan",
+              "amountMsat": "4004000",
+              "forwardingFeeMsat": 0
+            },
+            {
+              "channelId": "b1118772eafa388f892bf951fef4777cf9abb00597b1335538da6f6e7b4888c1",
+              "fromNodeId": "ivan",
+              "toNodeId": "frank",
+              "amountMsat": "4002000",
+              "forwardingFeeMsat": 2000
+            },
+            {
+              "channelId": "370e01ef45904b7e3138756254866829c131f61d3f966812d244dfdc08285734",
+              "fromNodeId": "frank",
+              "toNodeId": "carol",
+              "amountMsat": "4000000",
+              "forwardingFeeMsat": 2000
+            },
+            {
+              "channelId": "c637a26168039fc64919fe40adaf810e0d3a889b5a19c629796cfa0c47f91367",
+              "fromNodeId": "carol",
+              "toNodeId": "alice",
+              "amountMsat": "4000000",
+              "forwardingFeeMsat": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "synthetic-tx-000003",
+      "timestamp": 1767229200000,
+      "senderNodeId": "bob",
+      "recipientNodeId": "ivan",
+      "amountMsat": "18000000",
+      "assetId": null,
+      "assetAmount": null,
+      "routing": {
+        "algorithm": "yen",
+        "max_fee_msat": 3000,
+        "max_paths": 1
+      },
+      "outcome": "succeeded",
+      "failureReason": null,
+      "failureChannelId": null,
+      "totalFeeMsat": 2000,
+      "durationMs": 30,
+      "paths": [
+        {
+          "nodes": [
+            "bob",
+            "frank",
+            "ivan"
+          ],
+          "amountMsat": "18000000",
+          "assetAmount": null,
+          "plannedFeeMsat": 2000,
+          "settled": true,
+          "hops": [
+            {
+              "channelId": "843bfeaa7533b799873b09db9a90737a1b7fd67110ac03b635e7715c3b160be0",
+              "fromNodeId": "bob",
+              "toNodeId": "frank",
+              "amountMsat": "18002000",
+              "forwardingFeeMsat": 0
+            },
+            {
+              "channelId": "b1118772eafa388f892bf951fef4777cf9abb00597b1335538da6f6e7b4888c1",
+              "fromNodeId": "frank",
+              "toNodeId": "ivan",
+              "amountMsat": "18000000",
+              "forwardingFeeMsat": 2000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "synthetic-tx-000004",
+      "timestamp": 1767231000000,
+      "senderNodeId": "ivan",
+      "recipientNodeId": "bob",
+      "amountMsat": "18000000",
+      "assetId": null,
+      "assetAmount": null,
+      "routing": {
+        "algorithm": "yen",
+        "max_fee_msat": 5000,
+        "max_paths": 1
+      },
+      "outcome": "succeeded",
+      "failureReason": null,
+      "failureChannelId": null,
+      "totalFeeMsat": 4000,
+      "durationMs": 39,
+      "paths": [
+        {
+          "nodes": [
+            "ivan",
+            "frank",
+            "bob"
+          ],
+          "amountMsat": "18000000",
+          "assetAmount": null,
+          "plannedFeeMsat": 4000,
+          "settled": true,
+          "hops": [
+            {
+              "channelId": "b1118772eafa388f892bf951fef4777cf9abb00597b1335538da6f6e7b4888c1",
+              "fromNodeId": "ivan",
+              "toNodeId": "frank",
+              "amountMsat": "18004000",
+              "forwardingFeeMsat": 0
+            },
+            {
+              "channelId": "843bfeaa7533b799873b09db9a90737a1b7fd67110ac03b635e7715c3b160be0",
+              "fromNodeId": "frank",
+              "toNodeId": "bob",
+              "amountMsat": "18000000",
+              "forwardingFeeMsat": 4000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "synthetic-tx-000005",
+      "timestamp": 1767232800000,
+      "senderNodeId": "carol",
+      "recipientNodeId": "heidi",
+      "amountMsat": "20000000",
+      "assetId": "rgb:synthetic-route-test",
+      "assetAmount": "6",
+      "routing": {
+        "algorithm": "min_cost_flow",
+        "max_fee_msat": 2000,
+        "max_paths": 1
+      },
+      "outcome": "succeeded",
+      "failureReason": null,
+      "failureChannelId": null,
+      "totalFeeMsat": 1000,
+      "durationMs": 48,
+      "paths": [
+        {
+          "nodes": [
+            "carol",
+            "erin",
+            "heidi"
+          ],
+          "amountMsat": "20000000",
+          "assetAmount": "6",
+          "plannedFeeMsat": 1000,
+          "settled": true,
+          "hops": [
+            {
+              "channelId": "0e5da3c50e1ccd797fcf43c5442558c19dfe622d9b7f49b35f1b6f21635fcd22",
+              "fromNodeId": "carol",
+              "toNodeId": "erin",
+              "amountMsat": "20001000",
+              "forwardingFeeMsat": 0
+            },
+            {
+              "channelId": "efc581b72c9e428aa1f22a175b0bb74e47702768865a420eb539baac3b5ed0e5",
+              "fromNodeId": "erin",
+              "toNodeId": "heidi",
+              "amountMsat": "20000000",
+              "forwardingFeeMsat": 1000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "synthetic-tx-000006",
+      "timestamp": 1767234600000,
+      "senderNodeId": "heidi",
+      "recipientNodeId": "carol",
+      "amountMsat": "20000000",
+      "assetId": "rgb:synthetic-route-test",
+      "assetAmount": "6",
+      "routing": {
+        "algorithm": "min_cost_flow",
+        "max_fee_msat": 4000,
+        "max_paths": 1
+      },
+      "outcome": "succeeded",
+      "failureReason": null,
+      "failureChannelId": null,
+      "totalFeeMsat": 3000,
+      "durationMs": 72,
+      "paths": [
+        {
+          "nodes": [
+            "heidi",
+            "erin",
+            "carol"
+          ],
+          "amountMsat": "20000000",
+          "assetAmount": "6",
+          "plannedFeeMsat": 3000,
+          "settled": true,
+          "hops": [
+            {
+              "channelId": "efc581b72c9e428aa1f22a175b0bb74e47702768865a420eb539baac3b5ed0e5",
+              "fromNodeId": "heidi",
+              "toNodeId": "erin",
+              "amountMsat": "20003000",
+              "forwardingFeeMsat": 0
+            },
+            {
+              "channelId": "0e5da3c50e1ccd797fcf43c5442558c19dfe622d9b7f49b35f1b6f21635fcd22",
+              "fromNodeId": "erin",
+              "toNodeId": "carol",
+              "amountMsat": "20000000",
+              "forwardingFeeMsat": 3000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "synthetic-tx-000007",
+      "timestamp": 1767236400000,
+      "senderNodeId": "dave",
+      "recipientNodeId": "judy",
+      "amountMsat": "10000000",
+      "assetId": "rgb:synthetic-route-test",
+      "assetAmount": "5",
+      "routing": {
+        "algorithm": "multi_objective",
+        "weights": {
+          "fee": 100,
+          "reliability": 60,
+          "cltv": 10,
+          "hops": 10
+        },
+        "max_fee_msat": 6000,
+        "max_paths": 1
+      },
+      "outcome": "succeeded",
+      "failureReason": null,
+      "failureChannelId": null,
+      "totalFeeMsat": 5000,
+      "durationMs": 71,
+      "paths": [
+        {
+          "nodes": [
+            "dave",
+            "grace",
+            "ivan",
+            "judy"
+          ],
+          "amountMsat": "10000000",
+          "assetAmount": "5",
+          "plannedFeeMsat": 5000,
+          "settled": true,
+          "hops": [
+            {
+              "channelId": "1eff7e1243c1f29776f1ed3d9e2ba4cb5ba86af57333920c9f5ce2601294fa22",
+              "fromNodeId": "dave",
+              "toNodeId": "grace",
+              "amountMsat": "10005000",
+              "forwardingFeeMsat": 0
+            },
+            {
+              "channelId": "5670a7760896d32403ba1a713c688eae10202cd89398ec837e0c5e3a5613db63",
+              "fromNodeId": "grace",
+              "toNodeId": "ivan",
+              "amountMsat": "10002000",
+              "forwardingFeeMsat": 3000
+            },
+            {
+              "channelId": "0db9b707a77f94f35c2d09db991bed0af6ca92e713f8d7059551f52a0694c955",
+              "fromNodeId": "ivan",
+              "toNodeId": "judy",
+              "amountMsat": "10000000",
+              "forwardingFeeMsat": 2000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "synthetic-tx-000008",
+      "timestamp": 1767238200000,
+      "senderNodeId": "judy",
+      "recipientNodeId": "dave",
+      "amountMsat": "10000000",
+      "assetId": "rgb:synthetic-route-test",
+      "assetAmount": "5",
+      "routing": {
+        "algorithm": "multi_objective",
+        "weights": {
+          "fee": 100,
+          "reliability": 60,
+          "cltv": 10,
+          "hops": 10
+        },
+        "max_fee_msat": 7000,
+        "max_paths": 1
+      },
+      "outcome": "succeeded",
+      "failureReason": null,
+      "failureChannelId": null,
+      "totalFeeMsat": 6000,
+      "durationMs": 39,
+      "paths": [
+        {
+          "nodes": [
+            "judy",
+            "ivan",
+            "grace",
+            "dave"
+          ],
+          "amountMsat": "10000000",
+          "assetAmount": "5",
+          "plannedFeeMsat": 6000,
+          "settled": true,
+          "hops": [
+            {
+              "channelId": "0db9b707a77f94f35c2d09db991bed0af6ca92e713f8d7059551f52a0694c955",
+              "fromNodeId": "judy",
+              "toNodeId": "ivan",
+              "amountMsat": "10006000",
+              "forwardingFeeMsat": 0
+            },
+            {
+              "channelId": "5670a7760896d32403ba1a713c688eae10202cd89398ec837e0c5e3a5613db63",
+              "fromNodeId": "ivan",
+              "toNodeId": "grace",
+              "amountMsat": "10003000",
+              "forwardingFeeMsat": 3000
+            },
+            {
+              "channelId": "1eff7e1243c1f29776f1ed3d9e2ba4cb5ba86af57333920c9f5ce2601294fa22",
+              "fromNodeId": "grace",
+              "toNodeId": "dave",
+              "amountMsat": "10000000",
+              "forwardingFeeMsat": 3000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "synthetic-tx-000009",
+      "timestamp": 1767240000000,
+      "senderNodeId": "erin",
+      "recipientNodeId": "frank",
+      "amountMsat": "13000000",
+      "assetId": null,
+      "assetAmount": null,
+      "routing": {
+        "algorithm": "ldk_dijkstra",
+        "max_fee_msat": 5000,
+        "max_paths": 1
+      },
+      "outcome": "succeeded",
+      "failureReason": null,
+      "failureChannelId": null,
+      "totalFeeMsat": 4000,
+      "durationMs": 82,
+      "paths": [
+        {
+          "nodes": [
+            "erin",
+            "bob",
+            "frank"
+          ],
+          "amountMsat": "13000000",
+          "assetAmount": null,
+          "plannedFeeMsat": 4000,
+          "settled": true,
+          "hops": [
+            {
+              "channelId": "6156f72e86ffc85c5ce6baa1be43df97a696204d96b74fa85e939d394a75446f",
+              "fromNodeId": "erin",
+              "toNodeId": "bob",
+              "amountMsat": "13004000",
+              "forwardingFeeMsat": 0
+            },
+            {
+              "channelId": "843bfeaa7533b799873b09db9a90737a1b7fd67110ac03b635e7715c3b160be0",
+              "fromNodeId": "bob",
+              "toNodeId": "frank",
+              "amountMsat": "13000000",
+              "forwardingFeeMsat": 4000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "synthetic-tx-000010",
+      "timestamp": 1767241800000,
+      "senderNodeId": "frank",
+      "recipientNodeId": "erin",
+      "amountMsat": "13000000",
+      "assetId": null,
+      "assetAmount": null,
+      "routing": {
+        "algorithm": "ldk_dijkstra",
+        "max_fee_msat": 2000,
+        "max_paths": 1
+      },
+      "outcome": "succeeded",
+      "failureReason": null,
+      "failureChannelId": null,
+      "totalFeeMsat": 1000,
+      "durationMs": 30,
+      "paths": [
+        {
+          "nodes": [
+            "frank",
+            "bob",
+            "erin"
+          ],
+          "amountMsat": "13000000",
+          "assetAmount": null,
+          "plannedFeeMsat": 1000,
+          "settled": true,
+          "hops": [
+            {
+              "channelId": "843bfeaa7533b799873b09db9a90737a1b7fd67110ac03b635e7715c3b160be0",
+              "fromNodeId": "frank",
+              "toNodeId": "bob",
+              "amountMsat": "13001000",
+              "forwardingFeeMsat": 0
+            },
+            {
+              "channelId": "6156f72e86ffc85c5ce6baa1be43df97a696204d96b74fa85e939d394a75446f",
+              "fromNodeId": "bob",
+              "toNodeId": "erin",
+              "amountMsat": "13000000",
+              "forwardingFeeMsat": 1000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "synthetic-tx-000011",
+      "timestamp": 1767243600000,
+      "senderNodeId": "grace",
+      "recipientNodeId": "alice",
+      "amountMsat": "14000000",
+      "assetId": "rgb:synthetic-route-test",
+      "assetAmount": "1",
+      "routing": {
+        "algorithm": "yen",
+        "max_fee_msat": 1000,
+        "max_paths": 1
+      },
+      "outcome": "succeeded",
+      "failureReason": null,
+      "failureChannelId": null,
+      "totalFeeMsat": 0,
+      "durationMs": 98,
+      "paths": [
+        {
+          "nodes": [
+            "grace",
+            "dave",
+            "alice"
+          ],
+          "amountMsat": "14000000",
+          "assetAmount": "1",
+          "plannedFeeMsat": 0,
+          "settled": true,
+          "hops": [
+            {
+              "channelId": "1eff7e1243c1f29776f1ed3d9e2ba4cb5ba86af57333920c9f5ce2601294fa22",
+              "fromNodeId": "grace",
+              "toNodeId": "dave",
+              "amountMsat": "14000000",
+              "forwardingFeeMsat": 0
+            },
+            {
+              "channelId": "658cde8e28826d1c4971d6e3720e062b9823a8db1bc5e1cec4b95b44a8528848",
+              "fromNodeId": "dave",
+              "toNodeId": "alice",
+              "amountMsat": "14000000",
+              "forwardingFeeMsat": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "synthetic-tx-000012",
+      "timestamp": 1767245400000,
+      "senderNodeId": "alice",
+      "recipientNodeId": "grace",
+      "amountMsat": "14000000",
+      "assetId": "rgb:synthetic-route-test",
+      "assetAmount": "1",
+      "routing": {
+        "algorithm": "yen",
+        "max_fee_msat": 4000,
+        "max_paths": 1
+      },
+      "outcome": "succeeded",
+      "failureReason": null,
+      "failureChannelId": null,
+      "totalFeeMsat": 3000,
+      "durationMs": 55,
+      "paths": [
+        {
+          "nodes": [
+            "alice",
+            "dave",
+            "grace"
+          ],
+          "amountMsat": "14000000",
+          "assetAmount": "1",
+          "plannedFeeMsat": 3000,
+          "settled": true,
+          "hops": [
+            {
+              "channelId": "658cde8e28826d1c4971d6e3720e062b9823a8db1bc5e1cec4b95b44a8528848",
+              "fromNodeId": "alice",
+              "toNodeId": "dave",
+              "amountMsat": "14003000",
+              "forwardingFeeMsat": 0
+            },
+            {
+              "channelId": "1eff7e1243c1f29776f1ed3d9e2ba4cb5ba86af57333920c9f5ce2601294fa22",
+              "fromNodeId": "dave",
+              "toNodeId": "grace",
+              "amountMsat": "14000000",
+              "forwardingFeeMsat": 3000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "synthetic-tx-000013",
+      "timestamp": 1767247200000,
+      "senderNodeId": "heidi",
+      "recipientNodeId": "bob",
+      "amountMsat": "15000000",
+      "assetId": "rgb:synthetic-route-test",
+      "assetAmount": "4",
+      "routing": {
+        "algorithm": "min_cost_flow",
+        "max_fee_msat": 2000,
+        "max_paths": 1
+      },
+      "outcome": "succeeded",
+      "failureReason": null,
+      "failureChannelId": null,
+      "totalFeeMsat": 1000,
+      "durationMs": 25,
+      "paths": [
+        {
+          "nodes": [
+            "heidi",
+            "erin",
+            "bob"
+          ],
+          "amountMsat": "15000000",
+          "assetAmount": "4",
+          "plannedFeeMsat": 1000,
+          "settled": true,
+          "hops": [
+            {
+              "channelId": "efc581b72c9e428aa1f22a175b0bb74e47702768865a420eb539baac3b5ed0e5",
+              "fromNodeId": "heidi",
+              "toNodeId": "erin",
+              "amountMsat": "15001000",
+              "forwardingFeeMsat": 0
+            },
+            {
+              "channelId": "6156f72e86ffc85c5ce6baa1be43df97a696204d96b74fa85e939d394a75446f",
+              "fromNodeId": "erin",
+              "toNodeId": "bob",
+              "amountMsat": "15000000",
+              "forwardingFeeMsat": 1000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "synthetic-tx-000014",
+      "timestamp": 1767249000000,
+      "senderNodeId": "bob",
+      "recipientNodeId": "heidi",
+      "amountMsat": "15000000",
+      "assetId": "rgb:synthetic-route-test",
+      "assetAmount": "4",
+      "routing": {
+        "algorithm": "min_cost_flow",
+        "max_fee_msat": 2000,
+        "max_paths": 1
+      },
+      "outcome": "succeeded",
+      "failureReason": null,
+      "failureChannelId": null,
+      "totalFeeMsat": 1000,
+      "durationMs": 60,
+      "paths": [
+        {
+          "nodes": [
+            "bob",
+            "erin",
+            "heidi"
+          ],
+          "amountMsat": "15000000",
+          "assetAmount": "4",
+          "plannedFeeMsat": 1000,
+          "settled": true,
+          "hops": [
+            {
+              "channelId": "6156f72e86ffc85c5ce6baa1be43df97a696204d96b74fa85e939d394a75446f",
+              "fromNodeId": "bob",
+              "toNodeId": "erin",
+              "amountMsat": "15001000",
+              "forwardingFeeMsat": 0
+            },
+            {
+              "channelId": "efc581b72c9e428aa1f22a175b0bb74e47702768865a420eb539baac3b5ed0e5",
+              "fromNodeId": "erin",
+              "toNodeId": "heidi",
+              "amountMsat": "15000000",
+              "forwardingFeeMsat": 1000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "synthetic-tx-000015",
+      "timestamp": 1767250800000,
+      "senderNodeId": "ivan",
+      "recipientNodeId": "carol",
+      "amountMsat": "17000000",
+      "assetId": null,
+      "assetAmount": null,
+      "routing": {
+        "algorithm": "multi_objective",
+        "weights": {
+          "fee": 100,
+          "reliability": 60,
+          "cltv": 10,
+          "hops": 10
+        },
+        "max_fee_msat": 3000,
+        "max_paths": 1
+      },
+      "outcome": "succeeded",
+      "failureReason": null,
+      "failureChannelId": null,
+      "totalFeeMsat": 2000,
+      "durationMs": 87,
+      "paths": [
+        {
+          "nodes": [
+            "ivan",
+            "frank",
+            "carol"
+          ],
+          "amountMsat": "17000000",
+          "assetAmount": null,
+          "plannedFeeMsat": 2000,
+          "settled": true,
+          "hops": [
+            {
+              "channelId": "b1118772eafa388f892bf951fef4777cf9abb00597b1335538da6f6e7b4888c1",
+              "fromNodeId": "ivan",
+              "toNodeId": "frank",
+              "amountMsat": "17002000",
+              "forwardingFeeMsat": 0
+            },
+            {
+              "channelId": "370e01ef45904b7e3138756254866829c131f61d3f966812d244dfdc08285734",
+              "fromNodeId": "frank",
+              "toNodeId": "carol",
+              "amountMsat": "17000000",
+              "forwardingFeeMsat": 2000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "synthetic-tx-000016",
+      "timestamp": 1767252600000,
+      "senderNodeId": "carol",
+      "recipientNodeId": "ivan",
+      "amountMsat": "17000000",
+      "assetId": null,
+      "assetAmount": null,
+      "routing": {
+        "algorithm": "multi_objective",
+        "weights": {
+          "fee": 100,
+          "reliability": 60,
+          "cltv": 10,
+          "hops": 10
+        },
+        "max_fee_msat": 3000,
+        "max_paths": 1
+      },
+      "outcome": "succeeded",
+      "failureReason": null,
+      "failureChannelId": null,
+      "totalFeeMsat": 2000,
+      "durationMs": 46,
+      "paths": [
+        {
+          "nodes": [
+            "carol",
+            "frank",
+            "ivan"
+          ],
+          "amountMsat": "17000000",
+          "assetAmount": null,
+          "plannedFeeMsat": 2000,
+          "settled": true,
+          "hops": [
+            {
+              "channelId": "370e01ef45904b7e3138756254866829c131f61d3f966812d244dfdc08285734",
+              "fromNodeId": "carol",
+              "toNodeId": "frank",
+              "amountMsat": "17002000",
+              "forwardingFeeMsat": 0
+            },
+            {
+              "channelId": "b1118772eafa388f892bf951fef4777cf9abb00597b1335538da6f6e7b4888c1",
+              "fromNodeId": "frank",
+              "toNodeId": "ivan",
+              "amountMsat": "17000000",
+              "forwardingFeeMsat": 2000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "synthetic-tx-000017",
+      "timestamp": 1767254400000,
+      "senderNodeId": "judy",
+      "recipientNodeId": "dave",
+      "amountMsat": "18000000",
+      "assetId": "rgb:synthetic-route-test",
+      "assetAmount": "1",
+      "routing": {
+        "algorithm": "ldk_dijkstra",
+        "max_fee_msat": 7000,
+        "max_paths": 1
+      },
+      "outcome": "succeeded",
+      "failureReason": null,
+      "failureChannelId": null,
+      "totalFeeMsat": 6000,
+      "durationMs": 57,
+      "paths": [
+        {
+          "nodes": [
+            "judy",
+            "ivan",
+            "grace",
+            "dave"
+          ],
+          "amountMsat": "18000000",
+          "assetAmount": "1",
+          "plannedFeeMsat": 6000,
+          "settled": true,
+          "hops": [
+            {
+              "channelId": "0db9b707a77f94f35c2d09db991bed0af6ca92e713f8d7059551f52a0694c955",
+              "fromNodeId": "judy",
+              "toNodeId": "ivan",
+              "amountMsat": "18006000",
+              "forwardingFeeMsat": 0
+            },
+            {
+              "channelId": "5670a7760896d32403ba1a713c688eae10202cd89398ec837e0c5e3a5613db63",
+              "fromNodeId": "ivan",
+              "toNodeId": "grace",
+              "amountMsat": "18003000",
+              "forwardingFeeMsat": 3000
+            },
+            {
+              "channelId": "1eff7e1243c1f29776f1ed3d9e2ba4cb5ba86af57333920c9f5ce2601294fa22",
+              "fromNodeId": "grace",
+              "toNodeId": "dave",
+              "amountMsat": "18000000",
+              "forwardingFeeMsat": 3000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "synthetic-tx-000018",
+      "timestamp": 1767256200000,
+      "senderNodeId": "dave",
+      "recipientNodeId": "judy",
+      "amountMsat": "18000000",
+      "assetId": "rgb:synthetic-route-test",
+      "assetAmount": "1",
+      "routing": {
+        "algorithm": "ldk_dijkstra",
+        "max_fee_msat": 6000,
+        "max_paths": 1
+      },
+      "outcome": "succeeded",
+      "failureReason": null,
+      "failureChannelId": null,
+      "totalFeeMsat": 5000,
+      "durationMs": 78,
+      "paths": [
+        {
+          "nodes": [
+            "dave",
+            "grace",
+            "ivan",
+            "judy"
+          ],
+          "amountMsat": "18000000",
+          "assetAmount": "1",
+          "plannedFeeMsat": 5000,
+          "settled": true,
+          "hops": [
+            {
+              "channelId": "1eff7e1243c1f29776f1ed3d9e2ba4cb5ba86af57333920c9f5ce2601294fa22",
+              "fromNodeId": "dave",
+              "toNodeId": "grace",
+              "amountMsat": "18005000",
+              "forwardingFeeMsat": 0
+            },
+            {
+              "channelId": "5670a7760896d32403ba1a713c688eae10202cd89398ec837e0c5e3a5613db63",
+              "fromNodeId": "grace",
+              "toNodeId": "ivan",
+              "amountMsat": "18002000",
+              "forwardingFeeMsat": 3000
+            },
+            {
+              "channelId": "0db9b707a77f94f35c2d09db991bed0af6ca92e713f8d7059551f52a0694c955",
+              "fromNodeId": "ivan",
+              "toNodeId": "judy",
+              "amountMsat": "18000000",
+              "forwardingFeeMsat": 2000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "synthetic-tx-000019",
+      "timestamp": 1767258000000,
+      "senderNodeId": "frank",
+      "recipientNodeId": "grace",
+      "amountMsat": "15000000",
+      "assetId": "rgb:synthetic-route-test",
+      "assetAmount": "4",
+      "routing": {
+        "algorithm": "yen",
+        "max_fee_msat": 4000,
+        "max_paths": 1
+      },
+      "outcome": "succeeded",
+      "failureReason": null,
+      "failureChannelId": null,
+      "totalFeeMsat": 3000,
+      "durationMs": 71,
+      "paths": [
+        {
+          "nodes": [
+            "frank",
+            "dave",
+            "grace"
+          ],
+          "amountMsat": "15000000",
+          "assetAmount": "4",
+          "plannedFeeMsat": 3000,
+          "settled": true,
+          "hops": [
+            {
+              "channelId": "009675a5ab86676eac5b3cf04a2f8bc468b9506c4a66f0efe0a4cfd7e2382a90",
+              "fromNodeId": "frank",
+              "toNodeId": "dave",
+              "amountMsat": "15003000",
+              "forwardingFeeMsat": 0
+            },
+            {
+              "channelId": "1eff7e1243c1f29776f1ed3d9e2ba4cb5ba86af57333920c9f5ce2601294fa22",
+              "fromNodeId": "dave",
+              "toNodeId": "grace",
+              "amountMsat": "15000000",
+              "forwardingFeeMsat": 3000
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "synthetic-tx-000020",
+      "timestamp": 1767259800000,
+      "senderNodeId": "grace",
+      "recipientNodeId": "frank",
+      "amountMsat": "15000000",
+      "assetId": "rgb:synthetic-route-test",
+      "assetAmount": "4",
+      "routing": {
+        "algorithm": "yen",
+        "max_fee_msat": 5000,
+        "max_paths": 1
+      },
+      "outcome": "succeeded",
+      "failureReason": null,
+      "failureChannelId": null,
+      "totalFeeMsat": 4000,
+      "durationMs": 31,
+      "paths": [
+        {
+          "nodes": [
+            "grace",
+            "dave",
+            "frank"
+          ],
+          "amountMsat": "15000000",
+          "assetAmount": "4",
+          "plannedFeeMsat": 4000,
+          "settled": true,
+          "hops": [
+            {
+              "channelId": "1eff7e1243c1f29776f1ed3d9e2ba4cb5ba86af57333920c9f5ce2601294fa22",
+              "fromNodeId": "grace",
+              "toNodeId": "dave",
+              "amountMsat": "15004000",
+              "forwardingFeeMsat": 0
+            },
+            {
+              "channelId": "009675a5ab86676eac5b3cf04a2f8bc468b9506c4a66f0efe0a4cfd7e2382a90",
+              "fromNodeId": "dave",
+              "toNodeId": "frank",
+              "amountMsat": "15000000",
+              "forwardingFeeMsat": 4000
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "nodeHistories": {
+    "alice": [
+      {
+        "transactionId": "synthetic-tx-000001",
+        "pathIndex": 0,
+        "direction": "outgoing",
+        "episode": {
+          "id": "synthetic-ep-000001-alice-outgoing-0",
+          "timestamp": 1767225600000,
+          "eventType": "payment_succeeded",
+          "peerNodeId": "02ac8c684718bde43e9766c902f8492d2d3deb9c99692d5e88daf7d6854b556dd3",
+          "peerAlias": "Bob",
+          "channelId": "678ef8fa838a9955f8069c6c66f4ca31d0a25c07a0cecd804e2f190ac381ddeb",
+          "amountMsat": "6000000",
+          "assetId": "rgb:synthetic-route-test",
+          "assetAmount": "12",
+          "routingAlgorithm": "ldk_dijkstra",
+          "outcome": "succeeded",
+          "failureReason": null,
+          "outboundRatioPct": 85,
+          "feeMsat": 3000,
+          "notes": "Uscita sintetica RGB; parte 1/2; regolata; nessun pagamento reale."
+        }
+      },
+      {
+        "transactionId": "synthetic-tx-000001",
+        "pathIndex": 1,
+        "direction": "outgoing",
+        "episode": {
+          "id": "synthetic-ep-000001-alice-outgoing-1",
+          "timestamp": 1767225600000,
+          "eventType": "payment_succeeded",
+          "peerNodeId": "02211429538d73a2b2e381b5ca9a96263b54a3b89e06cf81d248f7cff7bb77313a",
+          "peerAlias": "Carol",
+          "channelId": "c637a26168039fc64919fe40adaf810e0d3a889b5a19c629796cfa0c47f91367",
+          "amountMsat": "4000000",
+          "assetId": "rgb:synthetic-route-test",
+          "assetAmount": "8",
+          "routingAlgorithm": "ldk_dijkstra",
+          "outcome": "succeeded",
+          "failureReason": null,
+          "outboundRatioPct": 65,
+          "feeMsat": 6000,
+          "notes": "Uscita sintetica RGB; parte 2/2; regolata; nessun pagamento reale."
+        }
+      },
+      {
+        "transactionId": "synthetic-tx-000002",
+        "pathIndex": 0,
+        "direction": "incoming",
+        "episode": {
+          "id": "synthetic-ep-000002-alice-incoming-0",
+          "timestamp": 1767227400000,
+          "eventType": "payment_succeeded",
+          "peerNodeId": "02ac8c684718bde43e9766c902f8492d2d3deb9c99692d5e88daf7d6854b556dd3",
+          "peerAlias": "Bob",
+          "channelId": "678ef8fa838a9955f8069c6c66f4ca31d0a25c07a0cecd804e2f190ac381ddeb",
+          "amountMsat": "6000000",
+          "assetId": "rgb:synthetic-route-test",
+          "assetAmount": "12",
+          "routingAlgorithm": "ldk_dijkstra",
+          "outcome": "succeeded",
+          "failureReason": null,
+          "outboundRatioPct": 84,
+          "feeMsat": 0,
+          "notes": "Entrata sintetica RGB; parte 1/2; regolata; nessun pagamento reale."
+        }
+      },
+      {
+        "transactionId": "synthetic-tx-000002",
+        "pathIndex": 1,
+        "direction": "incoming",
+        "episode": {
+          "id": "synthetic-ep-000002-alice-incoming-1",
+          "timestamp": 1767227400000,
+          "eventType": "payment_succeeded",
+          "peerNodeId": "02211429538d73a2b2e381b5ca9a96263b54a3b89e06cf81d248f7cff7bb77313a",
+          "peerAlias": "Carol",
+          "channelId": "c637a26168039fc64919fe40adaf810e0d3a889b5a19c629796cfa0c47f91367",
+          "amountMsat": "4000000",
+          "assetId": "rgb:synthetic-route-test",
+          "assetAmount": "8",
+          "routingAlgorithm": "ldk_dijkstra",
+          "outcome": "succeeded",
+          "failureReason": null,
+          "outboundRatioPct": 64,
+          "feeMsat": 0,
+          "notes": "Entrata sintetica RGB; parte 2/2; regolata; nessun pagamento reale."
+        }
+      },
+      {
+        "transactionId": "synthetic-tx-000011",
+        "pathIndex": 0,
+        "direction": "incoming",
+        "episode": {
+          "id": "synthetic-ep-000011-alice-incoming-0",
+          "timestamp": 1767243600000,
+          "eventType": "payment_succeeded",
+          "peerNodeId": "02b4f4b925713e595eafe3f69d51b2fd0d4be0cc11168ca612a8638d834f3a175f",
+          "peerAlias": "Dave",
+          "channelId": "658cde8e28826d1c4971d6e3720e062b9823a8db1bc5e1cec4b95b44a8528848",
+          "amountMsat": "14000000",
+          "assetId": "rgb:synthetic-route-test",
+          "assetAmount": "1",
+          "routingAlgorithm": "yen",
+          "outcome": "succeeded",
+          "failureReason": null,
+          "outboundRatioPct": 45,
+          "feeMsat": 0,
+          "notes": "Entrata sintetica RGB; parte 1/1; regolata; nessun pagamento reale."
+        }
+      },
+      {
+        "transactionId": "synthetic-tx-000012",
+        "pathIndex": 0,
+        "direction": "outgoing",
+        "episode": {
+          "id": "synthetic-ep-000012-alice-outgoing-0",
+          "timestamp": 1767245400000,
+          "eventType": "payment_succeeded",
+          "peerNodeId": "02b4f4b925713e595eafe3f69d51b2fd0d4be0cc11168ca612a8638d834f3a175f",
+          "peerAlias": "Dave",
+          "channelId": "658cde8e28826d1c4971d6e3720e062b9823a8db1bc5e1cec4b95b44a8528848",
+          "amountMsat": "14000000",
+          "assetId": "rgb:synthetic-route-test",
+          "assetAmount": "1",
+          "routingAlgorithm": "yen",
+          "outcome": "succeeded",
+          "failureReason": null,
+          "outboundRatioPct": 46,
+          "feeMsat": 3000,
+          "notes": "Uscita sintetica RGB; parte 1/1; regolata; nessun pagamento reale."
+        }
+      }
+    ],
+    "bob": [
+      {
+        "transactionId": "synthetic-tx-000003",
+        "pathIndex": 0,
+        "direction": "outgoing",
+        "episode": {
+          "id": "synthetic-ep-000003-bob-outgoing-0",
+          "timestamp": 1767229200000,
+          "eventType": "payment_succeeded",
+          "peerNodeId": "0224ad5a14880ae3983ff8020ec16bc8434a5b523d2e394da874a9ddb074bba86f",
+          "peerAlias": "Frank",
+          "channelId": "843bfeaa7533b799873b09db9a90737a1b7fd67110ac03b635e7715c3b160be0",
+          "amountMsat": "18000000",
+          "assetId": null,
+          "assetAmount": null,
+          "routingAlgorithm": "yen",
+          "outcome": "succeeded",
+          "failureReason": null,
+          "outboundRatioPct": 25,
+          "feeMsat": 2000,
+          "notes": "Uscita sintetica BTC; parte 1/1; regolata; nessun pagamento reale."
+        }
+      },
+      {
+        "transactionId": "synthetic-tx-000004",
+        "pathIndex": 0,
+        "direction": "incoming",
+        "episode": {
+          "id": "synthetic-ep-000004-bob-incoming-0",
+          "timestamp": 1767231000000,
+          "eventType": "payment_succeeded",
+          "peerNodeId": "0224ad5a14880ae3983ff8020ec16bc8434a5b523d2e394da874a9ddb074bba86f",
+          "peerAlias": "Frank",
+          "channelId": "843bfeaa7533b799873b09db9a90737a1b7fd67110ac03b635e7715c3b160be0",
+          "amountMsat": "18000000",
+          "assetId": null,
+          "assetAmount": null,
+          "routingAlgorithm": "yen",
+          "outcome": "succeeded",
+          "failureReason": null,
+          "outboundRatioPct": 23,
+          "feeMsat": 0,
+          "notes": "Entrata sintetica BTC; parte 1/1; regolata; nessun pagamento reale."
+        }
+      },
+      {
+        "transactionId": "synthetic-tx-000013",
+        "pathIndex": 0,
+        "direction": "incoming",
+        "episode": {
+          "id": "synthetic-ep-000013-bob-incoming-0",
+          "timestamp": 1767247200000,
+          "eventType": "payment_succeeded",
+          "peerNodeId": "028acb8b8520220f44ca1e5fdda92fe6b329248648d4924619656bd0c5b5c778be",
+          "peerAlias": "Erin",
+          "channelId": "6156f72e86ffc85c5ce6baa1be43df97a696204d96b74fa85e939d394a75446f",
+          "amountMsat": "15000000",
+          "assetId": "rgb:synthetic-route-test",
+          "assetAmount": "4",
+          "routingAlgorithm": "min_cost_flow",
+          "outcome": "succeeded",
+          "failureReason": null,
+          "outboundRatioPct": 75,
+          "feeMsat": 0,
+          "notes": "Entrata sintetica RGB; parte 1/1; regolata; nessun pagamento reale."
+        }
+      },
+      {
+        "transactionId": "synthetic-tx-000014",
+        "pathIndex": 0,
+        "direction": "outgoing",
+        "episode": {
+          "id": "synthetic-ep-000014-bob-outgoing-0",
+          "timestamp": 1767249000000,
+          "eventType": "payment_succeeded",
+          "peerNodeId": "028acb8b8520220f44ca1e5fdda92fe6b329248648d4924619656bd0c5b5c778be",
+          "peerAlias": "Erin",
+          "channelId": "6156f72e86ffc85c5ce6baa1be43df97a696204d96b74fa85e939d394a75446f",
+          "amountMsat": "15000000",
+          "assetId": "rgb:synthetic-route-test",
+          "assetAmount": "4",
+          "routingAlgorithm": "min_cost_flow",
+          "outcome": "succeeded",
+          "failureReason": null,
+          "outboundRatioPct": 76,
+          "feeMsat": 1000,
+          "notes": "Uscita sintetica RGB; parte 1/1; regolata; nessun pagamento reale."
+        }
+      }
+    ],
+    "carol": [
+      {
+        "transactionId": "synthetic-tx-000005",
+        "pathIndex": 0,
+        "direction": "outgoing",
+        "episode": {
+          "id": "synthetic-ep-000005-carol-outgoing-0",
+          "timestamp": 1767232800000,
+          "eventType": "payment_succeeded",
+          "peerNodeId": "028acb8b8520220f44ca1e5fdda92fe6b329248648d4924619656bd0c5b5c778be",
+          "peerAlias": "Erin",
+          "channelId": "0e5da3c50e1ccd797fcf43c5442558c19dfe622d9b7f49b35f1b6f21635fcd22",
+          "amountMsat": "20000000",
+          "assetId": "rgb:synthetic-route-test",
+          "assetAmount": "6",
+          "routingAlgorithm": "min_cost_flow",
+          "outcome": "succeeded",
+          "failureReason": null,
+          "outboundRatioPct": 55,
+          "feeMsat": 1000,
+          "notes": "Uscita sintetica RGB; parte 1/1; regolata; nessun pagamento reale."
+        }
+      },
+      {
+        "transactionId": "synthetic-tx-000006",
+        "pathIndex": 0,
+        "direction": "incoming",
+        "episode": {
+          "id": "synthetic-ep-000006-carol-incoming-0",
+          "timestamp": 1767234600000,
+          "eventType": "payment_succeeded",
+          "peerNodeId": "028acb8b8520220f44ca1e5fdda92fe6b329248648d4924619656bd0c5b5c778be",
+          "peerAlias": "Erin",
+          "channelId": "0e5da3c50e1ccd797fcf43c5442558c19dfe622d9b7f49b35f1b6f21635fcd22",
+          "amountMsat": "20000000",
+          "assetId": "rgb:synthetic-route-test",
+          "assetAmount": "6",
+          "routingAlgorithm": "min_cost_flow",
+          "outcome": "succeeded",
+          "failureReason": null,
+          "outboundRatioPct": 52,
+          "feeMsat": 0,
+          "notes": "Entrata sintetica RGB; parte 1/1; regolata; nessun pagamento reale."
+        }
+      },
+      {
+        "transactionId": "synthetic-tx-000015",
+        "pathIndex": 0,
+        "direction": "incoming",
+        "episode": {
+          "id": "synthetic-ep-000015-carol-incoming-0",
+          "timestamp": 1767250800000,
+          "eventType": "payment_succeeded",
+          "peerNodeId": "0224ad5a14880ae3983ff8020ec16bc8434a5b523d2e394da874a9ddb074bba86f",
+          "peerAlias": "Frank",
+          "channelId": "370e01ef45904b7e3138756254866829c131f61d3f966812d244dfdc08285734",
+          "amountMsat": "17000000",
+          "assetId": null,
+          "assetAmount": null,
+          "routingAlgorithm": "multi_objective",
+          "outcome": "succeeded",
+          "failureReason": null,
+          "outboundRatioPct": 19,
+          "feeMsat": 0,
+          "notes": "Entrata sintetica BTC; parte 1/1; regolata; nessun pagamento reale."
+        }
+      },
+      {
+        "transactionId": "synthetic-tx-000016",
+        "pathIndex": 0,
+        "direction": "outgoing",
+        "episode": {
+          "id": "synthetic-ep-000016-carol-outgoing-0",
+          "timestamp": 1767252600000,
+          "eventType": "payment_succeeded",
+          "peerNodeId": "0224ad5a14880ae3983ff8020ec16bc8434a5b523d2e394da874a9ddb074bba86f",
+          "peerAlias": "Frank",
+          "channelId": "370e01ef45904b7e3138756254866829c131f61d3f966812d244dfdc08285734",
+          "amountMsat": "17000000",
+          "assetId": null,
+          "assetAmount": null,
+          "routingAlgorithm": "multi_objective",
+          "outcome": "succeeded",
+          "failureReason": null,
+          "outboundRatioPct": 21,
+          "feeMsat": 2000,
+          "notes": "Uscita sintetica BTC; parte 1/1; regolata; nessun pagamento reale."
+        }
+      }
+    ],
+    "dave": [
+      {
+        "transactionId": "synthetic-tx-000007",
+        "pathIndex": 0,
+        "direction": "outgoing",
+        "episode": {
+          "id": "synthetic-ep-000007-dave-outgoing-0",
+          "timestamp": 1767236400000,
+          "eventType": "payment_succeeded",
+          "peerNodeId": "02850e17a18b49d9b0d98325e5f2b08989a589627751a9d3056f97f943dde2ee38",
+          "peerAlias": "Grace",
+          "channelId": "1eff7e1243c1f29776f1ed3d9e2ba4cb5ba86af57333920c9f5ce2601294fa22",
+          "amountMsat": "10000000",
+          "assetId": "rgb:synthetic-route-test",
+          "assetAmount": "5",
+          "routingAlgorithm": "multi_objective",
+          "outcome": "succeeded",
+          "failureReason": null,
+          "outboundRatioPct": 80,
+          "feeMsat": 5000,
+          "notes": "Uscita sintetica RGB; parte 1/1; regolata; nessun pagamento reale."
+        }
+      },
+      {
+        "transactionId": "synthetic-tx-000008",
+        "pathIndex": 0,
+        "direction": "incoming",
+        "episode": {
+          "id": "synthetic-ep-000008-dave-incoming-0",
+          "timestamp": 1767238200000,
+          "eventType": "payment_succeeded",
+          "peerNodeId": "02850e17a18b49d9b0d98325e5f2b08989a589627751a9d3056f97f943dde2ee38",
+          "peerAlias": "Grace",
+          "channelId": "1eff7e1243c1f29776f1ed3d9e2ba4cb5ba86af57333920c9f5ce2601294fa22",
+          "amountMsat": "10000000",
+          "assetId": "rgb:synthetic-route-test",
+          "assetAmount": "5",
+          "routingAlgorithm": "multi_objective",
+          "outcome": "succeeded",
+          "failureReason": null,
+          "outboundRatioPct": 78,
+          "feeMsat": 0,
+          "notes": "Entrata sintetica RGB; parte 1/1; regolata; nessun pagamento reale."
+        }
+      },
+      {
+        "transactionId": "synthetic-tx-000017",
+        "pathIndex": 0,
+        "direction": "incoming",
+        "episode": {
+          "id": "synthetic-ep-000017-dave-incoming-0",
+          "timestamp": 1767254400000,
+          "eventType": "payment_succeeded",
+          "peerNodeId": "02850e17a18b49d9b0d98325e5f2b08989a589627751a9d3056f97f943dde2ee38",
+          "peerAlias": "Grace",
+          "channelId": "1eff7e1243c1f29776f1ed3d9e2ba4cb5ba86af57333920c9f5ce2601294fa22",
+          "amountMsat": "18000000",
+          "assetId": "rgb:synthetic-route-test",
+          "assetAmount": "1",
+          "routingAlgorithm": "ldk_dijkstra",
+          "outcome": "succeeded",
+          "failureReason": null,
+          "outboundRatioPct": 79,
+          "feeMsat": 0,
+          "notes": "Entrata sintetica RGB; parte 1/1; regolata; nessun pagamento reale."
+        }
+      },
+      {
+        "transactionId": "synthetic-tx-000018",
+        "pathIndex": 0,
+        "direction": "outgoing",
+        "episode": {
+          "id": "synthetic-ep-000018-dave-outgoing-0",
+          "timestamp": 1767256200000,
+          "eventType": "payment_succeeded",
+          "peerNodeId": "02850e17a18b49d9b0d98325e5f2b08989a589627751a9d3056f97f943dde2ee38",
+          "peerAlias": "Grace",
+          "channelId": "1eff7e1243c1f29776f1ed3d9e2ba4cb5ba86af57333920c9f5ce2601294fa22",
+          "amountMsat": "18000000",
+          "assetId": "rgb:synthetic-route-test",
+          "assetAmount": "1",
+          "routingAlgorithm": "ldk_dijkstra",
+          "outcome": "succeeded",
+          "failureReason": null,
+          "outboundRatioPct": 81,
+          "feeMsat": 5000,
+          "notes": "Uscita sintetica RGB; parte 1/1; regolata; nessun pagamento reale."
+        }
+      }
+    ],
+    "erin": [
+      {
+        "transactionId": "synthetic-tx-000009",
+        "pathIndex": 0,
+        "direction": "outgoing",
+        "episode": {
+          "id": "synthetic-ep-000009-erin-outgoing-0",
+          "timestamp": 1767240000000,
+          "eventType": "payment_succeeded",
+          "peerNodeId": "02ac8c684718bde43e9766c902f8492d2d3deb9c99692d5e88daf7d6854b556dd3",
+          "peerAlias": "Bob",
+          "channelId": "6156f72e86ffc85c5ce6baa1be43df97a696204d96b74fa85e939d394a75446f",
+          "amountMsat": "13000000",
+          "assetId": null,
+          "assetAmount": null,
+          "routingAlgorithm": "ldk_dijkstra",
+          "outcome": "succeeded",
+          "failureReason": null,
+          "outboundRatioPct": 25,
+          "feeMsat": 4000,
+          "notes": "Uscita sintetica BTC; parte 1/1; regolata; nessun pagamento reale."
+        }
+      },
+      {
+        "transactionId": "synthetic-tx-000010",
+        "pathIndex": 0,
+        "direction": "incoming",
+        "episode": {
+          "id": "synthetic-ep-000010-erin-incoming-0",
+          "timestamp": 1767241800000,
+          "eventType": "payment_succeeded",
+          "peerNodeId": "02ac8c684718bde43e9766c902f8492d2d3deb9c99692d5e88daf7d6854b556dd3",
+          "peerAlias": "Bob",
+          "channelId": "6156f72e86ffc85c5ce6baa1be43df97a696204d96b74fa85e939d394a75446f",
+          "amountMsat": "13000000",
+          "assetId": null,
+          "assetAmount": null,
+          "routingAlgorithm": "ldk_dijkstra",
+          "outcome": "succeeded",
+          "failureReason": null,
+          "outboundRatioPct": 23,
+          "feeMsat": 0,
+          "notes": "Entrata sintetica BTC; parte 1/1; regolata; nessun pagamento reale."
+        }
+      }
+    ],
+    "frank": [
+      {
+        "transactionId": "synthetic-tx-000009",
+        "pathIndex": 0,
+        "direction": "incoming",
+        "episode": {
+          "id": "synthetic-ep-000009-frank-incoming-0",
+          "timestamp": 1767240000000,
+          "eventType": "payment_succeeded",
+          "peerNodeId": "02ac8c684718bde43e9766c902f8492d2d3deb9c99692d5e88daf7d6854b556dd3",
+          "peerAlias": "Bob",
+          "channelId": "843bfeaa7533b799873b09db9a90737a1b7fd67110ac03b635e7715c3b160be0",
+          "amountMsat": "13000000",
+          "assetId": null,
+          "assetAmount": null,
+          "routingAlgorithm": "ldk_dijkstra",
+          "outcome": "succeeded",
+          "failureReason": null,
+          "outboundRatioPct": 75,
+          "feeMsat": 0,
+          "notes": "Entrata sintetica BTC; parte 1/1; regolata; nessun pagamento reale."
+        }
+      },
+      {
+        "transactionId": "synthetic-tx-000010",
+        "pathIndex": 0,
+        "direction": "outgoing",
+        "episode": {
+          "id": "synthetic-ep-000010-frank-outgoing-0",
+          "timestamp": 1767241800000,
+          "eventType": "payment_succeeded",
+          "peerNodeId": "02ac8c684718bde43e9766c902f8492d2d3deb9c99692d5e88daf7d6854b556dd3",
+          "peerAlias": "Bob",
+          "channelId": "843bfeaa7533b799873b09db9a90737a1b7fd67110ac03b635e7715c3b160be0",
+          "amountMsat": "13000000",
+          "assetId": null,
+          "assetAmount": null,
+          "routingAlgorithm": "ldk_dijkstra",
+          "outcome": "succeeded",
+          "failureReason": null,
+          "outboundRatioPct": 76,
+          "feeMsat": 1000,
+          "notes": "Uscita sintetica BTC; parte 1/1; regolata; nessun pagamento reale."
+        }
+      },
+      {
+        "transactionId": "synthetic-tx-000019",
+        "pathIndex": 0,
+        "direction": "outgoing",
+        "episode": {
+          "id": "synthetic-ep-000019-frank-outgoing-0",
+          "timestamp": 1767258000000,
+          "eventType": "payment_succeeded",
+          "peerNodeId": "02b4f4b925713e595eafe3f69d51b2fd0d4be0cc11168ca612a8638d834f3a175f",
+          "peerAlias": "Dave",
+          "channelId": "009675a5ab86676eac5b3cf04a2f8bc468b9506c4a66f0efe0a4cfd7e2382a90",
+          "amountMsat": "15000000",
+          "assetId": "rgb:synthetic-route-test",
+          "assetAmount": "4",
+          "routingAlgorithm": "yen",
+          "outcome": "succeeded",
+          "failureReason": null,
+          "outboundRatioPct": 65,
+          "feeMsat": 3000,
+          "notes": "Uscita sintetica RGB; parte 1/1; regolata; nessun pagamento reale."
+        }
+      },
+      {
+        "transactionId": "synthetic-tx-000020",
+        "pathIndex": 0,
+        "direction": "incoming",
+        "episode": {
+          "id": "synthetic-ep-000020-frank-incoming-0",
+          "timestamp": 1767259800000,
+          "eventType": "payment_succeeded",
+          "peerNodeId": "02b4f4b925713e595eafe3f69d51b2fd0d4be0cc11168ca612a8638d834f3a175f",
+          "peerAlias": "Dave",
+          "channelId": "009675a5ab86676eac5b3cf04a2f8bc468b9506c4a66f0efe0a4cfd7e2382a90",
+          "amountMsat": "15000000",
+          "assetId": "rgb:synthetic-route-test",
+          "assetAmount": "4",
+          "routingAlgorithm": "yen",
+          "outcome": "succeeded",
+          "failureReason": null,
+          "outboundRatioPct": 63,
+          "feeMsat": 0,
+          "notes": "Entrata sintetica RGB; parte 1/1; regolata; nessun pagamento reale."
+        }
+      }
+    ],
+    "grace": [
+      {
+        "transactionId": "synthetic-tx-000011",
+        "pathIndex": 0,
+        "direction": "outgoing",
+        "episode": {
+          "id": "synthetic-ep-000011-grace-outgoing-0",
+          "timestamp": 1767243600000,
+          "eventType": "payment_succeeded",
+          "peerNodeId": "02b4f4b925713e595eafe3f69d51b2fd0d4be0cc11168ca612a8638d834f3a175f",
+          "peerAlias": "Dave",
+          "channelId": "1eff7e1243c1f29776f1ed3d9e2ba4cb5ba86af57333920c9f5ce2601294fa22",
+          "amountMsat": "14000000",
+          "assetId": "rgb:synthetic-route-test",
+          "assetAmount": "1",
+          "routingAlgorithm": "yen",
+          "outcome": "succeeded",
+          "failureReason": null,
+          "outboundRatioPct": 20,
+          "feeMsat": 0,
+          "notes": "Uscita sintetica RGB; parte 1/1; regolata; nessun pagamento reale."
+        }
+      },
+      {
+        "transactionId": "synthetic-tx-000012",
+        "pathIndex": 0,
+        "direction": "incoming",
+        "episode": {
+          "id": "synthetic-ep-000012-grace-incoming-0",
+          "timestamp": 1767245400000,
+          "eventType": "payment_succeeded",
+          "peerNodeId": "02b4f4b925713e595eafe3f69d51b2fd0d4be0cc11168ca612a8638d834f3a175f",
+          "peerAlias": "Dave",
+          "channelId": "1eff7e1243c1f29776f1ed3d9e2ba4cb5ba86af57333920c9f5ce2601294fa22",
+          "amountMsat": "14000000",
+          "assetId": "rgb:synthetic-route-test",
+          "assetAmount": "1",
+          "routingAlgorithm": "yen",
+          "outcome": "succeeded",
+          "failureReason": null,
+          "outboundRatioPct": 18,
+          "feeMsat": 0,
+          "notes": "Entrata sintetica RGB; parte 1/1; regolata; nessun pagamento reale."
+        }
+      },
+      {
+        "transactionId": "synthetic-tx-000019",
+        "pathIndex": 0,
+        "direction": "incoming",
+        "episode": {
+          "id": "synthetic-ep-000019-grace-incoming-0",
+          "timestamp": 1767258000000,
+          "eventType": "payment_succeeded",
+          "peerNodeId": "02b4f4b925713e595eafe3f69d51b2fd0d4be0cc11168ca612a8638d834f3a175f",
+          "peerAlias": "Dave",
+          "channelId": "1eff7e1243c1f29776f1ed3d9e2ba4cb5ba86af57333920c9f5ce2601294fa22",
+          "amountMsat": "15000000",
+          "assetId": "rgb:synthetic-route-test",
+          "assetAmount": "4",
+          "routingAlgorithm": "yen",
+          "outcome": "succeeded",
+          "failureReason": null,
+          "outboundRatioPct": 20,
+          "feeMsat": 0,
+          "notes": "Entrata sintetica RGB; parte 1/1; regolata; nessun pagamento reale."
+        }
+      },
+      {
+        "transactionId": "synthetic-tx-000020",
+        "pathIndex": 0,
+        "direction": "outgoing",
+        "episode": {
+          "id": "synthetic-ep-000020-grace-outgoing-0",
+          "timestamp": 1767259800000,
+          "eventType": "payment_succeeded",
+          "peerNodeId": "02b4f4b925713e595eafe3f69d51b2fd0d4be0cc11168ca612a8638d834f3a175f",
+          "peerAlias": "Dave",
+          "channelId": "1eff7e1243c1f29776f1ed3d9e2ba4cb5ba86af57333920c9f5ce2601294fa22",
+          "amountMsat": "15000000",
+          "assetId": "rgb:synthetic-route-test",
+          "assetAmount": "4",
+          "routingAlgorithm": "yen",
+          "outcome": "succeeded",
+          "failureReason": null,
+          "outboundRatioPct": 21,
+          "feeMsat": 4000,
+          "notes": "Uscita sintetica RGB; parte 1/1; regolata; nessun pagamento reale."
+        }
+      }
+    ],
+    "heidi": [
+      {
+        "transactionId": "synthetic-tx-000005",
+        "pathIndex": 0,
+        "direction": "incoming",
+        "episode": {
+          "id": "synthetic-ep-000005-heidi-incoming-0",
+          "timestamp": 1767232800000,
+          "eventType": "payment_succeeded",
+          "peerNodeId": "028acb8b8520220f44ca1e5fdda92fe6b329248648d4924619656bd0c5b5c778be",
+          "peerAlias": "Erin",
+          "channelId": "efc581b72c9e428aa1f22a175b0bb74e47702768865a420eb539baac3b5ed0e5",
+          "amountMsat": "20000000",
+          "assetId": "rgb:synthetic-route-test",
+          "assetAmount": "6",
+          "routingAlgorithm": "min_cost_flow",
+          "outcome": "succeeded",
+          "failureReason": null,
+          "outboundRatioPct": 30,
+          "feeMsat": 0,
+          "notes": "Entrata sintetica RGB; parte 1/1; regolata; nessun pagamento reale."
+        }
+      },
+      {
+        "transactionId": "synthetic-tx-000006",
+        "pathIndex": 0,
+        "direction": "outgoing",
+        "episode": {
+          "id": "synthetic-ep-000006-heidi-outgoing-0",
+          "timestamp": 1767234600000,
+          "eventType": "payment_succeeded",
+          "peerNodeId": "028acb8b8520220f44ca1e5fdda92fe6b329248648d4924619656bd0c5b5c778be",
+          "peerAlias": "Erin",
+          "channelId": "efc581b72c9e428aa1f22a175b0bb74e47702768865a420eb539baac3b5ed0e5",
+          "amountMsat": "20000000",
+          "assetId": "rgb:synthetic-route-test",
+          "assetAmount": "6",
+          "routingAlgorithm": "min_cost_flow",
+          "outcome": "succeeded",
+          "failureReason": null,
+          "outboundRatioPct": 32,
+          "feeMsat": 3000,
+          "notes": "Uscita sintetica RGB; parte 1/1; regolata; nessun pagamento reale."
+        }
+      },
+      {
+        "transactionId": "synthetic-tx-000013",
+        "pathIndex": 0,
+        "direction": "outgoing",
+        "episode": {
+          "id": "synthetic-ep-000013-heidi-outgoing-0",
+          "timestamp": 1767247200000,
+          "eventType": "payment_succeeded",
+          "peerNodeId": "028acb8b8520220f44ca1e5fdda92fe6b329248648d4924619656bd0c5b5c778be",
+          "peerAlias": "Erin",
+          "channelId": "efc581b72c9e428aa1f22a175b0bb74e47702768865a420eb539baac3b5ed0e5",
+          "amountMsat": "15000000",
+          "assetId": "rgb:synthetic-route-test",
+          "assetAmount": "4",
+          "routingAlgorithm": "min_cost_flow",
+          "outcome": "succeeded",
+          "failureReason": null,
+          "outboundRatioPct": 29,
+          "feeMsat": 1000,
+          "notes": "Uscita sintetica RGB; parte 1/1; regolata; nessun pagamento reale."
+        }
+      },
+      {
+        "transactionId": "synthetic-tx-000014",
+        "pathIndex": 0,
+        "direction": "incoming",
+        "episode": {
+          "id": "synthetic-ep-000014-heidi-incoming-0",
+          "timestamp": 1767249000000,
+          "eventType": "payment_succeeded",
+          "peerNodeId": "028acb8b8520220f44ca1e5fdda92fe6b329248648d4924619656bd0c5b5c778be",
+          "peerAlias": "Erin",
+          "channelId": "efc581b72c9e428aa1f22a175b0bb74e47702768865a420eb539baac3b5ed0e5",
+          "amountMsat": "15000000",
+          "assetId": "rgb:synthetic-route-test",
+          "assetAmount": "4",
+          "routingAlgorithm": "min_cost_flow",
+          "outcome": "succeeded",
+          "failureReason": null,
+          "outboundRatioPct": 28,
+          "feeMsat": 0,
+          "notes": "Entrata sintetica RGB; parte 1/1; regolata; nessun pagamento reale."
+        }
+      }
+    ],
+    "ivan": [
+      {
+        "transactionId": "synthetic-tx-000003",
+        "pathIndex": 0,
+        "direction": "incoming",
+        "episode": {
+          "id": "synthetic-ep-000003-ivan-incoming-0",
+          "timestamp": 1767229200000,
+          "eventType": "payment_succeeded",
+          "peerNodeId": "0224ad5a14880ae3983ff8020ec16bc8434a5b523d2e394da874a9ddb074bba86f",
+          "peerAlias": "Frank",
+          "channelId": "b1118772eafa388f892bf951fef4777cf9abb00597b1335538da6f6e7b4888c1",
+          "amountMsat": "18000000",
+          "assetId": null,
+          "assetAmount": null,
+          "routingAlgorithm": "yen",
+          "outcome": "succeeded",
+          "failureReason": null,
+          "outboundRatioPct": 70,
+          "feeMsat": 0,
+          "notes": "Entrata sintetica BTC; parte 1/1; regolata; nessun pagamento reale."
+        }
+      },
+      {
+        "transactionId": "synthetic-tx-000004",
+        "pathIndex": 0,
+        "direction": "outgoing",
+        "episode": {
+          "id": "synthetic-ep-000004-ivan-outgoing-0",
+          "timestamp": 1767231000000,
+          "eventType": "payment_succeeded",
+          "peerNodeId": "0224ad5a14880ae3983ff8020ec16bc8434a5b523d2e394da874a9ddb074bba86f",
+          "peerAlias": "Frank",
+          "channelId": "b1118772eafa388f892bf951fef4777cf9abb00597b1335538da6f6e7b4888c1",
+          "amountMsat": "18000000",
+          "assetId": null,
+          "assetAmount": null,
+          "routingAlgorithm": "yen",
+          "outcome": "succeeded",
+          "failureReason": null,
+          "outboundRatioPct": 71,
+          "feeMsat": 4000,
+          "notes": "Uscita sintetica BTC; parte 1/1; regolata; nessun pagamento reale."
+        }
+      },
+      {
+        "transactionId": "synthetic-tx-000015",
+        "pathIndex": 0,
+        "direction": "outgoing",
+        "episode": {
+          "id": "synthetic-ep-000015-ivan-outgoing-0",
+          "timestamp": 1767250800000,
+          "eventType": "payment_succeeded",
+          "peerNodeId": "0224ad5a14880ae3983ff8020ec16bc8434a5b523d2e394da874a9ddb074bba86f",
+          "peerAlias": "Frank",
+          "channelId": "b1118772eafa388f892bf951fef4777cf9abb00597b1335538da6f6e7b4888c1",
+          "amountMsat": "17000000",
+          "assetId": null,
+          "assetAmount": null,
+          "routingAlgorithm": "multi_objective",
+          "outcome": "succeeded",
+          "failureReason": null,
+          "outboundRatioPct": 69,
+          "feeMsat": 2000,
+          "notes": "Uscita sintetica BTC; parte 1/1; regolata; nessun pagamento reale."
+        }
+      },
+      {
+        "transactionId": "synthetic-tx-000016",
+        "pathIndex": 0,
+        "direction": "incoming",
+        "episode": {
+          "id": "synthetic-ep-000016-ivan-incoming-0",
+          "timestamp": 1767252600000,
+          "eventType": "payment_succeeded",
+          "peerNodeId": "0224ad5a14880ae3983ff8020ec16bc8434a5b523d2e394da874a9ddb074bba86f",
+          "peerAlias": "Frank",
+          "channelId": "b1118772eafa388f892bf951fef4777cf9abb00597b1335538da6f6e7b4888c1",
+          "amountMsat": "17000000",
+          "assetId": null,
+          "assetAmount": null,
+          "routingAlgorithm": "multi_objective",
+          "outcome": "succeeded",
+          "failureReason": null,
+          "outboundRatioPct": 68,
+          "feeMsat": 0,
+          "notes": "Entrata sintetica BTC; parte 1/1; regolata; nessun pagamento reale."
+        }
+      }
+    ],
+    "judy": [
+      {
+        "transactionId": "synthetic-tx-000001",
+        "pathIndex": 0,
+        "direction": "incoming",
+        "episode": {
+          "id": "synthetic-ep-000001-judy-incoming-0",
+          "timestamp": 1767225600000,
+          "eventType": "payment_succeeded",
+          "peerNodeId": "02c187aea8e006b846d82c200f929e1a40a6ad24b6df46f15abebfc36e90447e08",
+          "peerAlias": "Heidi",
+          "channelId": "95837da7c5b6febd64946c6f440b6b2f2d9a955e9465bf560310755b85355e53",
+          "amountMsat": "6000000",
+          "assetId": "rgb:synthetic-route-test",
+          "assetAmount": "12",
+          "routingAlgorithm": "ldk_dijkstra",
+          "outcome": "succeeded",
+          "failureReason": null,
+          "outboundRatioPct": 20,
+          "feeMsat": 0,
+          "notes": "Entrata sintetica RGB; parte 1/2; regolata; nessun pagamento reale."
+        }
+      },
+      {
+        "transactionId": "synthetic-tx-000001",
+        "pathIndex": 1,
+        "direction": "incoming",
+        "episode": {
+          "id": "synthetic-ep-000001-judy-incoming-1",
+          "timestamp": 1767225600000,
+          "eventType": "payment_succeeded",
+          "peerNodeId": "028d0d55c5c2b491dda3964c4f3bce9974e3f4a2408ed6c146e557dded9b521544",
+          "peerAlias": "Ivan",
+          "channelId": "0db9b707a77f94f35c2d09db991bed0af6ca92e713f8d7059551f52a0694c955",
+          "amountMsat": "4000000",
+          "assetId": "rgb:synthetic-route-test",
+          "assetAmount": "8",
+          "routingAlgorithm": "ldk_dijkstra",
+          "outcome": "succeeded",
+          "failureReason": null,
+          "outboundRatioPct": 60,
+          "feeMsat": 0,
+          "notes": "Entrata sintetica RGB; parte 2/2; regolata; nessun pagamento reale."
+        }
+      },
+      {
+        "transactionId": "synthetic-tx-000002",
+        "pathIndex": 0,
+        "direction": "outgoing",
+        "episode": {
+          "id": "synthetic-ep-000002-judy-outgoing-0",
+          "timestamp": 1767227400000,
+          "eventType": "payment_succeeded",
+          "peerNodeId": "02c187aea8e006b846d82c200f929e1a40a6ad24b6df46f15abebfc36e90447e08",
+          "peerAlias": "Heidi",
+          "channelId": "95837da7c5b6febd64946c6f440b6b2f2d9a955e9465bf560310755b85355e53",
+          "amountMsat": "6000000",
+          "assetId": "rgb:synthetic-route-test",
+          "assetAmount": "12",
+          "routingAlgorithm": "ldk_dijkstra",
+          "outcome": "succeeded",
+          "failureReason": null,
+          "outboundRatioPct": 20,
+          "feeMsat": 2000,
+          "notes": "Uscita sintetica RGB; parte 1/2; regolata; nessun pagamento reale."
+        }
+      },
+      {
+        "transactionId": "synthetic-tx-000002",
+        "pathIndex": 1,
+        "direction": "outgoing",
+        "episode": {
+          "id": "synthetic-ep-000002-judy-outgoing-1",
+          "timestamp": 1767227400000,
+          "eventType": "payment_succeeded",
+          "peerNodeId": "028d0d55c5c2b491dda3964c4f3bce9974e3f4a2408ed6c146e557dded9b521544",
+          "peerAlias": "Ivan",
+          "channelId": "0db9b707a77f94f35c2d09db991bed0af6ca92e713f8d7059551f52a0694c955",
+          "amountMsat": "4000000",
+          "assetId": "rgb:synthetic-route-test",
+          "assetAmount": "8",
+          "routingAlgorithm": "ldk_dijkstra",
+          "outcome": "succeeded",
+          "failureReason": null,
+          "outboundRatioPct": 60,
+          "feeMsat": 4000,
+          "notes": "Uscita sintetica RGB; parte 2/2; regolata; nessun pagamento reale."
+        }
+      },
+      {
+        "transactionId": "synthetic-tx-000007",
+        "pathIndex": 0,
+        "direction": "incoming",
+        "episode": {
+          "id": "synthetic-ep-000007-judy-incoming-0",
+          "timestamp": 1767236400000,
+          "eventType": "payment_succeeded",
+          "peerNodeId": "028d0d55c5c2b491dda3964c4f3bce9974e3f4a2408ed6c146e557dded9b521544",
+          "peerAlias": "Ivan",
+          "channelId": "0db9b707a77f94f35c2d09db991bed0af6ca92e713f8d7059551f52a0694c955",
+          "amountMsat": "10000000",
+          "assetId": "rgb:synthetic-route-test",
+          "assetAmount": "5",
+          "routingAlgorithm": "multi_objective",
+          "outcome": "succeeded",
+          "failureReason": null,
+          "outboundRatioPct": 59,
+          "feeMsat": 0,
+          "notes": "Entrata sintetica RGB; parte 1/1; regolata; nessun pagamento reale."
+        }
+      },
+      {
+        "transactionId": "synthetic-tx-000008",
+        "pathIndex": 0,
+        "direction": "outgoing",
+        "episode": {
+          "id": "synthetic-ep-000008-judy-outgoing-0",
+          "timestamp": 1767238200000,
+          "eventType": "payment_succeeded",
+          "peerNodeId": "028d0d55c5c2b491dda3964c4f3bce9974e3f4a2408ed6c146e557dded9b521544",
+          "peerAlias": "Ivan",
+          "channelId": "0db9b707a77f94f35c2d09db991bed0af6ca92e713f8d7059551f52a0694c955",
+          "amountMsat": "10000000",
+          "assetId": "rgb:synthetic-route-test",
+          "assetAmount": "5",
+          "routingAlgorithm": "multi_objective",
+          "outcome": "succeeded",
+          "failureReason": null,
+          "outboundRatioPct": 60,
+          "feeMsat": 6000,
+          "notes": "Uscita sintetica RGB; parte 1/1; regolata; nessun pagamento reale."
+        }
+      },
+      {
+        "transactionId": "synthetic-tx-000017",
+        "pathIndex": 0,
+        "direction": "outgoing",
+        "episode": {
+          "id": "synthetic-ep-000017-judy-outgoing-0",
+          "timestamp": 1767254400000,
+          "eventType": "payment_succeeded",
+          "peerNodeId": "028d0d55c5c2b491dda3964c4f3bce9974e3f4a2408ed6c146e557dded9b521544",
+          "peerAlias": "Ivan",
+          "channelId": "0db9b707a77f94f35c2d09db991bed0af6ca92e713f8d7059551f52a0694c955",
+          "amountMsat": "18000000",
+          "assetId": "rgb:synthetic-route-test",
+          "assetAmount": "1",
+          "routingAlgorithm": "ldk_dijkstra",
+          "outcome": "succeeded",
+          "failureReason": null,
+          "outboundRatioPct": 59,
+          "feeMsat": 6000,
+          "notes": "Uscita sintetica RGB; parte 1/1; regolata; nessun pagamento reale."
+        }
+      },
+      {
+        "transactionId": "synthetic-tx-000018",
+        "pathIndex": 0,
+        "direction": "incoming",
+        "episode": {
+          "id": "synthetic-ep-000018-judy-incoming-0",
+          "timestamp": 1767256200000,
+          "eventType": "payment_succeeded",
+          "peerNodeId": "028d0d55c5c2b491dda3964c4f3bce9974e3f4a2408ed6c146e557dded9b521544",
+          "peerAlias": "Ivan",
+          "channelId": "0db9b707a77f94f35c2d09db991bed0af6ca92e713f8d7059551f52a0694c955",
+          "amountMsat": "18000000",
+          "assetId": "rgb:synthetic-route-test",
+          "assetAmount": "1",
+          "routingAlgorithm": "ldk_dijkstra",
+          "outcome": "succeeded",
+          "failureReason": null,
+          "outboundRatioPct": 58,
+          "feeMsat": 0,
+          "notes": "Entrata sintetica RGB; parte 1/1; regolata; nessun pagamento reale."
+        }
+      }
+    ]
+  }
+}

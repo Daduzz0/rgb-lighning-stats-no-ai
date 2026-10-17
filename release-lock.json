@@ -1,0 +1,12 @@
+{
+  "repository": "https://github.com/kaleidoswap/desktop-app",
+  "tag": "v0.6.0",
+  "commit": "4372a3545b09e3a3181ee6ef80309af6140e2cba",
+  "artifact": "KaleidoSwap_0.6.0_amd64.AppImage",
+  "sha256": "986d40598a3d63d4317b88548f113de894ca4e7351586a90adbb47e83d2540ba",
+  "signatureFingerprint": "D22687EA589C508EE1FB27259EE396C0452755F0",
+  "signatureVerified": true,
+  "unmodifiedOfficialRelease": true,
+  "bundledNodeSha256": "f9cc8a4f9b93edf26d3a2671c952eebed1b22e980a6ace6bbd4cab8fe4d300c3",
+  "bundledNodeVersionOutput": "rgb-lightning-node 0.1.0"
+}
