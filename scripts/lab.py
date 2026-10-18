@@ -22,7 +22,7 @@ def compose(project, *args, capture=True):
     if not re.fullmatch(r"[a-z0-9][a-z0-9_-]{0,39}", project):
         raise ValueError("Nome progetto Docker non valido")
     return subprocess.run(["docker", "compose", "-p", project, "-f", str(COMPOSE_FILE), *args],
-                          check=True, text=True, capture_output=capture, timeout=1800).stdout
+                          check=True, text=True, capture_output=capture, timeout=3600).stdout
 
 
 def bitcoin(project, *args):

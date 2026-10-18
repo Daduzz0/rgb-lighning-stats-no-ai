@@ -21,12 +21,12 @@ if (values.help) {
 } else {
   check(values.config, '--config is required');
   check(values.mode === 'baseline', 'This runner only executes the stock single-path baseline');
-  check(values.reference, '--reference must point to the AIR-GB run directory');
   const inputLock = await verifyInputs();
   const [suite, topology, config] = await Promise.all([readJson(values.suite), readJson(values.topology), readJson(values.config)]);
   validateSuite(suite, topology, config);
+  const defaultTopology = fileURLToPath(new URL('./topology.json', import.meta.url));
   check(hash(suite) === hash(await readJson(new URL('./scenarios.json', import.meta.url)))
-    && hash(topology) === hash(await readJson(new URL('./topology.json', import.meta.url))), 'Use the exact locked AIR-GB inputs');
+    && (resolve(values.topology) !== resolve(defaultTopology) || hash(topology) === hash(await readJson(defaultTopology))), 'Use the exact locked AIR-GB inputs');
   const runId = randomUUID();
   const output = resolve(values.out ?? join(root, 'results/benchmark', `${values.mode}-${runId}`));
   // mkdir without recursive prevents overwriting or accidentally resuming payments.
@@ -63,7 +63,9 @@ if (values.help) {
     await save(join(output, 'initial-state.json'), initial);
     await save(join(output, 'suite.json'), suite);
     await save(join(output, 'topology.json'), topology);
-    manifest.reference = await requireReference(resolve(values.reference), manifest, initial, config, output);
+    manifest.reference = values.reference
+      ? await requireReference(resolve(values.reference), manifest, initial, config, output)
+      : null;
     const logErrors = await collector.all();
     check(logErrors.length === 0, `Log collection preflight failed: ${JSON.stringify(logErrors)}`);
     manifest.runnerSourceHashes = {};

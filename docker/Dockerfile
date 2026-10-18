@@ -6,7 +6,7 @@ ARG RLN_COMMIT=d4762ac3d1b3ca83f2f7b4f894e8569109dc572a
 RUN git init . && git remote add origin https://github.com/RGB-Tools/rgb-lightning-node.git && git fetch --depth 1 origin "$RLN_COMMIT" && git checkout --detach FETCH_HEAD && git submodule update --init --recursive --depth 1
 COPY docker/instrument.py /instrument.py
 RUN python3 /instrument.py /src/src/ldk.rs
-ENV CARGO_BUILD_JOBS=1 CARGO_PROFILE_RELEASE_DEBUG=0 CARGO_PROFILE_RELEASE_OPT_LEVEL=1 CARGO_PROFILE_RELEASE_CODEGEN_UNITS=256
+ENV CARGO_BUILD_JOBS=8 CARGO_PROFILE_RELEASE_DEBUG=0 CARGO_PROFILE_RELEASE_OPT_LEVEL=1 CARGO_PROFILE_RELEASE_CODEGEN_UNITS=256
 RUN cargo build --locked --release
 
 FROM debian:trixie-slim

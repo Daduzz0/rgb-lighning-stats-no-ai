@@ -7,7 +7,7 @@ RUN git init . && git remote add origin https://github.com/RGB-Tools/rgb-lightni
 COPY instrument.py /instrument.py
 COPY single_path.py /single_path.py
 RUN python3 /instrument.py /src/src/ldk.rs && python3 /single_path.py /src/src/routes.rs
-ENV CARGO_BUILD_JOBS=1 CARGO_PROFILE_RELEASE_DEBUG=0 CARGO_PROFILE_RELEASE_OPT_LEVEL=1 CARGO_PROFILE_RELEASE_CODEGEN_UNITS=256
+ENV CARGO_BUILD_JOBS=8 CARGO_PROFILE_RELEASE_DEBUG=0 CARGO_PROFILE_RELEASE_OPT_LEVEL=1 CARGO_PROFILE_RELEASE_CODEGEN_UNITS=256
 RUN cargo build --locked --release
 
 FROM debian:trixie-slim

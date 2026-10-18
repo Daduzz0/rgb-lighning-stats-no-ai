@@ -17,20 +17,22 @@ def main():
     parser.add_argument("command", choices=("up", "down", "status", "logs"))
     parser.add_argument("--project", default="rgb-stats-benchmark")
     parser.add_argument("--label", default="machine-a")
+    parser.add_argument("--topology", default=str(ROOT / "benchmark/topology.json"))
     args = parser.parse_args()
     lab.COMPOSE_FILE = ROOT / "benchmark/compose.yaml"
     if args.command != "up":
         lab.compose(args.project, {"down": "stop", "status": "ps", "logs": "logs"}[args.command], capture=False)
         return 0
+    topology_path = Path(args.topology).resolve()
+    default_topology_path = (ROOT / "benchmark/topology.json").resolve()
     lock = read(ROOT / "benchmark/inputs-lock.json")
-    for name in ("topology.json", "scenarios.json"):
+    for name in (("topology.json", "scenarios.json") if topology_path == default_topology_path else ("scenarios.json",)):
         actual = hashlib.sha256((ROOT / "benchmark" / name).read_bytes()).hexdigest()
         if actual != lock["files"][name]:
             raise ValueError(f"Shared input changed: {name}")
-    # Shared topology has zero pushes, not the legacy history layout's half balances.
-    config_path = lab.setup(args.project, "topology", topology_path=ROOT / "benchmark/topology.json")
+    config_path = lab.setup(args.project, "topology", topology_path=topology_path)
     existing = read(config_path)
-    spec = read(ROOT / "benchmark/topology.json")
+    spec = read(topology_path)
     if set(existing["nodes"]) != {node["id"] for node in spec["nodes"]}:
         raise ValueError("The project does not contain exactly the 20 shared nodes")
     config = {

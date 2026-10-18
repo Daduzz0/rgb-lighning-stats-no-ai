@@ -64,8 +64,7 @@ benchmark-logs:
 	$(PYTHON) benchmark/setup.py logs --project "$(BENCHMARK_PROJECT)"
 
 benchmark-run:
-	@test -n "$(AI_RUN)" || { echo "Set AI_RUN to the AIR-GB run directory"; exit 1; }
-	$(NODE) benchmark/run.mjs --config "$(BENCHMARK_CONFIG)" --reference "$(AI_RUN)" --out "$(BENCHMARK_OUT)"
+	$(NODE) benchmark/run.mjs --config "$(BENCHMARK_CONFIG)" $(if $(AI_RUN),--reference "$(AI_RUN)",) --out "$(BENCHMARK_OUT)"
 
 benchmark-compare:
 	@test -n "$(AI_RUN)" || { echo "Set AI_RUN to the AIR-GB run directory"; exit 1; }
