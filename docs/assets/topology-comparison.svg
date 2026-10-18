@@ -35,7 +35,7 @@
 
   <!-- Header -->
   <text x="40" y="54" fill="#f8fafc" font-size="22" font-weight="700">20-Node Regtest Benchmark Topology (topology-mpp.json vs topology.json)</text>
-  <text x="40" y="78" fill="#94a3b8" font-size="13">15 Colored RGB + BTC Channels across 10 Core Nodes (AliceJudy) + 10 Isolated Peripheral Nodes (KarlTara) " 1,000,000 sat / channel " push_msat: 7,000,000</text>
+  <text x="40" y="78" fill="#94a3b8" font-size="13">15 Colored RGB + BTC Channels across 10 Core Nodes (Alice&#8211;Judy) + 10 Isolated Peripheral Nodes (Karl&#8211;Tara) &#8226; 1,000,000 sat / channel &#8226; push_msat: 7,000,000</text>
 
   <!-- Legend Box -->
   <rect x="40" y="94" width="1120" height="44" rx="8" fill="#1e293b" stroke="#334155" stroke-width="1"/>
@@ -118,24 +118,24 @@
   <!-- Cross-Channels (Oriented in topology-mpp.json) -->
   <!-- Erin -> Carol -->
   <path d="M 460 255 L 320 355" stroke="#f59e0b" stroke-width="2" stroke-dasharray="5,4" fill="none" marker-end="url(#arrowAmber)"/>
-  <text x="368" y="288" fill="#fbbf24" font-size="9" font-weight="600">Erin’Carol (20 RGB, 5k)</text>
+  <text x="368" y="288" fill="#fbbf24" font-size="9" font-weight="600">Erin&#8594;Carol (20 RGB, 5k)</text>
 
   <!-- Frank -> Bob -->
   <path d="M 460 355 L 320 255" stroke="#f59e0b" stroke-width="2" stroke-dasharray="5,4" fill="none" marker-end="url(#arrowAmber)"/>
-  <text x="412" y="328" fill="#fbbf24" font-size="9" font-weight="600">Frank’Bob (20 RGB, 5k)</text>
+  <text x="412" y="328" fill="#fbbf24" font-size="9" font-weight="600">Frank&#8594;Bob (20 RGB, 5k)</text>
 
   <!-- Frank -> Dave -->
   <path d="M 465 395 L 322 502" stroke="#f59e0b" stroke-width="2" stroke-dasharray="5,4" fill="none" marker-end="url(#arrowAmber)"/>
-  <text x="415" y="465" fill="#fbbf24" font-size="9" font-weight="600">Frank’Dave (20 RGB, 5k)</text>
+  <text x="415" y="465" fill="#fbbf24" font-size="9" font-weight="600">Frank&#8594;Dave (20 RGB, 5k)</text>
 
   <!-- Ivan -> Grace -->
   <path d="M 634 475 L 526 512" stroke="#f59e0b" stroke-width="2" stroke-dasharray="5,4" fill="none" marker-end="url(#arrowAmber)"/>
-  <text x="585" y="512" fill="#fbbf24" font-size="9" font-weight="600">Ivan’Grace (40 RGB, 5k)</text>
+  <text x="585" y="512" fill="#fbbf24" font-size="9" font-weight="600">Ivan&#8594;Grace (40 RGB, 5k)</text>
 
   <!-- Privacy Link: Heidi -> Frank -->
   <path d="M 634 305 L 526 360" stroke="#a855f7" stroke-width="3" fill="none" marker-end="url(#arrowPurple)"/>
   <rect x="542" y="310" width="92" height="26" rx="4" fill="#3b0764" stroke="#a855f7" stroke-width="1"/>
-  <text x="588" y="322" fill="#f3e8ff" font-size="9.5" font-weight="700" text-anchor="middle">Heidi’Frank 20</text>
+  <text x="588" y="322" fill="#f3e8ff" font-size="9.5" font-weight="700" text-anchor="middle">Heidi&#8594;Frank 20</text>
   <text x="588" y="332" fill="#d8b4fe" font-size="8.5" text-anchor="middle">Case 18 Privacy</text>
 
   <!-- NODES -->
@@ -212,61 +212,61 @@
   <rect x="910" y="402" width="236" height="86" rx="6" fill="#1e293b" stroke="#f59e0b" stroke-width="1"/>
   <text x="922" y="420" fill="#fbbf24" font-size="11.5" font-weight="700">3. Reverse Cross-Link Guards</text>
   <text x="922" y="437" fill="#cbd5e1" font-size="10.5">Cross-edges set to 5,000 msat in</text>
-  <text x="922" y="452" fill="#cbd5e1" font-size="10.5">Judy’Alice direction (&gt;1k default).</text>
+  <text x="922" y="452" fill="#cbd5e1" font-size="10.5">Judy&#8594;Alice direction (&gt;1k default).</text>
   <text x="922" y="468" fill="#94a3b8" font-size="10">Prevents &gt;2 path MCF fragmentation.</text>
 
   <!-- Card 4 -->
   <rect x="910" y="498" width="236" height="80" rx="6" fill="#1e293b" stroke="#a855f7" stroke-width="1"/>
-  <text x="922" y="516" fill="#c084fc" font-size="11.5" font-weight="700">4. Heidi’Frank Privacy Hop</text>
-  <text x="922" y="533" fill="#cbd5e1" font-size="10.5">Reversed Frank-Heidi to Heidi’Frank</text>
+  <text x="922" y="516" fill="#c084fc" font-size="11.5" font-weight="700">4. Heidi&#8594;Frank Privacy Hop</text>
+  <text x="922" y="533" fill="#cbd5e1" font-size="10.5">Reversed Frank-Heidi to Heidi&#8594;Frank</text>
   <text x="922" y="548" fill="#cbd5e1" font-size="10.5">(20 RGB) so Heidi can reach Ivan</text>
   <text x="922" y="563" fill="#94a3b8" font-size="10">in 18-rgb-privacy (single-path).</text>
 
   <!-- Bottom Bar: Peripheral Nodes (Karl..Tara) -->
   <rect x="40" y="606" width="1120" height="118" rx="10" fill="#0f172a" stroke="#1e293b" stroke-width="1.5"/>
-  <text x="60" y="632" fill="#f8fafc" font-size="13" font-weight="700">10 Peripheral Nodes (Karl  Tara) " Negative Control Reachability Island (Cases 19 &amp; 20)</text>
-  <text x="60" y="650" fill="#94a3b8" font-size="11">Online with funded wallets and P2P connections, but 0 open Lightning channels in the benchmark fixture  verifying that both routers cleanly reject unreachable destinations.</text>
+  <text x="60" y="632" fill="#f8fafc" font-size="13" font-weight="700">10 Peripheral Nodes (Karl &#8211; Tara) &#8226; Negative Control Reachability Island (Cases 19 &amp; 20)</text>
+  <text x="60" y="650" fill="#94a3b8" font-size="11">Online with funded wallets and P2P connections, but 0 open Lightning channels in the benchmark fixture &#8212; verifying that both routers cleanly reject unreachable destinations.</text>
 
   <!-- 10 Peripheral Node Pills -->
   <g transform="translate(60, 665)">
     <rect x="0" y="0" width="96" height="40" rx="6" fill="#1e293b" stroke="#334155"/>
     <text x="48" y="18" fill="#cbd5e1" font-size="11" font-weight="700" text-anchor="middle">Karl</text>
-    <text x="48" y="32" fill="#64748b" font-size="9.5" text-anchor="middle">:8811 " 0 ch</text>
+    <text x="48" y="32" fill="#64748b" font-size="9.5" text-anchor="middle">:8811 &#8226; 0 ch</text>
 
     <rect x="108" y="0" width="96" height="40" rx="6" fill="#1e293b" stroke="#334155"/>
     <text x="156" y="18" fill="#cbd5e1" font-size="11" font-weight="700" text-anchor="middle">Leo</text>
-    <text x="156" y="32" fill="#64748b" font-size="9.5" text-anchor="middle">:8812 " 0 ch</text>
+    <text x="156" y="32" fill="#64748b" font-size="9.5" text-anchor="middle">:8812 &#8226; 0 ch</text>
 
     <rect x="216" y="0" width="96" height="40" rx="6" fill="#1e293b" stroke="#334155"/>
     <text x="264" y="18" fill="#cbd5e1" font-size="11" font-weight="700" text-anchor="middle">Mia</text>
-    <text x="264" y="32" fill="#64748b" font-size="9.5" text-anchor="middle">:8813 " 0 ch</text>
+    <text x="264" y="32" fill="#64748b" font-size="9.5" text-anchor="middle">:8813 &#8226; 0 ch</text>
 
     <rect x="324" y="0" width="96" height="40" rx="6" fill="#1e293b" stroke="#334155"/>
     <text x="372" y="18" fill="#cbd5e1" font-size="11" font-weight="700" text-anchor="middle">Nico</text>
-    <text x="372" y="32" fill="#64748b" font-size="9.5" text-anchor="middle">:8814 " 0 ch</text>
+    <text x="372" y="32" fill="#64748b" font-size="9.5" text-anchor="middle">:8814 &#8226; 0 ch</text>
 
     <rect x="432" y="0" width="96" height="40" rx="6" fill="#1e293b" stroke="#334155"/>
     <text x="480" y="18" fill="#cbd5e1" font-size="11" font-weight="700" text-anchor="middle">Olive</text>
-    <text x="480" y="32" fill="#64748b" font-size="9.5" text-anchor="middle">:8815 " 0 ch</text>
+    <text x="480" y="32" fill="#64748b" font-size="9.5" text-anchor="middle">:8815 &#8226; 0 ch</text>
 
     <rect x="540" y="0" width="96" height="40" rx="6" fill="#1e293b" stroke="#334155"/>
     <text x="588" y="18" fill="#cbd5e1" font-size="11" font-weight="700" text-anchor="middle">Paul</text>
-    <text x="588" y="32" fill="#64748b" font-size="9.5" text-anchor="middle">:8816 " 0 ch</text>
+    <text x="588" y="32" fill="#64748b" font-size="9.5" text-anchor="middle">:8816 &#8226; 0 ch</text>
 
     <rect x="648" y="0" width="96" height="40" rx="6" fill="#1e293b" stroke="#334155"/>
     <text x="696" y="18" fill="#cbd5e1" font-size="11" font-weight="700" text-anchor="middle">Quinn</text>
-    <text x="696" y="32" fill="#64748b" font-size="9.5" text-anchor="middle">:8817 " 0 ch</text>
+    <text x="696" y="32" fill="#64748b" font-size="9.5" text-anchor="middle">:8817 &#8226; 0 ch</text>
 
     <rect x="756" y="0" width="96" height="40" rx="6" fill="#1e293b" stroke="#334155"/>
     <text x="804" y="18" fill="#cbd5e1" font-size="11" font-weight="700" text-anchor="middle">Ruth</text>
-    <text x="804" y="32" fill="#64748b" font-size="9.5" text-anchor="middle">:8818 " 0 ch</text>
+    <text x="804" y="32" fill="#64748b" font-size="9.5" text-anchor="middle">:8818 &#8226; 0 ch</text>
 
     <rect x="864" y="0" width="96" height="40" rx="6" fill="#1e293b" stroke="#334155"/>
     <text x="912" y="18" fill="#cbd5e1" font-size="11" font-weight="700" text-anchor="middle">Saul</text>
-    <text x="912" y="32" fill="#64748b" font-size="9.5" text-anchor="middle">:8819 " 0 ch</text>
+    <text x="912" y="32" fill="#64748b" font-size="9.5" text-anchor="middle">:8819 &#8226; 0 ch</text>
 
     <rect x="972" y="0" width="96" height="40" rx="6" fill="#1e293b" stroke="#334155"/>
     <text x="1020" y="18" fill="#cbd5e1" font-size="11" font-weight="700" text-anchor="middle">Tara</text>
-    <text x="1020" y="32" fill="#64748b" font-size="9.5" text-anchor="middle">:8820 " 0 ch</text>
+    <text x="1020" y="32" fill="#64748b" font-size="9.5" text-anchor="middle">:8820 &#8226; 0 ch</text>
   </g>
 </svg>
