@@ -47,7 +47,42 @@ flowchart LR
 
 ---
 
-## 3. The 20-Node Regtest Benchmark Topology
+## 3. Under the Hood: How We Implemented Native RGB Multi-Path Payments (MPP)
+
+Standard Lightning MPP splits a single asset (BTC millisatoshis) across multiple paths. **RGB Multi-Path Payments** are significantly harder because every shard must simultaneously satisfy **two coupled conservation laws**—the **RGB token amount** AND the **Bitcoin carrier amount** (`>= 3,000,000` msat per HTLC)—while coloring multiple concurrent HTLC outputs inside LDK commitment transactions.
+
+We implemented RGB MPP across **four layers**:
+
+![How RGB Multi-Path Payments Work Across All 4 Layers](./assets/mpp-implementation.svg)
+
+### Layer 1: Pre-Flight MPP Feasibility & Part-Count Selection (`routing-selector.ts` & `channel-scoring.ts`)
+Before calling the Rust daemon, `EphemeralRoutingContext` inspects the sender's live channels (`/listchannels`) in RAM:
+- It checks whether any single channel can cover both `reqMsat` and `reqAsset` (`singlePathPossible`), or whether multiple channels with `maxSafeAssetAmount > 0n` must be combined (`mppPossible`).
+- It sorts candidate channels by largest RGB capacity and computes the minimum number of shards $k \in [2..8]$ required to cover the transfer (`recommendedMaxPaths`).
+- **Physical Liquidity Guardrail**: When paying `100` RGB across `60` RGB and `40` RGB channels, a naive `0.8B` LLM sees `60 < 100` and tries to mark the channel as `insufficient_liquidity` (which would exclude the peer). Our guardrail in `channel-scoring.ts` verifies that the channel is a valid partial MPP contributor and preserves it for `min_cost_flow`.
+
+### Layer 2: Rust `MinCostFlow` Decomposition & Proportional Carrier Splitting (`routes.rs` & `router.rs`)
+Inside our custom `rgb-lightning-node` + `rust-lightning` (`feat/rgb-mpp`) forks, `POST /sendpayment` dispatches `RoutingPolicy::MinCostFlow`:
+1. **Capacity-Bounded Residual Graph**: First-hop edges out of the sender are bounded by real local RGB liquidity (`available_outbound_rgb()`) and spendable BTC (`outbound_capacity_msat`). Downstream edges in `network_graph` are bounded by gossiped `htlc_maximum_rgb` and `htlc_maximum_msat`, excluding any pubkey in `excluded_nodes`.
+2. **Successive Shortest Augmenting Paths**: The solver repeatedly finds the lowest-fee augmenting path from sender to recipient and pushes flow $f_i = \min(\text{remaining\_rgb}, \text{bottleneck\_rgb})$ along path $P_i$ until $\sum_i f_i = A_{\text{rgb}}$. If the decomposition requires more than `max_paths` shards or exceeds `max_fee_msat`, it fails closed before sending a single HTLC.
+3. **Proportional BTC Carrier Allocation**: Because every colored HTLC output requires at least `MIN_RGB_HTLC_MSAT = 3,000,000` msat (`3,000` sat), the planner splits the total BTC carrier $M_{\text{msat}}$ proportionally across each RGB shard $f_i$:
+   $$M_i = \max\left(3{,}000{,}000,\ \left\lfloor M_{\text{msat}} \times \frac{f_i}{A_{\text{rgb}}} \right\rfloor\right)$$
+   For `02-rgb-mpp-100` (`100` RGB, `30,000,000` msat), Shard 1 (`60` RGB via `Bob -> Erin -> Heidi -> Judy`) carries `18,000,000` msat (`600` msat fee) and Shard 2 (`40` RGB via `Carol -> Frank -> Ivan -> Judy`) carries `12,000,000` msat (`300` msat fee).
+
+### Layer 3: Atomic Multi-Part RGB Aggregation at the Recipient (`rust-lightning`)
+Each HTLC wire message (`UpdateAddHTLC`) and onion hop payload carries `rgb_payment: Option<(ContractId, u64)>` alongside the shared `payment_hash` and `payment_secret`. At the final hop (`Judy`), LDK's `InboundPayment` aggregator holds incoming shards in memory and only emits `Event::PaymentClaimable` (releasing the `PaymentPreimage` across all paths simultaneously) when **both** conditions are met:
+$$\sum_{p \in \text{parts}} \text{msat}_p \ge \text{invoice\_msat} \quad \text{AND} \quad \sum_{p \in \text{parts}} \text{rgb}_p == \text{invoice\_rgb}$$
+If any shard fails or times out, all held HTLCs roll back atomically without revealing the preimage.
+
+### Layer 4: Multi-HTLC RGB Commitment Coloring & Pending Accounting (`channel.rs` & `rgb_utils/mod.rs`)
+Upstream `rgb-lightning-node` assumed only one RGB HTLC would ever be active per channel and crashed when signing commitments with multiple or sequential MPP HTLCs. We engineered a 3-part fix in `rust-lightning`:
+1. **In-Flight RGB Reservation (`available_outbound_rgb` / `available_inbound_rgb`)**: Subtracts all `pending_outbound_htlcs`, `holding_cell_htlc_updates`, and `pending_inbound_htlcs` from `local_rgb_amount` / `remote_rgb_amount` so concurrent shards never over-commit a channel.
+2. **Exact Claimed-Preimage Delta in `build_commitment_transaction`**: Instead of subtracting HTLC amounts from a stale on-disk `last_rgb_payment_info` file, `build_commitment_transaction` computes `delta = value_to_self_claimed_rgb as i128 - value_to_remote_claimed_rgb as i128` across HTLCs with revealed preimages and passes exact `rgb_balances: (u64, u64)` directly into `color_commitment()`.
+3. **Settle-Only Balance Mutation**: On-disk pending RGB balances (`update_rgb_channel_amount_pending`) are updated strictly upon `InboundHTLCRemovalReason::Fulfill` and outbound preimage fulfillment—never prematurely when HTLCs are merely announced or committed.
+
+---
+
+## 4. The 20-Node Regtest Benchmark Topology
 
 To test both stacks fairly under realistic network conditions, we built a **20-node regtest laboratory** (`10` interconnected core routing nodes `Alice`–`Judy` with `15` colored channels, plus `10` isolated peripheral nodes `Karl`–`Tara` as negative reachability controls).
 
@@ -85,7 +120,7 @@ Our first benchmark run on the initial `topology.json` revealed deep protocol in
 
 ---
 
-## 4. Benchmark Results (`topology-mpp.json`)
+## 5. Benchmark Results (`topology-mpp.json`)
 
 Both stacks were benchmarked **sequentially and in isolation** (only one stack running at a time) from the exact same initial channel balance state (`initialStateHash: fc59bc783b32d65f2afada257571a5351de2c91b1ed748ecd10cc4c2432d8b45`).
 
@@ -111,7 +146,7 @@ Why did AIR-GB pay **78.95% lower fees** on the exact same successful payments? 
 
 ---
 
-## 5. The Whole Story (Hackathon Pitch & Presentation Guide)
+## 6. The Whole Story (Hackathon Pitch & Presentation Guide)
 
 *Use this narrative structure directly when presenting the project to the hackathon judges.*
 
