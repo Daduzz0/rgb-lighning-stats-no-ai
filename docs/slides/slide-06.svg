@@ -1,0 +1,198 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" width="1920" height="1080" font-family="Ubuntu Sans, Inter, -apple-system, BlinkMacSystemFont, sans-serif">
+  <defs>
+    <linearGradient id="slideBg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#060911"/>
+      <stop offset="55%" stop-color="#0b1120"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <linearGradient id="topAccent" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#10b981"/>
+      <stop offset="50%" stop-color="#38bdf8"/>
+      <stop offset="100%" stop-color="#a855f7"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Canvas Background -->
+  <rect width="1920" height="1080" fill="url(#slideBg)"/>
+  <rect x="0" y="0" width="1920" height="6" fill="url(#topAccent)"/>
+
+  <!-- Header Bar -->
+  <rect x="0" y="6" width="1920" height="114" fill="#090d16" fill-opacity="0.85"/>
+  <line x1="0" y1="120" x2="1920" y2="120" stroke="#1e293b" stroke-width="2"/>
+
+  <!-- Category Pill -->
+  <rect x="48" y="24" width="290" height="26" rx="13" fill="#064e3b" stroke="#10b981" stroke-width="1"/>
+  <text x="193" y="42" fill="#6ee7b7" font-size="12" font-weight="700" text-anchor="middle">PROTOCOL ENGINEERING</text>
+
+  <!-- Slide Title & Subtitle -->
+  <text x="48" y="80" fill="#f8fafc" font-size="30" font-weight="800">Under the Hood: 4-Layer Native RGB Multi-Path Payments in Rust</text>
+  <text x="48" y="106" fill="#94a3b8" font-size="15.5">Coupled dual-asset flow decomposition, atomic recipient shard aggregation, and multi-HTLC commitment coloring fix</text>
+
+  <!-- Top-Right Timing & Slide Counter -->
+  <rect x="1580" y="34" width="165" height="44" rx="8" fill="#1e293b" stroke="#334155"/>
+  <text x="1662" y="53" fill="#94a3b8" font-size="10.5" font-weight="700" text-anchor="middle">TIMING SLOT</text>
+  <text x="1662" y="70" fill="#38bdf8" font-size="13.5" font-weight="700" font-family="Ubuntu Sans Mono, monospace" text-anchor="middle">3:10 - 3:55</text>
+
+  <rect x="1760" y="34" width="112" height="44" rx="8" fill="#064e3b" stroke="#10b981" stroke-width="1.5"/>
+  <text x="1816" y="63" fill="#ecfdf5" font-size="18" font-weight="800" font-family="Ubuntu Sans Mono, monospace" text-anchor="middle">06 / 09</text>
+
+  <!-- Slide Body -->
+  
+  
+  <rect x="48" y="142" width="490" height="274" rx="12" fill="#0f172a" stroke="#38bdf8" stroke-width="2"/>
+  <rect x="66" y="160" width="454" height="34" rx="6" fill="#0c4a6e"/>
+  <text x="80" y="182" fill="#7dd3fc" font-size="15" font-weight="800">Layers 1 &amp; 2: MinCostFlow &amp; BTC Carrier</text>
+  <text x="68" y="218" fill="#e2e8f0" font-size="14" font-weight="600">&#8226; Successive shortest augmenting paths split</text>
+<text x="80" y="243" fill="#94a3b8" font-size="14" font-weight="400">  100 RGB into 40 RGB (100 msat/hop via Carol)</text>
+<text x="80" y="268" fill="#94a3b8" font-size="14" font-weight="400">  + 60 RGB (200 msat/hop via Bob) = 900 msat.</text>
+<text x="68" y="293" fill="#e2e8f0" font-size="14" font-weight="600">&#8226; Proportional BTC carrier allocation enforces</text>
+<text x="80" y="318" fill="#94a3b8" font-size="14" font-weight="400">  RLN 3,000,000 msat minimum per colored HTLC:</text>
+<text x="80" y="343" fill="#94a3b8" font-size="14" font-weight="400">  Shard 1 = 18M msat, Shard 2 = 12M msat.</text>
+
+  <rect x="48" y="434" width="490" height="274" rx="12" fill="#0f172a" stroke="#a855f7" stroke-width="2"/>
+  <rect x="66" y="452" width="454" height="34" rx="6" fill="#3b0764"/>
+  <text x="80" y="474" fill="#e9d5ff" font-size="15" font-weight="800">Layer 3: Atomic Dual-Asset Aggregation</text>
+  <text x="68" y="510" fill="#e2e8f0" font-size="14" font-weight="600">&#8226; Each UpdateAddHTLC carries (ContractId, u64)</text>
+<text x="80" y="535" fill="#94a3b8" font-size="14" font-weight="400">  alongside shared payment_hash &amp; secret.</text>
+<text x="68" y="560" fill="#e2e8f0" font-size="14" font-weight="600">&#8226; Recipient InboundPayment holds shards until</text>
+<text x="80" y="585" fill="#94a3b8" font-size="14" font-weight="400">  BOTH sum(msat) &gt;= 30M AND sum(rgb) == 100.</text>
+<text x="68" y="610" fill="#34d399" font-size="14" font-weight="700">&#10003; Releases PaymentPreimage atomically across</text>
+<text x="80" y="635" fill="#94a3b8" font-size="14" font-weight="400">  all shards or fails all back cleanly.</text>
+
+  <rect x="48" y="726" width="490" height="274" rx="12" fill="#0f172a" stroke="#f59e0b" stroke-width="2"/>
+  <rect x="66" y="744" width="454" height="34" rx="6" fill="#451a03"/>
+  <text x="80" y="766" fill="#fcd34d" font-size="15" font-weight="800">Layer 4: Multi-HTLC color_commitment() Fix</text>
+  <text x="68" y="802" fill="#e2e8f0" font-size="14" font-weight="600">&#8226; Stock RLN read a single stale file</text>
+<text x="80" y="827" fill="#94a3b8" font-size="14" font-weight="400">  (last_rgb_payment_info), crashing under MPP.</text>
+<text x="68" y="852" fill="#e2e8f0" font-size="14" font-weight="600">&#8226; Fixed by reserving in-flight RGB via</text>
+<text x="80" y="877" fill="#94a3b8" font-size="14" font-weight="400">  available_outbound_rgb / available_inbound_rgb</text>
+<text x="68" y="902" fill="#34d399" font-size="14" font-weight="700">&#10003; Computes exact settled delta from claimed</text>
+<text x="80" y="927" fill="#94a3b8" font-size="14" font-weight="400">  preimages inside build_commitment_transaction.</text>
+  <rect x="560" y="142" width="1312" height="860" rx="14" fill="#0b0f19" stroke="#1e293b" stroke-width="2"/>
+  <svg x="568" y="150" width="1296" height="844" viewBox="0 0 1200 720" preserveAspectRatio="xMidYMid meet">
+  <defs>
+    <linearGradient id="bgMpp" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0b0f19"/>
+      <stop offset="100%" stop-color="#111827"/>
+    </linearGradient>
+    <marker id="arrEmerald" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#10b981"/>
+    </marker>
+    <marker id="arrSky" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#38bdf8"/>
+    </marker>
+    <marker id="arrAmber2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#f59e0b"/>
+    </marker>
+    <marker id="arrPurple2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#a855f7"/>
+    </marker>
+  </defs>
+
+  <rect width="1200" height="720" rx="16" fill="url(#bgMpp)"/>
+  <rect x="16" y="16" width="1168" height="688" rx="12" fill="none" stroke="#1e293b" stroke-width="2"/>
+
+  <!-- Header -->
+  <text x="40" y="54" fill="#f8fafc" font-size="22" font-weight="700">How Native RGB Multi-Path Payments (MPP) Work Across All 4 Layers</text>
+  <text x="40" y="78" fill="#94a3b8" font-size="13">Walkthrough of Scenario 02-rgb-mpp-100: Splitting 100 RGB + 30,000,000 msat BTC Carrier from Alice to Judy (60 RGB + 40 RGB)</text>
+
+  <!-- LAYER 1: PRE-FLIGHT FEASIBILITY -->
+  <rect x="40" y="100" width="545" height="270" rx="10" fill="#0f172a" stroke="#38bdf8" stroke-width="1.5"/>
+  <rect x="56" y="114" width="380" height="24" rx="4" fill="#0c4a6e"/>
+  <text x="66" y="130" fill="#7dd3fc" font-size="11.5" font-weight="700">LAYER 1: Pre-Flight MPP Feasibility (routing-selector.ts)</text>
+
+  <text x="58" y="160" fill="#e2e8f0" font-size="12" font-weight="700">1. EphemeralRoutingContext Inspects Alice's Live Channels:</text>
+  <rect x="58" y="172" width="508" height="76" rx="6" fill="#1e293b" stroke="#334155"/>
+  <text x="72" y="192" fill="#34d399" font-size="11" font-family="monospace">&#8226; alice-bob  : 60 RGB | 990M msat spendable  &#10003; Partial Contributor #1</text>
+  <text x="72" y="212" fill="#60a5fa" font-size="11" font-family="monospace">&#8226; alice-carol: 40 RGB | 990M msat spendable  &#10003; Partial Contributor #2</text>
+  <text x="72" y="232" fill="#94a3b8" font-size="11" font-family="monospace">&#8226; alice-dave : 40 RGB | 990M msat spendable  &#10003; Backup Contributor</text>
+
+  <text x="58" y="270" fill="#e2e8f0" font-size="12" font-weight="700">2. Dichotomous Feasibility &amp; Guardrail Decision:</text>
+  <text x="70" y="290" fill="#cbd5e1" font-size="11">&#8226; <tspan fill="#f87171" font-weight="700">singlePathPossible = false</tspan> (Max single channel is 60 RGB &lt; 100 RGB required)</text>
+  <text x="70" y="308" fill="#cbd5e1" font-size="11">&#8226; <tspan fill="#34d399" font-weight="700">mppPossible = true</tspan> (60 + 40 = 100 RGB covered in k = 2 paths)</text>
+  <text x="70" y="326" fill="#cbd5e1" font-size="11">&#8226; Physical Liquidity Guardrail prevents 0.8B LLM from marking 60/40 channels</text>
+  <text x="82" y="342" fill="#94a3b8" font-size="10.5">as insufficient_liquidity; forces <tspan fill="#38bdf8" font-family="monospace">algorithm: "min_cost_flow", max_paths: 2</tspan></text>
+
+  <!-- Arrow Layer 1 -> Layer 2 -->
+  <line x1="585" y1="235" x2="610" y2="235" stroke="#38bdf8" stroke-width="3" marker-end="url(#arrSky)"/>
+
+  <!-- LAYER 2: RUST MIN-COST FLOW DECOMPOSITION -->
+  <rect x="615" y="100" width="545" height="270" rx="10" fill="#0f172a" stroke="#10b981" stroke-width="1.5"/>
+  <rect x="631" y="114" width="445" height="24" rx="4" fill="#064e3b"/>
+  <text x="641" y="130" fill="#6ee7b7" font-size="11.5" font-weight="700">LAYER 2: Rust Min-Cost Flow &amp; Proportional Carrier (routes.rs)</text>
+
+  <text x="633" y="160" fill="#e2e8f0" font-size="12" font-weight="700">1. Successive Shortest Augmenting Paths on Residual Graph:</text>
+  <text x="645" y="180" fill="#cbd5e1" font-size="11">&#8226; Hop 1 out of Alice bounded by real <tspan fill="#6ee7b7" font-family="monospace">available_outbound_rgb()</tspan></text>
+  <text x="645" y="198" fill="#cbd5e1" font-size="11">&#8226; Augmenting Path 1 (cheapest: 100 msat/hop): pushes <tspan fill="#60a5fa" font-weight="700">40 RGB</tspan> via Carol&#8594;Frank&#8594;Ivan&#8594;Judy</text>
+  <text x="645" y="216" fill="#cbd5e1" font-size="11">&#8226; Augmenting Path 2 (next: 200 msat/hop): pushes <tspan fill="#34d399" font-weight="700">60 RGB</tspan> via Bob&#8594;Erin&#8594;Heidi&#8594;Judy</text>
+
+  <text x="633" y="244" fill="#e2e8f0" font-size="12" font-weight="700">2. Proportional BTC Carrier Allocation (MIN_RGB_HTLC_MSAT = 3M):</text>
+  <rect x="633" y="256" width="508" height="96" rx="6" fill="#1e293b" stroke="#334155"/>
+  <text x="647" y="276" fill="#f8fafc" font-size="11" font-family="monospace">M_i = max(3,000,000 msat, floor(30,000,000 * f_i / 100))</text>
+  <text x="647" y="300" fill="#34d399" font-size="11" font-family="monospace">&#8226; Shard 1 (60 RGB): 18,000,000 msat BTC + 600 msat fee (3 hops &#215; 200)</text>
+  <text x="647" y="320" fill="#60a5fa" font-size="11" font-family="monospace">&#8226; Shard 2 (40 RGB): 12,000,000 msat BTC + 300 msat fee (3 hops &#215; 100)</text>
+  <text x="647" y="340" fill="#fbbf24" font-size="11" font-family="monospace">&#8226; Total Route     : 100 RGB | 30,000,000 msat | 900 msat total fee</text>
+
+  <!-- LAYER 3: ATOMIC RECIPIENT AGGREGATION -->
+  <rect x="40" y="395" width="545" height="285" rx="10" fill="#0f172a" stroke="#a855f7" stroke-width="1.5"/>
+  <rect x="56" y="409" width="445" height="24" rx="4" fill="#3b0764"/>
+  <text x="66" y="425" fill="#d8b4fe" font-size="11.5" font-weight="700">LAYER 3: Atomic Multi-Part RGB Aggregation at Recipient (LDK)</text>
+
+  <text x="58" y="455" fill="#e2e8f0" font-size="12" font-weight="700">Dual-Asset Hold Condition on Shared payment_hash + payment_secret:</text>
+
+  <!-- Visual diagram of 2 shards arriving at Judy -->
+  <rect x="58" y="468" width="210" height="44" rx="6" fill="#064e3b" stroke="#10b981"/>
+  <text x="163" y="487" fill="#ecfdf5" font-size="11" font-weight="700" text-anchor="middle">HTLC Part 1 (from Heidi)</text>
+  <text x="163" y="503" fill="#6ee7b7" font-size="10" font-family="monospace" text-anchor="middle">+60 RGB | +18,000,000 msat</text>
+
+  <rect x="58" y="522" width="210" height="44" rx="6" fill="#1e3a8a" stroke="#3b82f6"/>
+  <text x="163" y="541" fill="#eff6ff" font-size="11" font-weight="700" text-anchor="middle">HTLC Part 2 (from Ivan)</text>
+  <text x="163" y="557" fill="#93c5fd" font-size="10" font-family="monospace" text-anchor="middle">+40 RGB | +12,000,000 msat</text>
+
+  <line x1="268" y1="490" x2="318" y2="510" stroke="#10b981" stroke-width="2.5" marker-end="url(#arrEmerald)"/>
+  <line x1="268" y1="544" x2="318" y2="526" stroke="#3b82f6" stroke-width="2.5" marker-end="url(#arrSky)"/>
+
+  <rect x="322" y="472" width="244" height="92" rx="8" fill="#2e1065" stroke="#a855f7" stroke-width="1.5"/>
+  <text x="444" y="494" fill="#f3e8ff" font-size="11.5" font-weight="700" text-anchor="middle">Judy InboundPayment Aggregator</text>
+  <text x="444" y="514" fill="#d8b4fe" font-size="10.5" font-family="monospace" text-anchor="middle">&#931; msat = 30M &#8805; 30M (OK)</text>
+  <text x="444" y="532" fill="#d8b4fe" font-size="10.5" font-family="monospace" text-anchor="middle">&#931; rgb  = 100 == 100 (OK)</text>
+  <text x="444" y="552" fill="#34d399" font-size="10.5" font-weight="700" text-anchor="middle">&#10003; Release Preimage Atomically!</text>
+
+  <text x="58" y="592" fill="#cbd5e1" font-size="11">&#8226; Judy holds Part 1 in memory until Part 2 arrives with the same <tspan fill="#e2e8f0" font-family="monospace">payment_secret</tspan>.</text>
+  <text x="58" y="612" fill="#cbd5e1" font-size="11">&#8226; Only when <tspan fill="#34d399" font-weight="700">both BTC and RGB sums</tspan> match the invoice does LDK emit</text>
+  <text x="70" y="628" fill="#cbd5e1" font-size="11"><tspan fill="#e2e8f0" font-family="monospace">Event::PaymentClaimable</tspan> and reveal the preimage back along both paths.</text>
+  <text x="58" y="650" fill="#94a3b8" font-size="10.5">&#8226; If any part times out or fails, all parts roll back atomically (zero partial loss).</text>
+
+  <!-- LAYER 4: MULTI-HTLC COMMITMENT COLORING FIX -->
+  <rect x="615" y="395" width="545" height="285" rx="10" fill="#0f172a" stroke="#f59e0b" stroke-width="1.5"/>
+  <rect x="631" y="409" width="490" height="24" rx="4" fill="#451a03"/>
+  <text x="641" y="425" fill="#fcd34d" font-size="11.5" font-weight="700">LAYER 4: Multi-HTLC RGB Commitment Coloring Fix (channel.rs / mod.rs)</text>
+
+  <text x="633" y="455" fill="#fda4af" font-size="11.5" font-weight="700">Why Stock rust-lightning Crashed on Concurrent / Sequential RGB HTLCs:</text>
+  <text x="645" y="474" fill="#cbd5e1" font-size="10.5">&#8226; Stock <tspan fill="#fca5a5" font-family="monospace">color_commitment()</tspan> subtracted <tspan fill="#fca5a5" font-family="monospace">rgb_offered_htlc</tspan> from a stale disk snapshot</text>
+  <text x="655" y="490" fill="#cbd5e1" font-size="10.5">(<tspan fill="#fca5a5" font-family="monospace">last_rgb_payment_info</tspan>) and mutated pending balances before preimage fulfillment.</text>
+
+  <text x="633" y="518" fill="#34d399" font-size="11.5" font-weight="700">Our 3-Part Fix in rust-lightning:</text>
+  <rect x="633" y="528" width="508" height="134" rx="6" fill="#1e293b" stroke="#334155"/>
+
+  <text x="647" y="548" fill="#f8fafc" font-size="11" font-weight="700">1. In-Flight Reservation (<tspan fill="#6ee7b7" font-family="monospace">available_outbound_rgb / available_inbound_rgb</tspan>):</text>
+  <text x="660" y="564" fill="#94a3b8" font-size="10.5">Subtracts all pending_outbound_htlcs &amp; holding_cell_htlc_updates from local_rgb_amount.</text>
+
+  <text x="647" y="588" fill="#f8fafc" font-size="11" font-weight="700">2. Exact Claimed-Preimage Delta in <tspan fill="#6ee7b7" font-family="monospace">build_commitment_transaction</tspan>:</text>
+  <text x="660" y="604" fill="#94a3b8" font-size="10.5" font-family="monospace">delta = value_to_self_claimed_rgb - value_to_remote_claimed_rgb</text>
+  <text x="660" y="619" fill="#94a3b8" font-size="10.5">Passes exact <tspan fill="#e2e8f0" font-family="monospace">rgb_balances: (u64, u64)</tspan> directly into <tspan fill="#e2e8f0" font-family="monospace">color_commitment()</tspan>.</text>
+
+  <text x="647" y="643" fill="#f8fafc" font-size="11" font-weight="700">3. Settle-Only Balance Mutation:</text>
+  <text x="660" y="657" fill="#94a3b8" font-size="10.5">Updates on-disk channel RGB amounts strictly on <tspan fill="#fcd34d" font-family="monospace">InboundHTLCRemovalReason::Fulfill</tspan>.</text>
+</svg>
+  
+
+  <!-- Footer Bar -->
+  <rect x="0" y="1024" width="1920" height="56" fill="#060911"/>
+  <line x1="0" y1="1024" x2="1920" y2="1024" stroke="#1e293b" stroke-width="1.5"/>
+  <rect x="0" y="1074" width="1920" height="6" fill="#1e293b"/>
+  <rect x="0" y="1074" width="1280" height="6" fill="url(#topAccent)"/>
+
+  <text x="48" y="1056" fill="#64748b" font-size="13" font-weight="600">Rust Implementation: src/routes.rs, lightning/src/routing/router.rs, lightning/src/ln/channel.rs, rgb_utils/mod.rs</text>
+  <text x="1872" y="1056" fill="#94a3b8" font-size="13" font-weight="600" text-anchor="end">Slide 06: 4-Layer Native RGB Multi-Path Payment Architecture</text>
+</svg>

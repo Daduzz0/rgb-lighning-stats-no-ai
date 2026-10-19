@@ -1,0 +1,214 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" width="1920" height="1080" font-family="Ubuntu Sans, Inter, -apple-system, BlinkMacSystemFont, sans-serif">
+  <defs>
+    <linearGradient id="slideBg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#060911"/>
+      <stop offset="55%" stop-color="#0b1120"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <linearGradient id="topAccent" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#10b981"/>
+      <stop offset="50%" stop-color="#38bdf8"/>
+      <stop offset="100%" stop-color="#a855f7"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Canvas Background -->
+  <rect width="1920" height="1080" fill="url(#slideBg)"/>
+  <rect x="0" y="0" width="1920" height="6" fill="url(#topAccent)"/>
+
+  <!-- Header Bar -->
+  <rect x="0" y="6" width="1920" height="114" fill="#090d16" fill-opacity="0.85"/>
+  <line x1="0" y1="120" x2="1920" y2="120" stroke="#1e293b" stroke-width="2"/>
+
+  <!-- Category Pill -->
+  <rect x="48" y="24" width="290" height="26" rx="13" fill="#064e3b" stroke="#10b981" stroke-width="1"/>
+  <text x="193" y="42" fill="#6ee7b7" font-size="12" font-weight="700" text-anchor="middle">PROBLEM STATEMENT</text>
+
+  <!-- Slide Title & Subtitle -->
+  <text x="48" y="80" fill="#f8fafc" font-size="30" font-weight="800">The Problem: Why Single-Path RGB Lightning Breaks at Scale</text>
+  <text x="48" y="106" fill="#94a3b8" font-size="15.5">Stock rgb-lightning-node routes along a single path (max_path_count = 1), stranding split RGB liquidity and inflating fees</text>
+
+  <!-- Top-Right Timing & Slide Counter -->
+  <rect x="1580" y="34" width="165" height="44" rx="8" fill="#1e293b" stroke="#334155"/>
+  <text x="1662" y="53" fill="#94a3b8" font-size="10.5" font-weight="700" text-anchor="middle">TIMING SLOT</text>
+  <text x="1662" y="70" fill="#38bdf8" font-size="13.5" font-weight="700" font-family="Ubuntu Sans Mono, monospace" text-anchor="middle">0:30 - 1:10</text>
+
+  <rect x="1760" y="34" width="112" height="44" rx="8" fill="#064e3b" stroke="#10b981" stroke-width="1.5"/>
+  <text x="1816" y="63" fill="#ecfdf5" font-size="18" font-weight="800" font-family="Ubuntu Sans Mono, monospace" text-anchor="middle">02 / 09</text>
+
+  <!-- Slide Body -->
+  
+  
+  <rect x="48" y="142" width="490" height="274" rx="12" fill="#0f172a" stroke="#ef4444" stroke-width="2"/>
+  <rect x="66" y="160" width="454" height="34" rx="6" fill="#450a0a"/>
+  <text x="80" y="182" fill="#fca5a5" font-size="15" font-weight="800">1. Split-Corridor Liquidity Stranding</text>
+  <text x="68" y="218" fill="#e2e8f0" font-size="14" font-weight="600">&#8226; Stock RLN hardcodes with_max_path_count(1)</text>
+<text x="80" y="243" fill="#94a3b8" font-size="14" font-weight="400">  inside rust-lightning RouteParameters.</text>
+<text x="68" y="268" fill="#e2e8f0" font-size="14" font-weight="600">&#8226; When Alice has 60 RGB on Corridor A (Bob)</text>
+<text x="80" y="293" fill="#94a3b8" font-size="14" font-weight="400">  and 40 RGB on Corridor B (Carol), any</text>
+<text x="80" y="318" fill="#94a3b8" font-size="14" font-weight="400">  transfer &gt; 60 RGB fails immediately.</text>
+<text x="68" y="343" fill="#34d399" font-size="14" font-weight="700">&#10003; AIR-GB unlocks 60+40 and 40+40 RGB splits.</text>
+
+  <rect x="48" y="434" width="490" height="274" rx="12" fill="#0f172a" stroke="#f59e0b" stroke-width="2"/>
+  <rect x="66" y="452" width="454" height="34" rx="6" fill="#451a03"/>
+  <text x="80" y="474" fill="#fcd34d" font-size="15" font-weight="800">2. Leaf-Node Trapping &amp; 5,100 msat Detours</text>
+  <text x="68" y="510" fill="#e2e8f0" font-size="14" font-weight="600">&#8226; Single-path transfers drain primary channels</text>
+<text x="80" y="535" fill="#94a3b8" font-size="14" font-weight="400">  in one direction (Case 07 drains Alice&#8594;Bob).</text>
+<text x="68" y="560" fill="#e2e8f0" font-size="14" font-weight="600">&#8226; Return transfers fail due to LDK 1% channel</text>
+<text x="80" y="585" fill="#94a3b8" font-size="14" font-weight="400">  reserve (10M msat) + single-path limits.</text>
+<text x="68" y="610" fill="#e2e8f0" font-size="14" font-weight="600">&#8226; Case 11 (1 RGB Alice&#8594;Bob) is forced into a</text>
+<text x="80" y="635" fill="#94a3b8" font-size="14" font-weight="400">  3-hop detour costing 5,100 msat vs. 0 msat!</text>
+
+  <rect x="48" y="726" width="490" height="274" rx="12" fill="#0f172a" stroke="#3b82f6" stroke-width="2"/>
+  <rect x="66" y="744" width="454" height="34" rx="6" fill="#1e3a8a"/>
+  <text x="80" y="766" fill="#93c5fd" font-size="15" font-weight="800">3. Intent &amp; Historical Failure Blindness</text>
+  <text x="68" y="802" fill="#e2e8f0" font-size="14" font-weight="600">&#8226; Standard LDK Dijkstra ignores user fee caps,</text>
+<text x="80" y="827" fill="#94a3b8" font-size="14" font-weight="400">  node exclusions, and probing privacy rules.</text>
+<text x="68" y="852" fill="#e2e8f0" font-size="14" font-weight="600">&#8226; No RAG memory of RGB contract-specific</text>
+<text x="80" y="877" fill="#94a3b8" font-size="14" font-weight="400">  TemporaryChannelFailure or HTLCTimeout.</text>
+<text x="68" y="902" fill="#34d399" font-size="14" font-weight="700">&#10003; AIR-GB adds local QVAC RAG + 4 Rust planners.</text>
+  <rect x="560" y="142" width="1312" height="860" rx="14" fill="#0b0f19" stroke="#1e293b" stroke-width="2"/>
+  <svg x="568" y="150" width="1296" height="844" viewBox="0 0 1200 680" preserveAspectRatio="xMidYMid meet">
+  <defs>
+    <linearGradient id="bgProb" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0b0f19"/>
+      <stop offset="100%" stop-color="#111827"/>
+    </linearGradient>
+    <marker id="arrRedP" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#ef4444"/>
+    </marker>
+    <marker id="arrAmbP" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#f59e0b"/>
+    </marker>
+    <marker id="arrBlueP" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#3b82f6"/>
+    </marker>
+  </defs>
+
+  <rect width="1200" height="680" rx="16" fill="url(#bgProb)"/>
+  <rect x="16" y="16" width="1168" height="648" rx="12" fill="none" stroke="#1e293b" stroke-width="2"/>
+
+  <!-- Header -->
+  <text x="40" y="54" fill="#f8fafc" font-size="22" font-weight="700">Why Stock Single-Path RGB Lightning Breaks at Scale</text>
+  <text x="40" y="78" fill="#94a3b8" font-size="13">Three compounding routing failures observed in standard rgb-lightning-node (max_path_count = 1) across our 20-node regtest benchmark</text>
+
+  <!-- PANEL 1: SPLIT LIQUIDITY STRANDING -->
+  <rect x="40" y="102" width="360" height="415" rx="10" fill="#0f172a" stroke="#ef4444" stroke-width="1.5" stroke-opacity="0.7"/>
+  <rect x="58" y="118" width="324" height="28" rx="6" fill="#450a0a"/>
+  <text x="70" y="137" fill="#fca5a5" font-size="12.5" font-weight="700">1. Split-Corridor Liquidity Stranding</text>
+
+  <text x="58" y="166" fill="#cbd5e1" font-size="11.5">Stock RLN hardcodes <tspan fill="#fca5a5" font-family="Ubuntu Sans Mono, monospace" font-weight="700">with_max_path_count(1)</tspan>.</text>
+  <text x="58" y="184" fill="#94a3b8" font-size="11">Parallel RGB corridors cannot be combined:</text>
+
+  <!-- Mini diagram inside Panel 1 -->
+  <rect x="58" y="200" width="324" height="170" rx="8" fill="#18181b" stroke="#27272a"/>
+  <circle cx="96" cy="285" r="24" fill="#065f46" stroke="#10b981" stroke-width="2"/>
+  <text x="96" y="282" fill="#fff" font-size="11" font-weight="700" text-anchor="middle">Alice</text>
+  <text x="96" y="295" fill="#a7f3d0" font-size="8.5" text-anchor="middle">100 RGB</text>
+
+  <circle cx="342" cy="285" r="24" fill="#1e3a8a" stroke="#60a5fa" stroke-width="2"/>
+  <text x="342" y="282" fill="#fff" font-size="11" font-weight="700" text-anchor="middle">Judy</text>
+  <text x="342" y="295" fill="#bfdbfe" font-size="8.5" text-anchor="middle">Invoice 100</text>
+
+  <!-- Top corridor 60 RGB -->
+  <path d="M 120 272 L 210 232 L 318 272" stroke="#ef4444" stroke-width="2.5" fill="none" marker-end="url(#arrRedP)"/>
+  <rect x="155" y="214" width="130" height="24" rx="4" fill="#450a0a" stroke="#ef4444"/>
+  <text x="220" y="230" fill="#fecaca" font-size="10" font-weight="700" text-anchor="middle">Corridor A: 60 RGB &lt; 100</text>
+
+  <!-- Bottom corridor 40 RGB -->
+  <path d="M 120 298 L 210 338 L 318 298" stroke="#ef4444" stroke-width="2.5" fill="none" marker-end="url(#arrRedP)"/>
+  <rect x="155" y="330" width="130" height="24" rx="4" fill="#450a0a" stroke="#ef4444"/>
+  <text x="220" y="346" fill="#fecaca" font-size="10" font-weight="700" text-anchor="middle">Corridor B: 40 RGB &lt; 100</text>
+
+  <rect x="58" y="384" width="324" height="115" rx="8" fill="#1e293b" stroke="#334155"/>
+  <text x="72" y="406" fill="#f87171" font-size="11.5" font-weight="700">Benchmark Impact (Cases 02, 03, 04):</text>
+  <text x="72" y="426" fill="#e2e8f0" font-size="10.5">&#8226; Case 02 (100 RGB) &amp; Case 04 (80 RGB) fail</text>
+  <text x="82" y="442" fill="#94a3b8" font-size="10">immediately with FailedToFindRoute.</text>
+  <text x="72" y="462" fill="#e2e8f0" font-size="10.5">&#8226; Upstream RLN color_commitment() also crashes</text>
+  <text x="82" y="478" fill="#94a3b8" font-size="10">if &gt;1 RGB HTLC is active on the same channel</text>
+  <text x="82" y="492" fill="#94a3b8" font-size="10">due to stale last_rgb_payment_info file state.</text>
+
+  <!-- PANEL 2: CASCADING DEPLETION & FEE DETOURS -->
+  <rect x="420" y="102" width="360" height="415" rx="10" fill="#0f172a" stroke="#f59e0b" stroke-width="1.5" stroke-opacity="0.7"/>
+  <rect x="438" y="118" width="324" height="28" rx="6" fill="#451a03"/>
+  <text x="450" y="137" fill="#fcd34d" font-size="12.5" font-weight="700">2. Leaf Stranding &amp; 5,100 msat Detours</text>
+
+  <text x="438" y="166" fill="#cbd5e1" font-size="11.5">One-way single-path drains primary channels</text>
+  <text x="438" y="184" fill="#94a3b8" font-size="11">and traps liquidity at leaf nodes (Judy):</text>
+
+  <!-- Mini diagram inside Panel 2 -->
+  <rect x="438" y="200" width="324" height="170" rx="8" fill="#18181b" stroke="#27272a"/>
+  <text x="452" y="222" fill="#fca5a5" font-size="10" font-weight="700">Step A: Case 07 drains Alice &#8594; Bob (60 &#8594; 0 RGB)</text>
+  <text x="452" y="238" fill="#fca5a5" font-size="10" font-weight="700">Step B: Case 08 return fails (1% BTC reserve)</text>
+
+  <!-- Alice -> Bob blocked, detour via Carol -> Erin -> Bob -->
+  <circle cx="478" cy="308" r="20" fill="#065f46" stroke="#10b981" stroke-width="2"/>
+  <text x="478" y="312" fill="#fff" font-size="10" font-weight="700" text-anchor="middle">Alice</text>
+
+  <circle cx="718" cy="308" r="20" fill="#1e293b" stroke="#ef4444" stroke-width="2"/>
+  <text x="718" y="312" fill="#fff" font-size="10" font-weight="700" text-anchor="middle">Bob</text>
+
+  <line x1="500" y1="308" x2="694" y2="308" stroke="#ef4444" stroke-width="2" stroke-dasharray="4,4"/>
+  <text x="598" y="300" fill="#f87171" font-size="9.5" font-weight="700" text-anchor="middle">0 RGB left (Drained!)</text>
+
+  <!-- Detour arc -->
+  <path d="M 492 292 L 555 258 L 640 258 L 704 292" stroke="#f59e0b" stroke-width="2.5" fill="none" marker-end="url(#arrAmbP)"/>
+  <text x="598" y="252" fill="#fbbf24" font-size="9.5" font-weight="700" text-anchor="middle">Detour: Alice &#8594; Carol &#8594; Erin &#8594; Bob</text>
+  <text x="598" y="348" fill="#fcd34d" font-size="10.5" font-weight="700" text-anchor="middle">Case 11 (1 RGB): 5,100 msat fee (3 hops) vs 0 msat!</text>
+
+  <rect x="438" y="384" width="324" height="115" rx="8" fill="#1e293b" stroke="#334155"/>
+  <text x="452" y="406" fill="#fbbf24" font-size="11.5" font-weight="700">Benchmark Impact (Cases 08, 10, 11, 12, 13, 15):</text>
+  <text x="452" y="426" fill="#e2e8f0" font-size="10.5">&#8226; 0 / 3 return flows succeed in Baseline (0 RGB</text>
+  <text x="462" y="442" fill="#94a3b8" font-size="10">returned to Alice vs 190 RGB in AIR-GB).</text>
+  <text x="452" y="462" fill="#e2e8f0" font-size="10.5">&#8226; Mid-network hops (Bob&#8594;Erin, Carol&#8594;Frank,</text>
+  <text x="462" y="478" fill="#94a3b8" font-size="10">Frank&#8594;Ivan) all fail because upstream channels</text>
+  <text x="462" y="492" fill="#94a3b8" font-size="10">were completely emptied by single-path routing.</text>
+
+  <!-- PANEL 3: INTENT & TELEMETRY BLINDNESS -->
+  <rect x="800" y="102" width="360" height="415" rx="10" fill="#0f172a" stroke="#3b82f6" stroke-width="1.5" stroke-opacity="0.7"/>
+  <rect x="818" y="118" width="324" height="28" rx="6" fill="#1e3a8a"/>
+  <text x="830" y="137" fill="#93c5fd" font-size="12.5" font-weight="700">3. Intent &amp; Telemetry Blindness</text>
+
+  <text x="818" y="166" fill="#cbd5e1" font-size="11.5">Standard LDK Dijkstra uses static edge weights</text>
+  <text x="818" y="184" fill="#94a3b8" font-size="11">with zero awareness of user intent or RGB history:</text>
+
+  <rect x="818" y="200" width="324" height="170" rx="8" fill="#18181b" stroke="#27272a"/>
+  <text x="834" y="226" fill="#93c5fd" font-size="11" font-weight="700">What Stock LDK Dijkstra Ignores:</text>
+  <text x="834" y="250" fill="#e2e8f0" font-size="10.5">&#8226; Natural-Language Fee Caps:</text>
+  <text x="846" y="266" fill="#94a3b8" font-size="10">Cannot parse "Cap fees at 500 msat, avoid Bob"</text>
+  <text x="834" y="288" fill="#e2e8f0" font-size="10.5">&#8226; Privacy vs. Probing Trade-offs:</text>
+  <text x="846" y="304" fill="#94a3b8" font-size="10">No per-payment toggle between MPP &amp; single-path</text>
+  <text x="834" y="326" fill="#e2e8f0" font-size="10.5">&#8226; First-Party RGB Failure Memory:</text>
+  <text x="846" y="342" fill="#94a3b8" font-size="10">No RAG index of past RGB HTLC timeouts, congestion</text>
+  <text x="846" y="356" fill="#94a3b8" font-size="10">ratios, or per-algorithm success rates</text>
+
+  <rect x="818" y="384" width="324" height="115" rx="8" fill="#1e293b" stroke="#334155"/>
+  <text x="832" y="406" fill="#60a5fa" font-size="11.5" font-weight="700">How AIR-GB Solves All Three:</text>
+  <text x="832" y="426" fill="#34d399" font-size="10.5" font-weight="600">&#10003; Native 4-Layer Rust RGB MPP (MinCostFlow)</text>
+  <text x="832" y="446" fill="#34d399" font-size="10.5" font-weight="600">&#10003; Multi-Objective Pareto &amp; Yen K-Shortest</text>
+  <text x="832" y="466" fill="#34d399" font-size="10.5" font-weight="600">&#10003; QVAC Local LLM + TurboVec RAG Telemetry</text>
+  <text x="832" y="486" fill="#34d399" font-size="10.5" font-weight="600">&#10003; 4-Gate Deterministic Physical Guardrails</text>
+
+  <!-- BOTTOM SUMMARY BAR -->
+  <rect x="40" y="535" width="1120" height="105" rx="10" fill="#18181b" stroke="#3f3f46" stroke-width="1.5"/>
+  <text x="64" y="564" fill="#f8fafc" font-size="14" font-weight="700">Net Result on the 20-Scenario Live Regtest Benchmark (topology-mpp.json):</text>
+
+  <rect x="64" y="578" width="510" height="46" rx="6" fill="#450a0a" stroke="#ef4444"/>
+  <text x="319" y="598" fill="#fecaca" font-size="12" font-weight="700" text-anchor="middle">Stock Baseline: 7 / 20 Succeeded (35.0%) &#8226; 0 MPP Splits &#8226; 5,700 msat Matched Fees</text>
+  <text x="319" y="615" fill="#fca5a5" font-size="10.5" text-anchor="middle">Strands 100% of RGB at leaf nodes; fails all large transfers &amp; return flows</text>
+
+  <rect x="600" y="578" width="536" height="46" rx="6" fill="#064e3b" stroke="#10b981"/>
+  <text x="868" y="598" fill="#ecfdf5" font-size="12" font-weight="700" text-anchor="middle">AIR-GB (AI + MPP): 13 / 20 Succeeded (65.0% | 81.3% Reachable) &#8226; 1,200 msat Fees</text>
+  <text x="868" y="615" fill="#6ee7b7" font-size="10.5" text-anchor="middle">3 / 3 MPP Splits &#8226; 190 RGB Returned to Alice &#8226; -78.95% Routing Fee Reduction</text>
+</svg>
+  
+
+  <!-- Footer Bar -->
+  <rect x="0" y="1024" width="1920" height="56" fill="#060911"/>
+  <line x1="0" y1="1024" x2="1920" y2="1024" stroke="#1e293b" stroke-width="1.5"/>
+  <rect x="0" y="1074" width="1920" height="6" fill="#1e293b"/>
+  <rect x="0" y="1074" width="427" height="6" fill="url(#topAccent)"/>
+
+  <text x="48" y="1056" fill="#64748b" font-size="13" font-weight="600">Baseline Evaluation: stock-02 on topology-mpp.json (7 / 20 Succeeded, 5,700 msat Paired Fees)</text>
+  <text x="1872" y="1056" fill="#94a3b8" font-size="13" font-weight="600" text-anchor="end">Slide 02: Split-Corridor Stranding &amp; Downstream Channel Depletion</text>
+</svg>

@@ -1,0 +1,353 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" width="1920" height="1080" font-family="Ubuntu Sans, Inter, -apple-system, BlinkMacSystemFont, sans-serif">
+  <defs>
+    <linearGradient id="slideBg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#060911"/>
+      <stop offset="55%" stop-color="#0b1120"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <linearGradient id="topAccent" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#10b981"/>
+      <stop offset="50%" stop-color="#38bdf8"/>
+      <stop offset="100%" stop-color="#a855f7"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Canvas Background -->
+  <rect width="1920" height="1080" fill="url(#slideBg)"/>
+  <rect x="0" y="0" width="1920" height="6" fill="url(#topAccent)"/>
+
+  <!-- Header Bar -->
+  <rect x="0" y="6" width="1920" height="114" fill="#090d16" fill-opacity="0.85"/>
+  <line x1="0" y1="120" x2="1920" y2="120" stroke="#1e293b" stroke-width="2"/>
+
+  <!-- Category Pill -->
+  <rect x="48" y="24" width="290" height="26" rx="13" fill="#064e3b" stroke="#10b981" stroke-width="1"/>
+  <text x="193" y="42" fill="#6ee7b7" font-size="12" font-weight="700" text-anchor="middle">BENCHMARK TOPOLOGY</text>
+
+  <!-- Slide Title & Subtitle -->
+  <text x="48" y="80" fill="#f8fafc" font-size="30" font-weight="800">The 20-Node Regtest Benchmark Topology (topology-mpp.json)</text>
+  <text x="48" y="106" fill="#94a3b8" font-size="15.5">15 colored RGB+BTC channels across 10 core routing nodes (Alice-Judy) + 10 isolated negative-control nodes (Karl-Tara)</text>
+
+  <!-- Top-Right Timing & Slide Counter -->
+  <rect x="1580" y="34" width="165" height="44" rx="8" fill="#1e293b" stroke="#334155"/>
+  <text x="1662" y="53" fill="#94a3b8" font-size="10.5" font-weight="700" text-anchor="middle">TIMING SLOT</text>
+  <text x="1662" y="70" fill="#38bdf8" font-size="13.5" font-weight="700" font-family="Ubuntu Sans Mono, monospace" text-anchor="middle">3:55 - 4:30</text>
+
+  <rect x="1760" y="34" width="112" height="44" rx="8" fill="#064e3b" stroke="#10b981" stroke-width="1.5"/>
+  <text x="1816" y="63" fill="#ecfdf5" font-size="18" font-weight="800" font-family="Ubuntu Sans Mono, monospace" text-anchor="middle">07 / 09</text>
+
+  <!-- Slide Body -->
+  
+  
+  <rect x="48" y="142" width="490" height="274" rx="12" fill="#0f172a" stroke="#10b981" stroke-width="2"/>
+  <rect x="66" y="160" width="454" height="34" rx="6" fill="#064e3b"/>
+  <text x="80" y="182" fill="#6ee7b7" font-size="15" font-weight="800">1. LDK 1% Reserve Cushion (push_msat: 7M)</text>
+  <text x="68" y="218" fill="#e2e8f0" font-size="14" font-weight="600">&#8226; Every 1M sat channel enforces a 1% (10M msat)</text>
+<text x="80" y="243" fill="#94a3b8" font-size="14" font-weight="400">  reserve before Judy can send an outbound HTLC.</text>
+<text x="68" y="268" fill="#e2e8f0" font-size="14" font-weight="600">&#8226; After Case 02 (18M + 12M msat split), Ivan&#8594;Judy</text>
+<text x="80" y="293" fill="#94a3b8" font-size="14" font-weight="400">  had only 2M msat above reserve (&lt; 3M floor!).</text>
+<text x="68" y="318" fill="#34d399" font-size="14" font-weight="700">&#10003; push_msat: 7,000,000 gives Judy 15M &amp; 9M msat</text>
+<text x="80" y="343" fill="#94a3b8" font-size="14" font-weight="400">  spendable BTC, unlocking reverse MPP returns.</text>
+
+  <rect x="48" y="434" width="490" height="274" rx="12" fill="#0f172a" stroke="#3b82f6" stroke-width="2"/>
+  <rect x="66" y="452" width="454" height="34" rx="6" fill="#1e3a8a"/>
+  <text x="80" y="474" fill="#93c5fd" font-size="15" font-weight="800">2. Differentiated Corridors &amp; Cross-Guards</text>
+  <text x="68" y="510" fill="#e2e8f0" font-size="14" font-weight="600">&#8226; 40-RGB branch (Carol-Frank-Ivan): 100 msat/hop</text>
+<text x="68" y="535" fill="#e2e8f0" font-size="14" font-weight="600">&#8226; 60-RGB branch (Bob-Erin-Heidi): 200 msat/hop</text>
+<text x="80" y="560" fill="#94a3b8" font-size="14" font-weight="400">  &#8594; 100 RGB MPP split costs 900 msat total.</text>
+<text x="68" y="585" fill="#e2e8f0" font-size="14" font-weight="600">&#8226; 20-RGB cross-links oriented with 5,000 msat</text>
+<text x="80" y="610" fill="#94a3b8" font-size="14" font-weight="400">  fee in Judy&#8594;Alice direction to prevent &gt;2-path</text>
+<text x="80" y="635" fill="#94a3b8" font-size="14" font-weight="400">  reverse fragmentation across default 1k edges.</text>
+
+  <rect x="48" y="726" width="490" height="274" rx="12" fill="#0f172a" stroke="#a855f7" stroke-width="2"/>
+  <rect x="66" y="744" width="454" height="34" rx="6" fill="#3b0764"/>
+  <text x="80" y="766" fill="#e9d5ff" font-size="15" font-weight="800">3. Privacy Link &amp; Gossip Readiness Gate</text>
+  <text x="68" y="802" fill="#e2e8f0" font-size="14" font-weight="600">&#8226; Heidi&#8594;Frank (20 RGB) enables single-path</text>
+<text x="80" y="827" fill="#94a3b8" font-size="14" font-weight="400">  privacy routing in Case 18 (Heidi&#8594;Frank&#8594;Ivan).</text>
+<text x="68" y="852" fill="#e2e8f0" font-size="14" font-weight="600">&#8226; assertPaymentReady + /benchmark/gossip-status</text>
+<text x="80" y="877" fill="#94a3b8" font-size="14" font-weight="400">  verifies all 15 channels have bidirectional</text>
+<text x="80" y="902" fill="#94a3b8" font-size="14" font-weight="400">  gossip before Case 01 begins.</text>
+  <rect x="560" y="142" width="1312" height="860" rx="14" fill="#0b0f19" stroke="#1e293b" stroke-width="2"/>
+  <svg x="568" y="150" width="1296" height="844" viewBox="0 0 1200 760" preserveAspectRatio="xMidYMid meet">
+  <defs>
+    <linearGradient id="bgGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0b0f19"/>
+      <stop offset="100%" stop-color="#111827"/>
+    </linearGradient>
+    <linearGradient id="branch60" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#10b981"/>
+      <stop offset="100%" stop-color="#059669"/>
+    </linearGradient>
+    <linearGradient id="branch40" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#3b82f6"/>
+      <stop offset="100%" stop-color="#2563eb"/>
+    </linearGradient>
+    <marker id="arrowGreen" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#10b981"/>
+    </marker>
+    <marker id="arrowBlue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#3b82f6"/>
+    </marker>
+    <marker id="arrowAmber" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#f59e0b"/>
+    </marker>
+    <marker id="arrowPurple" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#a855f7"/>
+    </marker>
+    <marker id="arrowSlate" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#64748b"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="760" rx="16" fill="url(#bgGrad)"/>
+  <rect x="16" y="16" width="1168" height="728" rx="12" fill="none" stroke="#1e293b" stroke-width="2"/>
+
+  <!-- Header -->
+  <text x="40" y="54" fill="#f8fafc" font-size="22" font-weight="700">20-Node Regtest Benchmark Topology (topology-mpp.json vs topology.json)</text>
+  <text x="40" y="78" fill="#94a3b8" font-size="13">15 Colored RGB + BTC Channels across 10 Core Nodes (Alice&#8211;Judy) + 10 Isolated Peripheral Nodes (Karl&#8211;Tara) &#8226; 1,000,000 sat / channel &#8226; push_msat: 7,000,000</text>
+
+  <!-- Legend Box -->
+  <rect x="40" y="94" width="1120" height="44" rx="8" fill="#1e293b" stroke="#334155" stroke-width="1"/>
+  <line x1="60" y1="116" x2="100" y2="116" stroke="#10b981" stroke-width="4" marker-end="url(#arrowGreen)"/>
+  <text x="110" y="120" fill="#e2e8f0" font-size="12" font-weight="600">60 RGB Main Branch (200 msat/hop = 600 msat)</text>
+
+  <line x1="415" y1="116" x2="455" y2="116" stroke="#3b82f6" stroke-width="4" marker-end="url(#arrowBlue)"/>
+  <text x="465" y="120" fill="#e2e8f0" font-size="12" font-weight="600">40 RGB Low-Fee Branch (100 msat/hop = 300 msat)</text>
+
+  <line x1="780" y1="116" x2="820" y2="116" stroke="#f59e0b" stroke-width="2.5" stroke-dasharray="5,4" marker-end="url(#arrowAmber)"/>
+  <text x="830" y="120" fill="#e2e8f0" font-size="12" font-weight="600">Cross-Link (5,000 msat fee)</text>
+
+  <line x1="1015" y1="116" x2="1055" y2="116" stroke="#a855f7" stroke-width="3" marker-end="url(#arrowPurple)"/>
+  <text x="1065" y="120" fill="#e2e8f0" font-size="12" font-weight="600">Privacy Link</text>
+
+  <!-- Main Graph Canvas -->
+  <rect x="40" y="152" width="840" height="440" rx="10" fill="#0f172a" stroke="#1e293b" stroke-width="1.5"/>
+
+  <!-- Column Headers -->
+  <text x="110" y="178" fill="#64748b" font-size="11" font-weight="700" text-anchor="middle">SOURCE (TIER 0)</text>
+  <text x="290" y="178" fill="#64748b" font-size="11" font-weight="700" text-anchor="middle">TIER 1 HOP</text>
+  <text x="490" y="178" fill="#64748b" font-size="11" font-weight="700" text-anchor="middle">TIER 2 HOP</text>
+  <text x="670" y="178" fill="#64748b" font-size="11" font-weight="700" text-anchor="middle">TIER 3 INGRESS</text>
+  <text x="815" y="178" fill="#64748b" font-size="11" font-weight="700" text-anchor="middle">SINK (TIER 4)</text>
+
+  <!-- EDGES -->
+  <!-- 60 RGB Branch: Alice -> Bob -> Erin -> Heidi -> Judy -->
+  <path d="M 148 360 L 252 245" stroke="#10b981" stroke-width="4" fill="none" marker-end="url(#arrowGreen)"/>
+  <rect x="162" y="282" width="76" height="28" rx="4" fill="#064e3b" stroke="#10b981" stroke-width="1"/>
+  <text x="200" y="295" fill="#ecfdf5" font-size="10" font-weight="700" text-anchor="middle">60 RGB</text>
+  <text x="200" y="306" fill="#6ee7b7" font-size="9" text-anchor="middle">fee: 0 msat</text>
+
+  <path d="M 328 235 L 452 235" stroke="#10b981" stroke-width="4" fill="none" marker-end="url(#arrowGreen)"/>
+  <rect x="350" y="202" width="80" height="28" rx="4" fill="#064e3b" stroke="#10b981" stroke-width="1"/>
+  <text x="390" y="215" fill="#ecfdf5" font-size="10" font-weight="700" text-anchor="middle">60 RGB</text>
+  <text x="390" y="226" fill="#6ee7b7" font-size="9" text-anchor="middle">fee: 200 msat</text>
+
+  <path d="M 528 235 L 632 282" stroke="#10b981" stroke-width="4" fill="none" marker-end="url(#arrowGreen)"/>
+  <rect x="542" y="226" width="80" height="28" rx="4" fill="#064e3b" stroke="#10b981" stroke-width="1"/>
+  <text x="582" y="239" fill="#ecfdf5" font-size="10" font-weight="700" text-anchor="middle">60 RGB</text>
+  <text x="582" y="250" fill="#6ee7b7" font-size="9" text-anchor="middle">fee: 200 msat</text>
+
+  <path d="M 708 295 L 782 355" stroke="#10b981" stroke-width="4" fill="none" marker-end="url(#arrowGreen)"/>
+  <rect x="708" y="294" width="80" height="28" rx="4" fill="#064e3b" stroke="#10b981" stroke-width="1"/>
+  <text x="748" y="307" fill="#ecfdf5" font-size="10" font-weight="700" text-anchor="middle">60 RGB</text>
+  <text x="748" y="318" fill="#6ee7b7" font-size="9" text-anchor="middle">fee: 200 msat</text>
+
+  <!-- 40 RGB Branch: Alice -> Carol -> Frank -> Ivan -> Judy -->
+  <path d="M 148 375 L 252 375" stroke="#3b82f6" stroke-width="4" fill="none" marker-end="url(#arrowBlue)"/>
+  <rect x="162" y="343" width="76" height="28" rx="4" fill="#1e3a8a" stroke="#3b82f6" stroke-width="1"/>
+  <text x="200" y="356" fill="#eff6ff" font-size="10" font-weight="700" text-anchor="middle">40 RGB</text>
+  <text x="200" y="367" fill="#93c5fd" font-size="9" text-anchor="middle">fee: 0 msat</text>
+
+  <path d="M 328 375 L 452 375" stroke="#3b82f6" stroke-width="4" fill="none" marker-end="url(#arrowBlue)"/>
+  <rect x="350" y="343" width="80" height="28" rx="4" fill="#1e3a8a" stroke="#3b82f6" stroke-width="1"/>
+  <text x="390" y="356" fill="#eff6ff" font-size="10" font-weight="700" text-anchor="middle">40 RGB</text>
+  <text x="390" y="367" fill="#93c5fd" font-size="9" text-anchor="middle">fee: 100 msat</text>
+
+  <path d="M 528 375 L 632 450" stroke="#3b82f6" stroke-width="4" fill="none" marker-end="url(#arrowBlue)"/>
+  <rect x="536" y="382" width="80" height="28" rx="4" fill="#1e3a8a" stroke="#3b82f6" stroke-width="1"/>
+  <text x="576" y="395" fill="#eff6ff" font-size="10" font-weight="700" text-anchor="middle">40 RGB</text>
+  <text x="576" y="406" fill="#93c5fd" font-size="9" text-anchor="middle">fee: 100 msat</text>
+
+  <path d="M 708 455 L 782 395" stroke="#3b82f6" stroke-width="4" fill="none" marker-end="url(#arrowBlue)"/>
+  <rect x="708" y="432" width="80" height="28" rx="4" fill="#1e3a8a" stroke="#3b82f6" stroke-width="1"/>
+  <text x="748" y="445" fill="#eff6ff" font-size="10" font-weight="700" text-anchor="middle">40 RGB</text>
+  <text x="748" y="456" fill="#93c5fd" font-size="9" text-anchor="middle">fee: 100 msat</text>
+
+  <!-- Lower Branch: Alice -> Dave -> Grace, plus Ivan -> Grace -->
+  <path d="M 148 390 L 252 510" stroke="#64748b" stroke-width="3" fill="none" marker-end="url(#arrowSlate)"/>
+  <rect x="155" y="448" width="76" height="26" rx="4" fill="#1e293b" stroke="#475569" stroke-width="1"/>
+  <text x="193" y="460" fill="#e2e8f0" font-size="10" font-weight="700" text-anchor="middle">40 RGB</text>
+  <text x="193" y="470" fill="#94a3b8" font-size="9" text-anchor="middle">fee: 0 msat</text>
+
+  <path d="M 328 520 L 452 520" stroke="#64748b" stroke-width="3" fill="none" marker-end="url(#arrowSlate)"/>
+  <rect x="350" y="528" width="82" height="26" rx="4" fill="#1e293b" stroke="#475569" stroke-width="1"/>
+  <text x="391" y="540" fill="#e2e8f0" font-size="10" font-weight="700" text-anchor="middle">40 RGB</text>
+  <text x="391" y="550" fill="#94a3b8" font-size="9" text-anchor="middle">fee: 5000 msat</text>
+
+  <!-- Cross-Channels (Oriented in topology-mpp.json) -->
+  <!-- Erin -> Carol -->
+  <path d="M 460 255 L 320 355" stroke="#f59e0b" stroke-width="2" stroke-dasharray="5,4" fill="none" marker-end="url(#arrowAmber)"/>
+  <text x="368" y="288" fill="#fbbf24" font-size="9" font-weight="600">Erin&#8594;Carol (20 RGB, 5k)</text>
+
+  <!-- Frank -> Bob -->
+  <path d="M 460 355 L 320 255" stroke="#f59e0b" stroke-width="2" stroke-dasharray="5,4" fill="none" marker-end="url(#arrowAmber)"/>
+  <text x="412" y="328" fill="#fbbf24" font-size="9" font-weight="600">Frank&#8594;Bob (20 RGB, 5k)</text>
+
+  <!-- Frank -> Dave -->
+  <path d="M 465 395 L 322 502" stroke="#f59e0b" stroke-width="2" stroke-dasharray="5,4" fill="none" marker-end="url(#arrowAmber)"/>
+  <text x="415" y="465" fill="#fbbf24" font-size="9" font-weight="600">Frank&#8594;Dave (20 RGB, 5k)</text>
+
+  <!-- Ivan -> Grace -->
+  <path d="M 634 475 L 526 512" stroke="#f59e0b" stroke-width="2" stroke-dasharray="5,4" fill="none" marker-end="url(#arrowAmber)"/>
+  <text x="585" y="512" fill="#fbbf24" font-size="9" font-weight="600">Ivan&#8594;Grace (40 RGB, 5k)</text>
+
+  <!-- Privacy Link: Heidi -> Frank -->
+  <path d="M 634 305 L 526 360" stroke="#a855f7" stroke-width="3" fill="none" marker-end="url(#arrowPurple)"/>
+  <rect x="542" y="310" width="92" height="26" rx="4" fill="#3b0764" stroke="#a855f7" stroke-width="1"/>
+  <text x="588" y="322" fill="#f3e8ff" font-size="9.5" font-weight="700" text-anchor="middle">Heidi&#8594;Frank 20</text>
+  <text x="588" y="332" fill="#d8b4fe" font-size="8.5" text-anchor="middle">Case 18 Privacy</text>
+
+  <!-- NODES -->
+  <!-- Alice -->
+  <circle cx="110" cy="375" r="36" fill="#065f46" stroke="#10b981" stroke-width="3"/>
+  <text x="110" y="372" fill="#ffffff" font-size="14" font-weight="700" text-anchor="middle">Alice</text>
+  <text x="110" y="388" fill="#a7f3d0" font-size="10" text-anchor="middle">:8801 (140 RGB)</text>
+
+  <!-- Bob -->
+  <circle cx="290" cy="235" r="34" fill="#1e293b" stroke="#10b981" stroke-width="2.5"/>
+  <text x="290" y="232" fill="#f8fafc" font-size="13" font-weight="700" text-anchor="middle">Bob</text>
+  <text x="290" y="247" fill="#94a3b8" font-size="10" text-anchor="middle">:8802</text>
+
+  <!-- Carol -->
+  <circle cx="290" cy="375" r="34" fill="#1e293b" stroke="#3b82f6" stroke-width="2.5"/>
+  <text x="290" y="372" fill="#f8fafc" font-size="13" font-weight="700" text-anchor="middle">Carol</text>
+  <text x="290" y="387" fill="#94a3b8" font-size="10" text-anchor="middle">:8803</text>
+
+  <!-- Dave -->
+  <circle cx="290" cy="520" r="34" fill="#1e293b" stroke="#64748b" stroke-width="2.5"/>
+  <text x="290" y="517" fill="#f8fafc" font-size="13" font-weight="700" text-anchor="middle">Dave</text>
+  <text x="290" y="532" fill="#94a3b8" font-size="10" text-anchor="middle">:8804</text>
+
+  <!-- Erin -->
+  <circle cx="490" cy="235" r="34" fill="#1e293b" stroke="#10b981" stroke-width="2.5"/>
+  <text x="490" y="232" fill="#f8fafc" font-size="13" font-weight="700" text-anchor="middle">Erin</text>
+  <text x="490" y="247" fill="#94a3b8" font-size="10" text-anchor="middle">:8805</text>
+
+  <!-- Frank -->
+  <circle cx="490" cy="375" r="34" fill="#1e293b" stroke="#3b82f6" stroke-width="2.5"/>
+  <text x="490" y="372" fill="#f8fafc" font-size="13" font-weight="700" text-anchor="middle">Frank</text>
+  <text x="490" y="387" fill="#94a3b8" font-size="10" text-anchor="middle">:8806</text>
+
+  <!-- Grace -->
+  <circle cx="490" cy="520" r="34" fill="#1e293b" stroke="#64748b" stroke-width="2.5"/>
+  <text x="490" y="517" fill="#f8fafc" font-size="13" font-weight="700" text-anchor="middle">Grace</text>
+  <text x="490" y="532" fill="#94a3b8" font-size="10" text-anchor="middle">:8807</text>
+
+  <!-- Heidi -->
+  <circle cx="670" cy="290" r="34" fill="#1e293b" stroke="#10b981" stroke-width="2.5"/>
+  <text x="670" y="287" fill="#f8fafc" font-size="13" font-weight="700" text-anchor="middle">Heidi</text>
+  <text x="670" y="302" fill="#94a3b8" font-size="10" text-anchor="middle">:8808</text>
+
+  <!-- Ivan -->
+  <circle cx="670" cy="460" r="34" fill="#1e293b" stroke="#3b82f6" stroke-width="2.5"/>
+  <text x="670" y="457" fill="#f8fafc" font-size="13" font-weight="700" text-anchor="middle">Ivan</text>
+  <text x="670" y="472" fill="#94a3b8" font-size="10" text-anchor="middle">:8809</text>
+
+  <!-- Judy -->
+  <circle cx="815" cy="375" r="36" fill="#1e3a8a" stroke="#60a5fa" stroke-width="3"/>
+  <text x="815" y="372" fill="#ffffff" font-size="14" font-weight="700" text-anchor="middle">Judy</text>
+  <text x="815" y="388" fill="#bfdbfe" font-size="10" text-anchor="middle">:8810 (100 Max)</text>
+
+  <!-- Right Panel: Engineering Improvements in topology-mpp.json -->
+  <rect x="896" y="152" width="264" height="440" rx="10" fill="#0f172a" stroke="#1e293b" stroke-width="1.5"/>
+  <text x="914" y="182" fill="#f8fafc" font-size="14" font-weight="700">Why topology-mpp.json?</text>
+  <text x="914" y="200" fill="#94a3b8" font-size="11">4 protocol bottlenecks solved:</text>
+
+  <!-- Card 1 -->
+  <rect x="910" y="214" width="236" height="82" rx="6" fill="#1e293b" stroke="#10b981" stroke-width="1"/>
+  <text x="922" y="232" fill="#34d399" font-size="11.5" font-weight="700">1. LDK 1% Reserve Cushion</text>
+  <text x="922" y="249" fill="#cbd5e1" font-size="10.5">push_msat: 7,000,000 (7k sat).</text>
+  <text x="922" y="264" fill="#94a3b8" font-size="10">Clears LDK's 10M msat reserve so</text>
+  <text x="922" y="278" fill="#94a3b8" font-size="10">Judy can route 100 RGB back (Case 03).</text>
+
+  <!-- Card 2 -->
+  <rect x="910" y="306" width="236" height="86" rx="6" fill="#1e293b" stroke="#3b82f6" stroke-width="1"/>
+  <text x="922" y="324" fill="#60a5fa" font-size="11.5" font-weight="700">2. Low-Fee MPP Corridors</text>
+  <text x="922" y="341" fill="#cbd5e1" font-size="10.5">Carol-Frank-Ivan: 100 msat/hop (300)</text>
+  <text x="922" y="356" fill="#cbd5e1" font-size="10.5">Bob-Erin-Heidi: 200 msat/hop (600)</text>
+  <text x="922" y="372" fill="#94a3b8" font-size="10">100 RGB split = 60+40 for 900 msat.</text>
+
+  <!-- Card 3 -->
+  <rect x="910" y="402" width="236" height="86" rx="6" fill="#1e293b" stroke="#f59e0b" stroke-width="1"/>
+  <text x="922" y="420" fill="#fbbf24" font-size="11.5" font-weight="700">3. Reverse Cross-Link Guards</text>
+  <text x="922" y="437" fill="#cbd5e1" font-size="10.5">Cross-edges set to 5,000 msat in</text>
+  <text x="922" y="452" fill="#cbd5e1" font-size="10.5">Judy&#8594;Alice direction (&gt;1k default).</text>
+  <text x="922" y="468" fill="#94a3b8" font-size="10">Prevents &gt;2 path MCF fragmentation.</text>
+
+  <!-- Card 4 -->
+  <rect x="910" y="498" width="236" height="80" rx="6" fill="#1e293b" stroke="#a855f7" stroke-width="1"/>
+  <text x="922" y="516" fill="#c084fc" font-size="11.5" font-weight="700">4. Heidi&#8594;Frank Privacy Hop</text>
+  <text x="922" y="533" fill="#cbd5e1" font-size="10.5">Reversed Frank-Heidi to Heidi&#8594;Frank</text>
+  <text x="922" y="548" fill="#cbd5e1" font-size="10.5">(20 RGB) so Heidi can reach Ivan</text>
+  <text x="922" y="563" fill="#94a3b8" font-size="10">in 18-rgb-privacy (single-path).</text>
+
+  <!-- Bottom Bar: Peripheral Nodes (Karl..Tara) -->
+  <rect x="40" y="606" width="1120" height="118" rx="10" fill="#0f172a" stroke="#1e293b" stroke-width="1.5"/>
+  <text x="60" y="632" fill="#f8fafc" font-size="13" font-weight="700">10 Peripheral Nodes (Karl &#8211; Tara) &#8226; Negative Control Reachability Island (Cases 19 &amp; 20)</text>
+  <text x="60" y="650" fill="#94a3b8" font-size="11">Online with funded wallets and P2P connections, but 0 open Lightning channels in the benchmark fixture &#8212; verifying that both routers cleanly reject unreachable destinations.</text>
+
+  <!-- 10 Peripheral Node Pills -->
+  <g transform="translate(60, 665)">
+    <rect x="0" y="0" width="96" height="40" rx="6" fill="#1e293b" stroke="#334155"/>
+    <text x="48" y="18" fill="#cbd5e1" font-size="11" font-weight="700" text-anchor="middle">Karl</text>
+    <text x="48" y="32" fill="#64748b" font-size="9.5" text-anchor="middle">:8811 &#8226; 0 ch</text>
+
+    <rect x="108" y="0" width="96" height="40" rx="6" fill="#1e293b" stroke="#334155"/>
+    <text x="156" y="18" fill="#cbd5e1" font-size="11" font-weight="700" text-anchor="middle">Leo</text>
+    <text x="156" y="32" fill="#64748b" font-size="9.5" text-anchor="middle">:8812 &#8226; 0 ch</text>
+
+    <rect x="216" y="0" width="96" height="40" rx="6" fill="#1e293b" stroke="#334155"/>
+    <text x="264" y="18" fill="#cbd5e1" font-size="11" font-weight="700" text-anchor="middle">Mia</text>
+    <text x="264" y="32" fill="#64748b" font-size="9.5" text-anchor="middle">:8813 &#8226; 0 ch</text>
+
+    <rect x="324" y="0" width="96" height="40" rx="6" fill="#1e293b" stroke="#334155"/>
+    <text x="372" y="18" fill="#cbd5e1" font-size="11" font-weight="700" text-anchor="middle">Nico</text>
+    <text x="372" y="32" fill="#64748b" font-size="9.5" text-anchor="middle">:8814 &#8226; 0 ch</text>
+
+    <rect x="432" y="0" width="96" height="40" rx="6" fill="#1e293b" stroke="#334155"/>
+    <text x="480" y="18" fill="#cbd5e1" font-size="11" font-weight="700" text-anchor="middle">Olive</text>
+    <text x="480" y="32" fill="#64748b" font-size="9.5" text-anchor="middle">:8815 &#8226; 0 ch</text>
+
+    <rect x="540" y="0" width="96" height="40" rx="6" fill="#1e293b" stroke="#334155"/>
+    <text x="588" y="18" fill="#cbd5e1" font-size="11" font-weight="700" text-anchor="middle">Paul</text>
+    <text x="588" y="32" fill="#64748b" font-size="9.5" text-anchor="middle">:8816 &#8226; 0 ch</text>
+
+    <rect x="648" y="0" width="96" height="40" rx="6" fill="#1e293b" stroke="#334155"/>
+    <text x="696" y="18" fill="#cbd5e1" font-size="11" font-weight="700" text-anchor="middle">Quinn</text>
+    <text x="696" y="32" fill="#64748b" font-size="9.5" text-anchor="middle">:8817 &#8226; 0 ch</text>
+
+    <rect x="756" y="0" width="96" height="40" rx="6" fill="#1e293b" stroke="#334155"/>
+    <text x="804" y="18" fill="#cbd5e1" font-size="11" font-weight="700" text-anchor="middle">Ruth</text>
+    <text x="804" y="32" fill="#64748b" font-size="9.5" text-anchor="middle">:8818 &#8226; 0 ch</text>
+
+    <rect x="864" y="0" width="96" height="40" rx="6" fill="#1e293b" stroke="#334155"/>
+    <text x="912" y="18" fill="#cbd5e1" font-size="11" font-weight="700" text-anchor="middle">Saul</text>
+    <text x="912" y="32" fill="#64748b" font-size="9.5" text-anchor="middle">:8819 &#8226; 0 ch</text>
+
+    <rect x="972" y="0" width="96" height="40" rx="6" fill="#1e293b" stroke="#334155"/>
+    <text x="1020" y="18" fill="#cbd5e1" font-size="11" font-weight="700" text-anchor="middle">Tara</text>
+    <text x="1020" y="32" fill="#64748b" font-size="9.5" text-anchor="middle">:8820 &#8226; 0 ch</text>
+  </g>
+</svg>
+  
+
+  <!-- Footer Bar -->
+  <rect x="0" y="1024" width="1920" height="56" fill="#060911"/>
+  <line x1="0" y1="1024" x2="1920" y2="1024" stroke="#1e293b" stroke-width="1.5"/>
+  <rect x="0" y="1074" width="1920" height="6" fill="#1e293b"/>
+  <rect x="0" y="1074" width="1493" height="6" fill="url(#topAccent)"/>
+
+  <text x="48" y="1056" fill="#64748b" font-size="13" font-weight="600">Channel Defaults: 1,000,000 sat capacity &#8226; push_msat: 7,000,000 &#8226; Initial State Hash: fc59bc78...8b45</text>
+  <text x="1872" y="1056" fill="#94a3b8" font-size="13" font-weight="600" text-anchor="end">Slide 07: Network Topology &amp; 4 Protocol Bottlenecks Solved</text>
+</svg>

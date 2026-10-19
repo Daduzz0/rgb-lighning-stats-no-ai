@@ -1,0 +1,92 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 680" width="1200" height="680" font-family="Ubuntu Sans, Inter, -apple-system, BlinkMacSystemFont, sans-serif">
+  <defs>
+    <linearGradient id="bgModels" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0b0f19"/>
+      <stop offset="100%" stop-color="#111827"/>
+    </linearGradient>
+    <marker id="arrPurp" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#a855f7"/>
+    </marker>
+    <marker id="arrCyanM" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#38bdf8"/>
+    </marker>
+    <marker id="arrGrnM" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#10b981"/>
+    </marker>
+  </defs>
+
+  <rect width="1200" height="680" rx="16" fill="url(#bgModels)"/>
+  <rect x="16" y="16" width="1168" height="648" rx="12" fill="none" stroke="#1e293b" stroke-width="2"/>
+
+  <!-- Header -->
+  <text x="40" y="54" fill="#f8fafc" font-size="22" font-weight="700">Local QVAC AI Stack: What Models We Use &amp; What Each Model Does</text>
+  <text x="40" y="78" fill="#94a3b8" font-size="13">100% Local Inference via qvac serve --openai (127.0.0.1:11434) &#8226; Zero External Cloud Calls &#8226; Strict JSON-Schema Grammar</text>
+
+  <!-- LEFT COLUMN: EMBEDDING MODEL (EMBEDDINGGEMMA_300M_Q4_0) -->
+  <rect x="40" y="102" width="535" height="425" rx="12" fill="#0f172a" stroke="#a855f7" stroke-width="2"/>
+  <rect x="58" y="118" width="499" height="54" rx="8" fill="#3b0764" stroke="#a855f7"/>
+  <text x="74" y="140" fill="#f3e8ff" font-size="14" font-weight="700">Model 1: EMBEDDINGGEMMA_300M_Q4_0 (alias: my-embed)</text>
+  <text x="74" y="159" fill="#d8b4fe" font-size="11" font-family="Ubuntu Sans Mono, monospace">300M params &#8226; 4-bit Q4_0 &#8226; 768-dim vectors &#8226; Mean Pooling &#8226; GPU</text>
+
+  <!-- Step 0 Box -->
+  <rect x="58" y="188" width="499" height="150" rx="8" fill="#1e293b" stroke="#475569"/>
+  <rect x="72" y="200" width="290" height="22" rx="4" fill="#581c87"/>
+  <text x="82" y="215" fill="#e9d5ff" font-size="11" font-weight="700">STEP 0: Post-Payment Telemetry Ingestion</text>
+  <text x="72" y="240" fill="#e2e8f0" font-size="11">Triggered after every settled/failed payment or fixture seed:</text>
+  <text x="72" y="260" fill="#cbd5e1" font-size="10.5">&#8226; Formats a &lt;150-token single-paragraph episode (<tspan fill="#d8b4fe" font-family="Ubuntu Sans Mono, monospace">formatTelemetryDocument</tspan>)</text>
+  <text x="72" y="278" fill="#cbd5e1" font-size="10.5">&#8226; Uploads via <tspan fill="#d8b4fe" font-family="Ubuntu Sans Mono, monospace">POST /v1/files</tspan> &#8594; <tspan fill="#d8b4fe" font-family="Ubuntu Sans Mono, monospace">POST /v1/vector_stores/:id/files</tspan></text>
+  <text x="72" y="296" fill="#cbd5e1" font-size="10.5">&#8226; <tspan fill="#34d399" font-weight="700">Why ragTurbovec: true?</tspan> Uses native SIMD <tspan fill="#a7f3d0" font-family="Ubuntu Sans Mono, monospace">turbovec-q4</tspan> + HyperDB</text>
+  <text x="82" y="312" fill="#94a3b8" font-size="10">full-precision reranking so incremental ingests never suffer 50-chunk FIFO eviction.</text>
+
+  <!-- Step 2a Box -->
+  <rect x="58" y="354" width="499" height="155" rx="8" fill="#1e293b" stroke="#475569"/>
+  <rect x="72" y="366" width="290" height="22" rx="4" fill="#581c87"/>
+  <text x="82" y="381" fill="#e9d5ff" font-size="11" font-weight="700">STEP 2a: Pre-Payment Semantic Retrieval</text>
+  <text x="72" y="406" fill="#e2e8f0" font-size="11">Runs inside <tspan fill="#d8b4fe" font-family="Ubuntu Sans Mono, monospace">scoreChannelsWithQvac()</tspan> before every payment:</text>
+  <text x="72" y="426" fill="#cbd5e1" font-size="10.5">&#8226; Embeds semantic query: asset ID (<tspan fill="#d8b4fe" font-family="Ubuntu Sans Mono, monospace">RGB</tspan> vs <tspan fill="#d8b4fe" font-family="Ubuntu Sans Mono, monospace">BTC</tspan>), <tspan fill="#d8b4fe" font-family="Ubuntu Sans Mono, monospace">amountMsat</tspan>, peer aliases</text>
+  <text x="72" y="444" fill="#cbd5e1" font-size="10.5">&#8226; Queries <tspan fill="#d8b4fe" font-family="Ubuntu Sans Mono, monospace">POST /v1/vector_stores/:id/search</tspan> (<tspan fill="#d8b4fe" font-family="Ubuntu Sans Mono, monospace">max_num_results: 4</tspan>)</text>
+  <text x="72" y="462" fill="#cbd5e1" font-size="10.5">&#8226; Returns top-4 <tspan fill="#d8b4fe" font-family="Ubuntu Sans Mono, monospace">RagTelemetryHit[]</tspan> (past HTLC timeouts, fee spikes,</text>
+  <text x="82" y="478" fill="#94a3b8" font-size="10">or high-outbound RGB successes on the node's own channels) to feed Model 2.</text>
+  <text x="72" y="496" fill="#6ee7b7" font-size="10">&#10003; Includes deterministic SQLite keyword fallback if vector store is cold.</text>
+
+  <!-- Arrow from Left Column (Step 2a) to Right Column (Step 2b) -->
+  <line x1="575" y1="420" x2="620" y2="345" stroke="#a855f7" stroke-width="3" marker-end="url(#arrPurp)"/>
+
+  <!-- RIGHT COLUMN: GENERATIVE LLM (QWEN3_5_0_8B_MULTIMODAL_Q4_K_M) -->
+  <rect x="625" y="102" width="535" height="425" rx="12" fill="#0f172a" stroke="#38bdf8" stroke-width="2"/>
+  <rect x="643" y="118" width="499" height="54" rx="8" fill="#0c4a6e" stroke="#38bdf8"/>
+  <text x="659" y="140" fill="#e0f2fe" font-size="13.5" font-weight="700">Model 2: QWEN3_5_0_8B_MULTIMODAL_Q4_K_M (qwen-fast / my-llm)</text>
+  <text x="659" y="159" fill="#7dd3fc" font-size="11" font-family="Ubuntu Sans Mono, monospace">Qwen 3.5 0.8B &#8226; Q4_K_M GGUF &#8226; ctx: 8192 &#8226; temp: 0 &#8226; Strict JSON Schema</text>
+
+  <!-- Step 1 Box -->
+  <rect x="643" y="184" width="499" height="102" rx="8" fill="#1e293b" stroke="#38bdf8" stroke-width="1"/>
+  <rect x="657" y="194" width="330" height="20" rx="4" fill="#0369a1"/>
+  <text x="667" y="208" fill="#f0f9ff" font-size="10.5" font-weight="700">STEP 1: NL Constraint Extraction (interpret.ts)</text>
+  <text x="657" y="229" fill="#cbd5e1" font-size="10.5">&#8226; Endpoint: <tspan fill="#7dd3fc" font-family="Ubuntu Sans Mono, monospace">POST /api/constraints/interpret</tspan> &#8594; <tspan fill="#7dd3fc" font-family="Ubuntu Sans Mono, monospace">/v1/chat/completions</tspan></text>
+  <text x="657" y="246" fill="#cbd5e1" font-size="10.5">&#8226; Schema: <tspan fill="#7dd3fc" font-family="Ubuntu Sans Mono, monospace">extracted.schema.json</tspan> (feeLimit, excludedNodeReferences,</text>
+  <text x="667" y="261" fill="#94a3b8" font-size="10">priority: lowest_fee | reliability | balanced, privacyRequest: avoid_extra_probing)</text>
+  <text x="657" y="277" fill="#34d399" font-size="10">&#8594; Compiled by compile.ts into SHA-256 fingerprinted CompiledPolicy</text>
+
+  <!-- Step 2b Box -->
+  <rect x="643" y="296" width="499" height="108" rx="8" fill="#1e293b" stroke="#38bdf8" stroke-width="1"/>
+  <rect x="657" y="306" width="350" height="20" rx="4" fill="#0369a1"/>
+  <text x="667" y="320" fill="#f0f9ff" font-size="10.5" font-weight="700">STEP 2b: Channel Classifier &amp; Weight Tuner (channel-scoring.ts)</text>
+  <text x="657" y="341" fill="#cbd5e1" font-size="10.5">&#8226; Input: Live <tspan fill="#7dd3fc" font-family="Ubuntu Sans Mono, monospace">/listchannels</tspan> ratios + Top-4 TurboVec RAG episodes</text>
+  <text x="657" y="358" fill="#cbd5e1" font-size="10.5">&#8226; Output (<tspan fill="#7dd3fc" font-family="Ubuntu Sans Mono, monospace">dynamicInferenceSchema</tspan>): Classifies each channel (<tspan fill="#6ee7b7" font-family="Ubuntu Sans Mono, monospace">optimal</tspan>,</text>
+  <text x="667" y="373" fill="#94a3b8" font-size="10"><tspan fill="#6ee7b7" font-family="Ubuntu Sans Mono, monospace">good</tspan>, <tspan fill="#fcd34d" font-family="Ubuntu Sans Mono, monospace">congested</tspan>, <tspan fill="#fca5a5" font-family="Ubuntu Sans Mono, monospace">unreliable</tspan>, <tspan fill="#fca5a5" font-family="Ubuntu Sans Mono, monospace">insufficient_liquidity</tspan>, <tspan fill="#fca5a5" font-family="Ubuntu Sans Mono, monospace">avoid</tspan>), score (0-100),</text>
+  <text x="667" y="388" fill="#94a3b8" font-size="10">overallProfile, and Pareto <tspan fill="#7dd3fc" font-family="Ubuntu Sans Mono, monospace">ObjectiveWeights { fee, reliability, cltv, hops }</tspan></text>
+
+  <!-- Step 3 Box -->
+  <rect x="643" y="414" width="499" height="98" rx="8" fill="#1e293b" stroke="#10b981" stroke-width="1.5"/>
+  <rect x="657" y="424" width="365" height="20" rx="4" fill="#065f46"/>
+  <text x="667" y="438" fill="#ecfdf5" font-size="10.5" font-weight="700">STEP 3: Algorithm &amp; MPP Split Selector (routing-selector.ts)</text>
+  <text x="657" y="459" fill="#cbd5e1" font-size="10.5">&#8226; Input: Scored channels + algorithm fail rates + EphemeralRoutingContext</text>
+  <text x="657" y="476" fill="#cbd5e1" font-size="10.5">&#8226; Output (<tspan fill="#6ee7b7" font-family="Ubuntu Sans Mono, monospace">algorithm-selection.schema.json</tspan>): Selects <tspan fill="#6ee7b7" font-family="Ubuntu Sans Mono, monospace">min_cost_flow</tspan> (MPP),</text>
+  <text x="667" y="491" fill="#94a3b8" font-size="10"><tspan fill="#6ee7b7" font-family="Ubuntu Sans Mono, monospace">multi_objective</tspan> (Pareto), <tspan fill="#6ee7b7" font-family="Ubuntu Sans Mono, monospace">yen</tspan> (K-shortest), or <tspan fill="#6ee7b7" font-family="Ubuntu Sans Mono, monospace">ldk_dijkstra</tspan> + <tspan fill="#6ee7b7" font-family="Ubuntu Sans Mono, monospace">max_paths (1..8)</tspan></text>
+
+  <!-- BOTTOM PRIVACY &SECURITY INVARIANT BAR -->
+  <rect x="40" y="542" width="1120" height="98" rx="10" fill="#064e3b" stroke="#10b981" stroke-width="1.5"/>
+  <text x="64" y="568" fill="#ecfdf5" font-size="14" font-weight="700">Lightning Privacy Invariant: "Don't Hold Other People's Data" (First-Party Scope + Ephemeral RAM Wipe)</text>
+  <text x="64" y="592" fill="#d1fae5" font-size="11.5">&#8226; <tspan fill="#6ee7b7" font-family="Ubuntu Sans Mono, monospace" font-weight="700">assertFirstPartyEpisode()</tspan>: Rejects any object containing third-party route hops, remote node balances, or raw invoices with PRIVACY_VIOLATION.</text>
+  <text x="64" y="612" fill="#d1fae5" font-size="11.5">&#8226; <tspan fill="#6ee7b7" font-family="Ubuntu Sans Mono, monospace" font-weight="700">EphemeralRoutingContext.wipe()</tspan>: Dichotomous capacity bounds and MPP split feasibility are computed in request-scoped RAM and zeroed in <tspan fill="#6ee7b7" font-family="Ubuntu Sans Mono, monospace">finally</tspan>.</text>
+</svg>

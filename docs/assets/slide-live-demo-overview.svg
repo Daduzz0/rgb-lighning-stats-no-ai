@@ -1,0 +1,101 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 680" width="1200" height="680" font-family="Ubuntu Sans, Inter, -apple-system, BlinkMacSystemFont, sans-serif">
+  <defs>
+    <linearGradient id="bgDemo" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0b0f19"/>
+      <stop offset="100%" stop-color="#111827"/>
+    </linearGradient>
+    <marker id="arrDemo" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#38bdf8"/>
+    </marker>
+  </defs>
+
+  <rect width="1200" height="680" rx="16" fill="url(#bgDemo)"/>
+  <rect x="16" y="16" width="1168" height="648" rx="12" fill="none" stroke="#1e293b" stroke-width="2"/>
+
+  <!-- Header -->
+  <text x="40" y="54" fill="#f8fafc" font-size="22" font-weight="700">Live Web UI Demo Walkthrough &amp; Executive Scorecard</text>
+  <text x="40" y="78" fill="#94a3b8" font-size="13">Interactive Demo on http://127.0.0.1:5173 (Alice :8801 &amp; Bob :8802 + QVAC :11434) &#8226; Followed by Judge Q&amp;A</text>
+
+  <!-- TOP ROW: 3-STEP LIVE DEMO FLOW -->
+  <rect x="40" y="100" width="1120" height="260" rx="12" fill="#0f172a" stroke="#38bdf8" stroke-width="1.5"/>
+  <rect x="58" y="114" width="350" height="24" rx="4" fill="#0c4a6e"/>
+  <text x="70" y="130" fill="#7dd3fc" font-size="11.5" font-weight="700">LIVE WEB UI DEMO FLOW (2 MINUTES)</text>
+
+  <!-- Demo Step 1 -->
+  <rect x="58" y="150" width="336" height="192" rx="8" fill="#1e293b" stroke="#38bdf8"/>
+  <text x="74" y="176" fill="#38bdf8" font-size="13" font-weight="700">Step 1: NL Constraint Compiler</text>
+  <text x="74" y="195" fill="#94a3b8" font-size="10.5" font-family="Ubuntu Sans Mono, monospace">POST /api/constraints/interpret &amp; /compile</text>
+  <text x="74" y="218" fill="#e2e8f0" font-size="11">&#8226; Type natural-language routing rule in</text>
+  <text x="84" y="234" fill="#cbd5e1" font-size="10.5">QVAC Copilot (e.g. fee cap, node</text>
+  <text x="84" y="250" fill="#cbd5e1" font-size="10.5">exclusion, or single-path privacy).</text>
+  <text x="74" y="272" fill="#e2e8f0" font-size="11">&#8226; Inspect validated <tspan fill="#7dd3fc" font-family="Ubuntu Sans Mono, monospace">CompiledPolicy</tspan> card</text>
+  <text x="84" y="288" fill="#cbd5e1" font-size="10.5">and cryptographic <tspan fill="#7dd3fc" font-family="Ubuntu Sans Mono, monospace">SHA-256</tspan> invoice</text>
+  <text x="84" y="304" fill="#cbd5e1" font-size="10.5">fingerprint binding.</text>
+  <text x="74" y="326" fill="#34d399" font-size="10.5" font-weight="600">&#10003; Fails closed on ambiguous/fiat inputs</text>
+
+  <line x1="394" y1="246" x2="424" y2="246" stroke="#38bdf8" stroke-width="2.5" marker-end="url(#arrDemo)"/>
+
+  <!-- Demo Step 2 -->
+  <rect x="430" y="150" width="336" height="192" rx="8" fill="#1e293b" stroke="#a855f7"/>
+  <text x="446" y="176" fill="#d8b4fe" font-size="13" font-weight="700">Step 2: TurboVec RAG &amp; Scoring</text>
+  <text x="446" y="195" fill="#94a3b8" font-size="10.5" font-family="Ubuntu Sans Mono, monospace">POST /api/routing/score-channels</text>
+  <text x="446" y="218" fill="#e2e8f0" font-size="11">&#8226; Load node-scoped first-party history</text>
+  <text x="456" y="234" fill="#cbd5e1" font-size="10.5">(<tspan fill="#d8b4fe" font-family="Ubuntu Sans Mono, monospace">20 / 100 / 500 / 2000 tx</tspan>) into SQLite</text>
+  <text x="456" y="250" fill="#cbd5e1" font-size="10.5">and QVAC TurboVec vector store.</text>
+  <text x="446" y="272" fill="#e2e8f0" font-size="11">&#8226; Inspect live channel classifications</text>
+  <text x="456" y="288" fill="#cbd5e1" font-size="10.5">(<tspan fill="#6ee7b7" font-family="Ubuntu Sans Mono, monospace">optimal</tspan>, <tspan fill="#6ee7b7" font-family="Ubuntu Sans Mono, monospace">good</tspan>, <tspan fill="#fcd34d" font-family="Ubuntu Sans Mono, monospace">congested</tspan>, <tspan fill="#fca5a5" font-family="Ubuntu Sans Mono, monospace">avoid</tspan>),</text>
+  <text x="456" y="304" fill="#cbd5e1" font-size="10.5">0-100 scores, and retrieved RAG hits.</text>
+  <text x="446" y="326" fill="#34d399" font-size="10.5" font-weight="600">&#10003; Bilateral physical liquidity guardrails</text>
+
+  <line x1="766" y1="246" x2="796" y2="246" stroke="#38bdf8" stroke-width="2.5" marker-end="url(#arrDemo)"/>
+
+  <!-- Demo Step 3 -->
+  <rect x="802" y="150" width="340" height="192" rx="8" fill="#1e293b" stroke="#10b981"/>
+  <text x="818" y="176" fill="#6ee7b7" font-size="13" font-weight="700">Step 3: Planner &amp; RGB MPP Send</text>
+  <text x="818" y="195" fill="#94a3b8" font-size="10.5" font-family="Ubuntu Sans Mono, monospace">POST /api/routing/select-algorithm</text>
+  <text x="818" y="218" fill="#e2e8f0" font-size="11">&#8226; EphemeralRoutingContext computes</text>
+  <text x="828" y="234" fill="#cbd5e1" font-size="10.5"><tspan fill="#6ee7b7" font-family="Ubuntu Sans Mono, monospace">singlePathPossible</tspan> &amp; <tspan fill="#6ee7b7" font-family="Ubuntu Sans Mono, monospace">mppPossible</tspan> in</text>
+  <text x="828" y="250" fill="#cbd5e1" font-size="10.5">RAM (wiped immediately in <tspan fill="#6ee7b7" font-family="Ubuntu Sans Mono, monospace">finally</tspan>).</text>
+  <text x="818" y="272" fill="#e2e8f0" font-size="11">&#8226; Dispatch to Rust RLN daemon with</text>
+  <text x="828" y="288" fill="#cbd5e1" font-size="10.5"><tspan fill="#6ee7b7" font-family="Ubuntu Sans Mono, monospace">min_cost_flow (max_paths: 2)</tspan> or</text>
+  <text x="828" y="304" fill="#cbd5e1" font-size="10.5"><tspan fill="#6ee7b7" font-family="Ubuntu Sans Mono, monospace">multi_objective</tspan> Pareto weights.</text>
+  <text x="818" y="326" fill="#34d399" font-size="10.5" font-weight="600">&#10003; Auto-ingests outcome back into RAG</text>
+
+  <!-- BOTTOM ROW: EXECUTIVE SCORECARD FOR Q&A -->
+  <rect x="40" y="380" width="1120" height="260" rx="12" fill="#0f172a" stroke="#10b981" stroke-width="2"/>
+  <rect x="58" y="394" width="420" height="24" rx="4" fill="#064e3b"/>
+  <text x="70" y="410" fill="#6ee7b7" font-size="11.5" font-weight="700">AIR-GB LIGHTNING &#8212; EXECUTIVE SUMMARY &amp; Q&amp;A SCORECARD</text>
+
+  <!-- 4 KPI Cards -->
+  <rect x="58" y="432" width="258" height="190" rx="8" fill="#1e293b" stroke="#10b981"/>
+  <text x="187" y="460" fill="#94a3b8" font-size="12" font-weight="700" text-anchor="middle">REACHABLE SUCCESS RATE</text>
+  <text x="187" y="504" fill="#34d399" font-size="34" font-weight="800" text-anchor="middle">81.25%</text>
+  <text x="187" y="528" fill="#ecfdf5" font-size="12" font-weight="700" text-anchor="middle">13 / 16 Feasible (65% of All 20)</text>
+  <text x="187" y="554" fill="#fca5a5" font-size="11" text-anchor="middle">vs. 43.75% (7 / 16) in Baseline</text>
+  <text x="187" y="576" fill="#6ee7b7" font-size="11" font-weight="700" text-anchor="middle">+85.7% More Completed Transfers</text>
+  <text x="187" y="604" fill="#94a3b8" font-size="10" text-anchor="middle">Same state hash: fc59bc78...8b45</text>
+
+  <rect x="333" y="432" width="258" height="190" rx="8" fill="#1e293b" stroke="#10b981"/>
+  <text x="462" y="460" fill="#94a3b8" font-size="12" font-weight="700" text-anchor="middle">MATCHED ROUTING FEES</text>
+  <text x="462" y="504" fill="#34d399" font-size="34" font-weight="800" text-anchor="middle">-78.95%</text>
+  <text x="462" y="528" fill="#ecfdf5" font-size="12" font-weight="700" text-anchor="middle">1,200 msat vs. 5,700 msat</text>
+  <text x="462" y="554" fill="#cbd5e1" font-size="11" text-anchor="middle">Case #11 (Alice &#8594; Bob, 1 RGB):</text>
+  <text x="462" y="574" fill="#6ee7b7" font-size="11" font-weight="700" text-anchor="middle">0 msat (1 hop) vs. 5,100 msat (3 hops)</text>
+  <text x="462" y="604" fill="#94a3b8" font-size="10" text-anchor="middle">Saved by MPP return rebalancing</text>
+
+  <rect x="608" y="432" width="258" height="190" rx="8" fill="#1e293b" stroke="#38bdf8"/>
+  <text x="737" y="460" fill="#94a3b8" font-size="12" font-weight="700" text-anchor="middle">NATIVE RUST RGB MPP</text>
+  <text x="737" y="504" fill="#38bdf8" font-size="34" font-weight="800" text-anchor="middle">3 / 3</text>
+  <text x="737" y="528" fill="#ecfdf5" font-size="12" font-weight="700" text-anchor="middle">Multi-Path Splits &amp; Returns</text>
+  <text x="737" y="554" fill="#cbd5e1" font-size="11" text-anchor="middle">60+40 RGB &amp; 40+40 RGB Splits</text>
+  <text x="737" y="574" fill="#7dd3fc" font-size="11" font-weight="700" text-anchor="middle">190 RGB Returned to Alice (vs. 0)</text>
+  <text x="737" y="604" fill="#94a3b8" font-size="10" text-anchor="middle">Fixed LDK multi-HTLC color_commitment</text>
+
+  <rect x="883" y="432" width="259" height="190" rx="8" fill="#1e293b" stroke="#a855f7"/>
+  <text x="1012" y="460" fill="#94a3b8" font-size="12" font-weight="700" text-anchor="middle">PLANNER &amp; AI LATENCY</text>
+  <text x="1012" y="504" fill="#d8b4fe" font-size="32" font-weight="800" text-anchor="middle">0.66-1.35 ms</text>
+  <text x="1012" y="528" fill="#ecfdf5" font-size="12" font-weight="700" text-anchor="middle">On-Node Rust Graph Solver</text>
+  <text x="1012" y="554" fill="#cbd5e1" font-size="11" text-anchor="middle">Qwen3.5-0.8B + EmbeddingGemma-300M</text>
+  <text x="1012" y="574" fill="#e9d5ff" font-size="11" font-weight="700" text-anchor="middle">100% Local Loopback + 4 Guardrails</text>
+  <text x="1012" y="604" fill="#94a3b8" font-size="10" text-anchor="middle">52 / 52 Fixture &amp; Safety Tests Passing</text>
+</svg>
